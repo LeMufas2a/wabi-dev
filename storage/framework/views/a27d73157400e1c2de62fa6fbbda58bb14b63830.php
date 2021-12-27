@@ -1,0 +1,3 @@
+<div class="col-md-6">
+    <?php echo $__env->make('partials.input',['name'=>'PayPal Pricing Plan ID','id'=>"subscribe[paypal_id]",'placeholder'=>"Product price plan id from PayPal starting with P-xxxxxx",'required'=>false,'value'=>(isset($plan)?$plan->paypal_id:null)], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+</div><?php /**PATH /home/wabizz1/public_html/modules/PaypalSubscribe/Providers/../Resources/views/planid.blade.php ENDPATH**/ ?>
