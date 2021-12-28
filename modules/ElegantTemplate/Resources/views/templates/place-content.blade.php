@@ -73,8 +73,8 @@
         <div class="package ">
             <div class="text-center">
                 
-                <div >
-     
+                <div>
+        
    			@if(!$restorant->categories->isEmpty())
         	<nav class="tabbable sticky" style="top: {{ config('app.isqrsaas') ? 64:88 }}px;">
                 <ul class="nav nav-pills bg-white mb-2">
@@ -82,15 +82,12 @@
                         <a class="nav-link  mb-sm-3 mb-md-0 active" data-toggle="tab" role="tab" href="">{{ __('All categories') }}</a>
                     </li> -->
                     @foreach ( $restorant->categories as $key => $category)
-                        @if(!$category->items->isEmpty())
+                        
                             <li class="nav-item ">
                                 <a class="btn  nav-link mb-sm-3 mb-md-0"   
                                    href="#subsection-<?php echo $category->id; ?>">{{ $category->name }}</a>
-                              
-                              
-
                             </li>
-                        @endif
+                        
                     @endforeach
                 </ul>
 
@@ -117,8 +114,18 @@
         <div class='row'>
             @if(!$restorant->categories->isEmpty())
             @foreach ( $restorant->categories as $key => $category)
-
+            
             <div id='subsection-<?php echo $category->id; ?>' class='box-info'>
+                    
+                <div class='head align-center myDeco' style="background:none;border-radius:none;">
+                
+                    @if($category->logom)
+
+                        <img id="previewImg" class="img-fluid rounded mx-auto" src="<?php echo $category->logom;?>" alt="..." /> 
+
+                    @endif
+            
+                </div>
                 <div class='head align-center myDeco'>
                     <h2 class="myTxtw"><b><?php echo $category->name; ?></b></h3>
                 </div>

@@ -431,7 +431,7 @@ section.section-download-app::before{content: " ";display: block;position: absol
 /* box-info */
 .box-info{background: #FFF;border-radius: var(--border-radius);box-shadow: var(--shadow);width: 100%;}
 .box-info + * {margin-top: var(--gap-lg);}
-.box-info > .head{position: sticky;top: 0;background: #FFF;z-index: 2;}
+.box-info > .head{top: 0;background: #FFF;z-index: 2;}
 .box-info > .head, .box-info > .actions, .box-info > .content{padding: var(--gap);}
 .actionsCart{padding: var(--gap);}
 .box-info > .head{background: #ffbb00; border-radius: 0px 0px 23px 23px;}

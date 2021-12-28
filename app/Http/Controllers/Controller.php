@@ -24,6 +24,7 @@ class Controller extends BaseController
     {
         //Make UUID
         $uuid = Str::uuid()->toString();
+        // dd($uuid);
 
         //Make the versions
         foreach ($versions as $key => $version) {
