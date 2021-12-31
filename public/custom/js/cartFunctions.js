@@ -364,7 +364,7 @@ function chageDeliveryCost(deliveryCost){
   }
 
 window.onload = function () {
-
+  
   
 
   //VUE CART
@@ -518,8 +518,9 @@ window.onload = function () {
                 variantID:variantID
               })
               .then(function (response) {
-                console.log("the response",response);
+                // console.log("the response",response);
                   if(response.data.status){
+                    console.log("response",response.data)
                     $('#productModal').modal('hide');
                     //$('#productModal').modal('close');
                     getCartContentAndTotalPrice();
@@ -541,3 +542,13 @@ window.onload = function () {
     },
   });
 }
+
+
+function toggleIcon(e) {
+  $(e.target)
+      .prev('.panel-heading')
+      .find(".more-less")
+      .toggleClass('glyphicon-plus glyphicon-minus');
+  }
+  $('.panel-group').on('hidden.bs.collapse', toggleIcon);
+  $('.panel-group').on('shown.bs.collapse', toggleIcon);

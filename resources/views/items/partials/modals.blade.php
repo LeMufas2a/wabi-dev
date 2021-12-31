@@ -11,7 +11,7 @@
             <div class="modal-body p-0">
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-body px-lg-5 py-lg-5">
-                        <form role="form" method="post" action="{{ route('categories.store') }}">
+                        <form role="form" method="post" action="{{ route('categories.store') }}" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" value="{{$restorant_id}}"  name="restaurant_id" />
                             <div class="form-group{{ $errors->has('category_name') ? ' has-danger' : '' }}">
@@ -22,6 +22,22 @@
                                     </span>
                                 @endif
                             </div>
+
+                            <div class="slim form-group{{ $errors->has('item_image') ? ' has-danger' : '' }}" 
+                                data-ratio="16:9"
+                                data-size="1000,300"
+                            >
+                                <input type="file" id="imgfile" name="item_image">
+                                @if ($errors->has('item_image'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('item_image') }}</strong>
+                                    </span>
+                                @endif
+
+                                <!-- <input type="hidden" name="cat_image" id="cat_image"> -->
+                            </div>
+
+                            
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary my-4">{{ __('Save') }}</button>
                             </div>
@@ -46,9 +62,10 @@
             <div class="modal-body p-0">
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-body px-lg-5 py-lg-5">
-                        <form role="form" id="form-edit-category" method="post" action="">
+                        <form role="form" id="form-edit-category" method="post" action="" enctype="multipart/form-data">
                             @csrf
                             @method('put')
+                            
                             <input name="cat_id" id="cat_id" type="hidden" required>
                             <div class="form-group{{ $errors->has('category_name') ? ' has-danger' : '' }}">
                                 <input class="form-control" name="category_name" id="cat_name" placeholder="{{ __('Category name') }} ..." type="text" required>
@@ -57,6 +74,25 @@
                                         <strong>{{ $errors->first('category_name') }}</strong>
                                     </span>
                                 @endif
+                            </div>
+                            <div class="form-group text-center{{ $errors->has('item_image') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="item_image">{{ __('Item Image') }}</label>
+                                <div class="text-center">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="width: auto; height: auto;">
+                                            <img id="previewImg" src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg" width="200px" height="150px" alt="..."/>
+                                        </div>
+                                    <div>
+                                    <span class="btn btn-outline-secondary btn-file">
+                                    <span class="fileinput-new">{{ __('Select image') }}</span>
+                                    <span class="fileinput-exists">{{ __('Change') }}</span>
+                                        <input type="file" id="imgfile" class="item_image" name="item_image" accept="image/x-png,image/gif,image/jpeg">
+                                        <div class="gallery"></div>
+                                    </span>
+                                    <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">{{ __('Remove') }}</a>
+                                </div>
+                                </div>
+                                </div>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary my-4">{{ __('Save') }}</button>
@@ -141,13 +177,14 @@
                                 <div class="text-center">
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                         <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;">
-                                            <img id="previewImg" src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg" width="200px" height="150px" alt="..."/>
+                                            <img id="previewImgItem" src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg" width="200px" height="150px" alt="..."/>
                                         </div>
                                     <div>
                                     <span class="btn btn-outline-secondary btn-file">
                                     <span class="fileinput-new">{{ __('Select image') }}</span>
                                     <span class="fileinput-exists">{{ __('Change') }}</span>
-                                        <input type="file" name="item_image" onchange="previewFile(this)" accept="image/x-png,image/gif,image/jpeg">
+                                        <input type="file" id="imgfileItem" class="item_image" name="item_image" accept="image/x-png,image/gif,image/jpeg">
+                                        <div class="gallery"></div>
                                     </span>
                                     <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">{{ __('Remove') }}</a>
                                 </div>

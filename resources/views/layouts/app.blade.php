@@ -52,6 +52,9 @@
         <!-- Custom CSS defined by admin -->
         <link type="text/css" href="{{ asset('byadmin') }}/back.css" rel="stylesheet">
         <link type="text/css" href="{{ asset('custom/css') }}/img_carousal.css" rel="stylesheet">
+        
+        <!-- Slim Cropper -->
+        <link type="text/css" href="{{ asset('css') }}/slim.min.css" rel="stylesheet">
 
 
 
@@ -166,9 +169,16 @@
          @if(strlen( config('broadcasting.connections.pusher.app_id'))>2)
             <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
             <script src="{{ asset('custom') }}/js/pusher.js"></script>
-        @endif
+            @endif
+            
+            <!-- Custom JS defined by admin -->
+            <?php echo file_get_contents(base_path('public/byadmin/back.js')) ?>
+            
+            <!-- SLIM Cropper -->
+            <!-- <script src="{{ asset('js') }}/slim.jquery.min.js"></script> -->
+            <script src="{{ asset('js') }}/slim.kickstart.min.js"></script>
 
-        <!-- Custom JS defined by admin -->
-        <?php echo file_get_contents(base_path('public/byadmin/back.js')) ?>
+            <!-- Custom JS for slim crop -->
+            <script src="{{ asset('custom') }}/js/custom.js"></script>
     </body>
 </html>

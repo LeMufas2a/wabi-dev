@@ -106,7 +106,7 @@
                                                 <span class="btn-inner--icon"><i class="fa fa-plus"></i> {{ __('Menu size limit reaced') }}</span>
                                             </a>
                                         @endif
-                                        <button class="btn btn-icon btn-1 btn-sm btn-warning" type="button" id="edit" data-toggle="modal" data-target="#modal-edit-category" data-toggle="tooltip" data-placement="top" title="{{ __('Edit category') }} {{ $category->name }}" data-id="<?= $category->id ?>" data-name="<?= $category->name ?>" >
+                                        <button class="btn btn-icon btn-1 btn-sm btn-warning" type="button" id="edit" data-toggle="modal" data-target="#modal-edit-category" data-toggle="tooltip" data-placement="top" title="{{ __('Edit category') }} {{ $category->name }}" data-id="<?= $category->id ?>"data-image="<?= $category->logom ?>"  data-name="<?= $category->name ?>" >
                                             <span class="btn-inner--icon"><i class="fa fa-edit"></i></span>
                                         </button>
 
@@ -202,17 +202,81 @@
   $("[data-target='#modal-edit-category']").on('click',function() {
     var id = $(this).attr('data-id');
     var name = $(this).attr('data-name');
-
+    var image = $(this).attr('data-image');
 
     
     $('#cat_name').val(name);
+    $('#previewImg').attr('src',image);
     $("#form-edit-category").attr("action", "/categories/"+id);
 });
 
+            $(document).on('change','#imgfile', function() {
+                let id = $(this).attr("name");
+                // console.log("name",$(this).attr("name"));
+                imagesPreview(this, 'div.gallery',id);
+            });
+            
+            $(document).on('change','#imgfileItem', function() {
+                let id = $(this).attr("name");
+                // console.log("name",$(this).attr("name"));
+                imagesPreviewItem(this, 'div.gallery',id);
+            });
+
+            function imagesPreview(input, placeToInsertImagePreview,id){
+                console.log("the id",id);
+                if (input.files) {
+                    var filesAmount = input.files.length;
+                    let i = 0;
+                    for (i = 0; i < filesAmount; i++) {
+                        var reader = new FileReader();
+                         
+                        reader.onload = function(event) {
+                            // $($.parseHTML('<img id="previewImg" width="100" height="100">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                            // $("."+id).attr('src', event.target.result);
+                            $("#previewImg").attr('src', event.target.result);
+                            // $("#"+this.active_el+"Modal")
+                        }
+
+                        reader.readAsDataURL(input.files[i]);
+                    }
+                }
+            }
+            
+            function imagesPreviewItem(input, placeToInsertImagePreview,id){
+                console.log("the id",id);
+                if (input.files) {
+                    var filesAmount = input.files.length;
+                    let i = 0;
+                    for (i = 0; i < filesAmount; i++) {
+                        var reader = new FileReader();
+                         
+                        reader.onload = function(event) {
+                            // $($.parseHTML('<img id="previewImg" width="100" height="100">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                            // $("."+id).attr('src', event.target.result);
+                            $("#previewImgItem").attr('src', event.target.result);
+                            // $("#"+this.active_el+"Modal")
+                        }
+
+                        reader.readAsDataURL(input.files[i]);
+                    }
+                }
+            }
+
+
+            $('#modal-new-item').on('hidden.bs.modal', function () {
+                $("#imgfileItem").val('');
+                $("#previewImgItem").attr('src',"https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg");
+            });
+
+            $('#modal-edit-category').on('hidden.bs.modal', function () {
+                $("#imgFile").val('');
+                $("#previewImg").attr('src',"https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg");
+            });
 
         function previewFile(input){
+            
             var file = $("input[type=file]").get(0).files[0];
-    
+            console.log("file",file);
             if(file){
                 var reader = new FileReader();
     
