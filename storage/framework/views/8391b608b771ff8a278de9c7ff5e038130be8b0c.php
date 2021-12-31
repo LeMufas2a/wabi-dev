@@ -52,11 +52,15 @@
         <!-- Custom CSS defined by admin -->
         <link type="text/css" href="<?php echo e(asset('byadmin')); ?>/back.css" rel="stylesheet">
         <link type="text/css" href="<?php echo e(asset('custom/css')); ?>/img_carousal.css" rel="stylesheet">
+        
+        <!-- Slim Cropper -->
+        <link type="text/css" href="<?php echo e(asset('css')); ?>/slim.min.css" rel="stylesheet">
 
 
 
     </head>
     <body class="<?php echo e($class ?? ''); ?>">
+        Ali Hassan Cheemaaaa
         <?php if(auth()->guard()->check()): ?>
             <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
                 <?php echo csrf_field(); ?>
@@ -166,10 +170,17 @@
          <?php if(strlen( config('broadcasting.connections.pusher.app_id'))>2): ?>
             <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
             <script src="<?php echo e(asset('custom')); ?>/js/pusher.js"></script>
-        <?php endif; ?>
+            <?php endif; ?>
+            
+            <!-- Custom JS defined by admin -->
+            <?php echo file_get_contents(base_path('public/byadmin/back.js')) ?>
+            
+            <!-- SLIM Cropper -->
+            <!-- <script src="<?php echo e(asset('js')); ?>/slim.jquery.min.js"></script> -->
+            <script src="<?php echo e(asset('js')); ?>/slim.kickstart.min.js"></script>
 
-        <!-- Custom JS defined by admin -->
-        <?php echo file_get_contents(base_path('public/byadmin/back.js')) ?>
+            <!-- Custom JS for slim crop -->
+            <script src="<?php echo e(asset('custom')); ?>/js/custom.js"></script>
     </body>
 </html>
 <?php /**PATH C:\xampp\htdocs\wabi-dev\resources\views/layouts/app.blade.php ENDPATH**/ ?>
