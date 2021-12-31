@@ -22,15 +22,10 @@ class Controller extends BaseController
      */
     public function saveImageVersions($folder, $laravel_image_resource, $versions)
     {
-<<<<<<< HEAD
         dd($versions);
         //Make UUID
         $uuid = Str::uuid()->toString();
         // dd($uuid);
-=======
-        //Make UUID
-        $uuid = Str::uuid()->toString();
->>>>>>> akhtar
 
         //Make the versions
         foreach ($versions as $key => $version) {
@@ -48,7 +43,6 @@ class Controller extends BaseController
                 //$laravel_image_resource->move(public_path($folder), $uuid.'_'.$version['name'].'.'.'jpg');
             }
         }
-<<<<<<< HEAD
         
         return $uuid;
     }
@@ -83,10 +77,6 @@ class Controller extends BaseController
          }
          
          return $uuid;
-=======
-
-        return $uuid;
->>>>>>> akhtar
     }
 
     private function withinArea($point, $polygon, $n)
