@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> akhtar
 <!-- head -->
 <head>
     <meta charset="utf-8" />
@@ -16,11 +19,22 @@
     <meta name="description" content="<?php echo e($restorant->description); ?>">
 
 
+<<<<<<< HEAD
 
     <?php echo notifyCss(); ?>
 
     
 
+=======
+	<link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+    <?php echo notifyCss(); ?>
+
+    
+	
+>>>>>>> akhtar
     <!-- Select2 -->
     <link type="text/css" href="<?php echo e(asset('custom')); ?>/css/select2.min.css" rel="stylesheet">
 

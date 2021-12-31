@@ -1053,7 +1053,11 @@ a:hover {
  }
 
  .callOutShoppingButtonBottom {
+<<<<<<< HEAD
     position: fixed;
+=======
+   	position: fixed;
+>>>>>>> akhtar
     bottom: 0px;
     right: 20px;
     z-index: 1000;  

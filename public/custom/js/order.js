@@ -415,6 +415,8 @@ $(".nav-item-category").on('click', function() {
             $("."+value).hide();
         }
     });
+
+
 });
 
 // setCurrentItem upon clicking the collapse + PLUS button

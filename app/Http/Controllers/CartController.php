@@ -34,18 +34,8 @@ class CartController extends Controller
         if(isset($request->session_id)){
             $this->setSessionID($request->session_id);
         }
-		// dd($request->id);
-        // if(!$request->id){
-        //     return response()->json([
-        //         'status' => false,
-        //         'errMsg' => __("You can't add items from other restaurant!"),
-        //     ]);
-        // }    
+		//dd($request->session_id);    
         $item = Items::find($request->id);
-        echo "<pre>";
-        print_r($item);
-        // if(isset($item)){
-        // }
         $restID = $item->category->restorant->id;
 
         $restaurant = Restorant::findOrFail($restID);

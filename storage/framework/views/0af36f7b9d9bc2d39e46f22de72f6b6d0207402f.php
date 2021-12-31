@@ -88,8 +88,14 @@
                   </nav>
               </div>
               <div class='related-mobile-menu'>
+<<<<<<< HEAD
                   <a href="javascript:;" class='show-mobile-menu'><i class="las la-bars"></i></a>
               </div>
+=======
+                  <a href="javascript:;" class='show-mobile-menu' style="background:transparent !important;"><i class="las la-bars" style="color:white;"></i></a>
+                
+                </div>
+>>>>>>> akhtar
           </div>
       </div>
   </section><?php /**PATH /home/wabizz1/public_html/modules/ElegantTemplate/Providers/../Resources/views/templates/logo_and_menu.blade.php ENDPATH**/ ?>

@@ -102,7 +102,7 @@
             "Database\\Seeders\\": "database/seeders/",
             "Modules\\": "modules/"
         },
-		"classmap": [
+        "classmap": [
             "app/slimcrop/Slim.php"
         ],
         "files": [

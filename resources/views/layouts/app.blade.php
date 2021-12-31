@@ -178,7 +178,13 @@
             <!-- <script src="{{ asset('js') }}/slim.jquery.min.js"></script> -->
             <script src="{{ asset('js') }}/slim.kickstart.min.js"></script>
 
+
             <!-- Custom JS for slim crop -->
             <script src="{{ asset('custom') }}/js/custom.js"></script>
+
+
+            <!-- Custom JS for slim crop -->
+            <script src="{{ asset('custom') }}/js/custom.js"></script>
+
     </body>
 </html>

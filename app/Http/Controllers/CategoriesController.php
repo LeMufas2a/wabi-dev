@@ -4,10 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Categories;
 use Illuminate\Http\Request;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> ali
 use Illuminate\Support\Str;
 
 // use App\slimcrop\SlimStatus;
 use Slim;
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> akhtar
+>>>>>>> ali
 
 class CategoriesController extends Controller
 {
@@ -40,15 +49,29 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> ali
         $images = new Slim();
         $images = $images->getImages('item_image');
         $image = $images[0];
 
         // dd($images);
+<<<<<<< HEAD
+=======
+=======
+        // dd(config());
+>>>>>>> akhtar
+>>>>>>> ali
         
         $category = new Categories;
         $category->name = strip_tags($request->category_name);
         $category->restorant_id = $request->restaurant_id;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> ali
         
         
         $ext = "jpg";
@@ -69,6 +92,26 @@ class CategoriesController extends Controller
         $file_medium = Slim::saveFile($data, $uuid_medium, public_path($this->imagePath));
         $file_thumbail = Slim::saveFile($data, $uuid_thumbail, public_path($this->imagePath));
             
+<<<<<<< HEAD
+=======
+=======
+
+        // Storing image for category
+        if ($request->hasFile('item_image')) {
+            $category->image = $this->saveImageVersions(
+                $this->imagePath,
+                $request->item_image,
+                [
+                    ['name'=>'large', 'w'=>1000, 'h'=>300],
+                    //['name'=>'thumbnail','w'=>300,'h'=>300],
+                    ['name'=>'medium', 'w'=>295, 'h'=>200],
+                    ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
+                ]
+            );
+            // dd($category->image);
+        }
+>>>>>>> akhtar
+>>>>>>> ali
 
         $category->save();
 

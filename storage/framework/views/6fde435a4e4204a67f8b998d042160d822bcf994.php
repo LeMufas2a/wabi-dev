@@ -88,8 +88,14 @@
                   </nav>
               </div>
               <div class='related-mobile-menu'>
+<<<<<<< HEAD
                   <a href="javascript:;" class='show-mobile-menu'><i class="las la-bars"></i></a>
               </div>
+=======
+                  <a href="javascript:;" class='show-mobile-menu' style="background:transparent !important;"><i class="las la-bars" style="color:white;"></i></a>
+                
+                </div>
+>>>>>>> ali
           </div>
       </div>
   </section><?php /**PATH C:\xampp\htdocs\wabi-dev\modules\ElegantTemplate\Providers/../Resources/views/templates/logo_and_menu.blade.php ENDPATH**/ ?>

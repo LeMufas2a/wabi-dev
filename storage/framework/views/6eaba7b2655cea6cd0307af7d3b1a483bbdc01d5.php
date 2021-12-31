@@ -36,6 +36,13 @@
  <!-- All in one -->
  <script src="<?php echo e(asset('custom')); ?>/js/js.js?id=<?php echo e(config('config.version')); ?>"></script>
  <script src="<?php echo e(asset('custom')); ?>/js/eleganttemplate.js"></script>
+<<<<<<< HEAD
+=======
+ 
+ <!-- SLIM Cropper JS  -->
+ <script src="<?php echo e(asset('js')); ?>/slim.jquery.min.js"></script>
+ 
+>>>>>>> ali
  <script>
      function openNav(){
       document.body.classList.toggle("mobile-menu-opened");

@@ -364,7 +364,9 @@ function chageDeliveryCost(deliveryCost){
   }
 
 window.onload = function () {
+
   
+
   
 
   //VUE CART
@@ -510,7 +512,6 @@ window.onload = function () {
     el:'#addToCart1',
     methods: {
         addToCartAct() {
-            
             axios.post('/cart-add', {
                 id: $('#modalID').text(),
                 quantity: $('#quantity').val(),
@@ -518,9 +519,15 @@ window.onload = function () {
                 variantID:variantID
               })
               .then(function (response) {
+
                 // console.log("the response",response);
                   if(response.data.status){
                     console.log("response",response.data)
+
+                // console.log("the response",response);
+                  if(response.data.status){
+                    console.log("response",response.data)
+
                     $('#productModal').modal('hide');
                     //$('#productModal').modal('close');
                     getCartContentAndTotalPrice();
@@ -542,6 +549,7 @@ window.onload = function () {
     },
   });
 }
+
 
 
 function toggleIcon(e) {

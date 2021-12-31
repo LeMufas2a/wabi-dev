@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
  <?php echo $__env->make('elegant-template::templates.head', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<<<<<<< HEAD
+=======
+  <style>
+  @import  url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap');
+    body{
+      font-family: 'Ubuntu', sans-serif !important;
+    }
+	.myUbuntu{
+      font-family: 'Ubuntu', sans-serif !important;
+    }
+  </style>
+>>>>>>> akhtar
 <body>
     <?php
         function clean($string) {
