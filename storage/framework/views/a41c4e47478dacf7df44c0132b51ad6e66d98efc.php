@@ -541,6 +541,74 @@
 
             form.submit();
         });
+<<<<<<< HEAD
+=======
+
+
+        function previewFile(input){
+            
+            // var file = $("input[type=file]").get(0).files[0];
+            var file = $(input).val();
+            // console.log("the file",file);
+            if(file){
+                // var reader = new FileReader();
+                //console.log("src",reader);
+                $("#previewImg").attr("src", file);
+                // reader.onload = function(){
+                // }
+    
+                //reader.readAsDataURL(file);
+            }
+        }
+
+        $(function() {
+            // Multiple images preview in browser
+            // var imagesPreview = function(input, placeToInsertImagePreview) {
+            //     console.log("images preview");
+            //     if (input.files) {
+            //         var filesAmount = input.files.length;
+
+            //         for (i = 0; i < filesAmount; i++) {
+            //             var reader = new FileReader();
+
+            //             reader.onload = function(event) {
+            //                 $($.parseHTML('<img width="100" height="100">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+            //             }
+
+            //             reader.readAsDataURL(input.files[i]);
+            //         }
+            //     }
+
+            // };
+
+            
+        });
+
+        $(document).on('change','#imgfile', function() {
+                let id = $(this).attr("name");
+                // console.log("name",$(this).attr("name"));
+                imagesPreview(this, 'div.gallery',id);
+            });
+
+            function imagesPreview(input, placeToInsertImagePreview,id){
+                console.log("the id",id);
+                if (input.files) {
+                    var filesAmount = input.files.length;
+                    let i = 0;
+                    for (i = 0; i < filesAmount; i++) {
+                        var reader = new FileReader();
+                         
+                        reader.onload = function(event) {
+                            // $($.parseHTML('<img id="previewImg" width="100" height="100">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                            $("."+id).attr('src', event.target.result);
+                            // $("#"+this.active_el+"Modal")
+                        }
+
+                        reader.readAsDataURL(input.files[i]);
+                    }
+                }
+            }
+>>>>>>> akhtar
     </script>
 <?php $__env->stopSection(); ?>
 

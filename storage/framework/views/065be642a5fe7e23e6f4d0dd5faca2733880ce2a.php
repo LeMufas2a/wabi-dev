@@ -208,7 +208,89 @@
     
     $('#cat_name').val(name);
     $("#form-edit-category").attr("action", "/categories/"+id);
+<<<<<<< HEAD
 })
+=======
+});
+
+            $(document).on('change','#imgfile', function() {
+                let id = $(this).attr("name");
+                // console.log("name",$(this).attr("name"));
+                imagesPreview(this, 'div.gallery',id);
+            });
+            
+            $(document).on('change','#imgfileItem', function() {
+                let id = $(this).attr("name");
+                // console.log("name",$(this).attr("name"));
+                imagesPreviewItem(this, 'div.gallery',id);
+            });
+
+            function imagesPreview(input, placeToInsertImagePreview,id){
+                console.log("the id",id);
+                if (input.files) {
+                    var filesAmount = input.files.length;
+                    let i = 0;
+                    for (i = 0; i < filesAmount; i++) {
+                        var reader = new FileReader();
+                         
+                        reader.onload = function(event) {
+                            // $($.parseHTML('<img id="previewImg" width="100" height="100">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                            // $("."+id).attr('src', event.target.result);
+                            $("#previewImg").attr('src', event.target.result);
+                            // $("#"+this.active_el+"Modal")
+                        }
+
+                        reader.readAsDataURL(input.files[i]);
+                    }
+                }
+            }
+            
+            function imagesPreviewItem(input, placeToInsertImagePreview,id){
+                console.log("the id",id);
+                if (input.files) {
+                    var filesAmount = input.files.length;
+                    let i = 0;
+                    for (i = 0; i < filesAmount; i++) {
+                        var reader = new FileReader();
+                         
+                        reader.onload = function(event) {
+                            // $($.parseHTML('<img id="previewImg" width="100" height="100">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                            // $("."+id).attr('src', event.target.result);
+                            $("#previewImgItem").attr('src', event.target.result);
+                            // $("#"+this.active_el+"Modal")
+                        }
+
+                        reader.readAsDataURL(input.files[i]);
+                    }
+                }
+            }
+
+
+            $('#modal-new-item').on('hidden.bs.modal', function () {
+                $("#imgfileItem").val('');
+                $("#previewImgItem").attr('src',"https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg");
+            });
+
+            $('#modal-edit-category').on('hidden.bs.modal', function () {
+                $("#imgFile").val('');
+                $("#previewImg").attr('src',"https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg");
+            });
+
+        function previewFile(input){
+            
+            var file = $("input[type=file]").get(0).files[0];
+            console.log("file",file);
+            if(file){
+                var reader = new FileReader();
+    
+                reader.onload = function(){
+                    $("#previewImg").attr("src", reader.result);
+                }
+    
+                reader.readAsDataURL(file);
+            }
+        }
+>>>>>>> akhtar
 </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', ['title' => __('Restaurant Menu Management')], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/wabizz1/public_html/resources/views/items/index.blade.php ENDPATH**/ ?>

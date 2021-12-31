@@ -364,7 +364,11 @@ function chageDeliveryCost(deliveryCost){
   }
 
 window.onload = function () {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> akhtar
   
 
   //VUE CART
@@ -510,7 +514,11 @@ window.onload = function () {
     el:'#addToCart1',
     methods: {
         addToCartAct() {
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> akhtar
             axios.post('/cart-add', {
                 id: $('#modalID').text(),
                 quantity: $('#quantity').val(),
@@ -518,9 +526,13 @@ window.onload = function () {
                 variantID:variantID
               })
               .then(function (response) {
+<<<<<<< HEAD
                 // console.log("the response",response);
                   if(response.data.status){
                     console.log("response",response.data)
+=======
+                  if(response.data.status){
+>>>>>>> akhtar
                     $('#productModal').modal('hide');
                     //$('#productModal').modal('close');
                     getCartContentAndTotalPrice();
@@ -542,6 +554,7 @@ window.onload = function () {
     },
   });
 }
+<<<<<<< HEAD
 
 
 function toggleIcon(e) {
@@ -552,3 +565,5 @@ function toggleIcon(e) {
   }
   $('.panel-group').on('hidden.bs.collapse', toggleIcon);
   $('.panel-group').on('shown.bs.collapse', toggleIcon);
+=======
+>>>>>>> akhtar

@@ -415,6 +415,7 @@ $(".nav-item-category").on('click', function() {
             $("."+value).hide();
         }
     });
+<<<<<<< HEAD
 });
 
 // setCurrentItem upon clicking the collapse + PLUS button
@@ -430,4 +431,6 @@ $(document).on("click",".collapse_plus",function(){
         alert("Item not found!");
     }
     
+=======
+>>>>>>> akhtar
 });

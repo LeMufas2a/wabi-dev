@@ -34,6 +34,7 @@ class CartController extends Controller
         if(isset($request->session_id)){
             $this->setSessionID($request->session_id);
         }
+<<<<<<< HEAD
 		// dd($request->id);
         // if(!$request->id){
         //     return response()->json([
@@ -46,6 +47,10 @@ class CartController extends Controller
         print_r($item);
         // if(isset($item)){
         // }
+=======
+		//dd($request->session_id);    
+        $item = Items::find($request->id);
+>>>>>>> akhtar
         $restID = $item->category->restorant->id;
 
         $restaurant = Restorant::findOrFail($restID);

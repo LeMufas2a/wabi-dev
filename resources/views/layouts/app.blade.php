@@ -177,8 +177,11 @@
             <!-- SLIM Cropper -->
             <!-- <script src="{{ asset('js') }}/slim.jquery.min.js"></script> -->
             <script src="{{ asset('js') }}/slim.kickstart.min.js"></script>
+<<<<<<< HEAD
 
             <!-- Custom JS for slim crop -->
             <script src="{{ asset('custom') }}/js/custom.js"></script>
+=======
+>>>>>>> akhtar
     </body>
 </html>

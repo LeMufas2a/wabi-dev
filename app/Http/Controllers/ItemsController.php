@@ -30,8 +30,13 @@ class ItemsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+<<<<<<< HEAD
     {   
         
+=======
+    {
+      
+>>>>>>> akhtar
         if (auth()->user()->hasRole('owner')) {
 
             

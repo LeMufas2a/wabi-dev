@@ -2,7 +2,11 @@
     <div class="modal-dialog modal-lg modal-dialog-centered modal-" role="document" id="modalDialogItem">
         <div class="modal-content">
             <div class="modal-header">
+<<<<<<< HEAD
                 <h5 id="modalTitle" class="modal-title" id="modal-title-new-item"></h5>
+=======
+                
+>>>>>>> akhtar
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -12,12 +16,23 @@
                     <div class="card-body px-lg-5 py-lg-5">
                         <div class="row">
                             <div class="col-sm col-md col-lg text-center" id="modalImgPart">
+<<<<<<< HEAD
                                 <img id="modalImg" src="" width="295px" height="200px">
                             </div>
                             <div class="col-sm col-md col-lg col-lg" id="modalItemDetailsPart">
                                 <input id="modalID" type="hidden"></input>
                                 <span id="modalPrice" class="new-price"></span>
                                 <p id="modalDescription"></p>
+=======
+                              <img id="modalImg" src="" width="295px" height="200px" style="width: 100%;">  
+                            </div>
+  
+                            <div class="col-sm col-md col-lg col-lg" id="modalItemDetailsPart">
+                              <h5 id="modalTitle" class="modal-title product_title" id="modal-title-new-item"></h5>
+                                <input id="modalID" type="hidden"></input>
+                                <span id="modalPrice" class="new-price"></span>
+                                
+>>>>>>> akhtar
                                 <div id="variants-area">
                                     <label class="form-control-label">{{ __('Select your options') }}</label>
                                     <div id="variants-area-inside">
@@ -32,10 +47,21 @@
                                @if(  !(isset($canDoOrdering)&&!$canDoOrdering)   )
                                 <div class="quantity-area">
                                     <div class="form-group">
+<<<<<<< HEAD
                                         <br />
                                         <label class="form-control-label" for="quantity">{{ __('Quantity') }}</label>
                                         <!--<input type="number" name="quantity" id="quantity" class="form-control form-control-alternative" placeholder="1" value="1" required autofocus>-->
                                             <input
+=======
+                                        <label class="form-control-label" for="quantity">{{ __('Quantity') }}</label>
+                                        <!--<input type="number" name="quantity" id="quantity" class="form-control form-control-alternative" placeholder="1" value="1" required autofocus>-->
+                                       <div class="quantity-controller">
+                                            <div class="minus-container">
+                                              <span id="minus">-</span>
+                                         </div> 
+                                         <div>
+                                           <input
+>>>>>>> akhtar
                                                     type="number"
                                                     min="1"
                                                     step="1"
@@ -48,12 +74,38 @@
                                                     required 
                                                     autofocus
                                             >
+<<<<<<< HEAD
                                     </div>
+=======
+                                         </div>
+                                         <div class="plus-container">
+                                           <span id="plus">+</span>
+                                         </div>
+                                      </div>
+                                    </div>
+                                  <div class="instruction d-flex">
+                                    <div class="col-12 p-0 d-flex align-items-center mb-4 mt-2">
+                                        <i class="icons8 icons8-shop me-1" title="" data-placement="" data-original-title=""></i>
+                                        <p class="legend mb-0">Click &amp; Collect</p>
+                                    </div>
+                                  </div>
+>>>>>>> akhtar
                                     <div class="quantity-btn">
                                         <div id="addToCart1">
                                             <button class="btn btn-primary" v-on:click='addToCartAct'>{{ __('Add To Cart') }}</button>
                                         </div>
                                     </div>
+<<<<<<< HEAD
+=======
+                                  <div class="product description">
+                                    <p>
+                                      Product description
+                                    </p>
+                                    <div>
+                                      <p id="modalDescription"></p>
+                                    </div>
+                                  </div>
+>>>>>>> akhtar
                                    
                                 </div>
                                @endif
@@ -176,6 +228,37 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
+=======
+<script>
+  let minus = document.getElementById("minus")
+  let plus = document.getElementById("plus")
+  let quantity = document.getElementById("quantity")
+  
+  minus.addEventListener("click",function(){
+    let setValue = Number(quantity.value) - 1
+    if (setValue < 1) {
+      return
+    }
+    quantity.value = setValue
+  })
+  
+  plus.addEventListener("click",function(){
+    //if(quantity.value > 10){
+    //  return
+    //}
+    //quantity.value = quantity.value + 1
+    let setValue = Number(quantity.value) + 1
+    if (setValue > 9) {
+      return
+    }
+    quantity.value = setValue
+    console.log(setValue)
+    //console.log(quantity.value)
+  })
+</script>
+
+>>>>>>> akhtar
 @endisset
 
 

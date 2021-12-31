@@ -51,7 +51,14 @@
 
         <!-- Custom CSS defined by admin -->
         <link type="text/css" href="<?php echo e(asset('byadmin')); ?>/back.css" rel="stylesheet">
+<<<<<<< HEAD
 
+=======
+        <link type="text/css" href="<?php echo e(asset('custom/css')); ?>/img_carousal.css" rel="stylesheet">
+        
+        <!-- Slim Cropper -->
+        <link type="text/css" href="<?php echo e(asset('css')); ?>/slim.min.css" rel="stylesheet">
+>>>>>>> akhtar
 
 
 
@@ -166,10 +173,21 @@
          <?php if(strlen( config('broadcasting.connections.pusher.app_id'))>2): ?>
             <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
             <script src="<?php echo e(asset('custom')); ?>/js/pusher.js"></script>
+<<<<<<< HEAD
         <?php endif; ?>
 
         <!-- Custom JS defined by admin -->
         <?php echo file_get_contents(base_path('public/byadmin/back.js')) ?>
+=======
+            <?php endif; ?>
+            
+            <!-- Custom JS defined by admin -->
+            <?php echo file_get_contents(base_path('public/byadmin/back.js')) ?>
+            
+            <!-- SLIM Cropper -->
+            <!-- <script src="<?php echo e(asset('js')); ?>/slim.jquery.min.js"></script> -->
+            <script src="<?php echo e(asset('js')); ?>/slim.kickstart.min.js"></script>
+>>>>>>> akhtar
     </body>
 </html>
 <?php /**PATH /home/wabizz1/public_html/resources/views/layouts/app.blade.php ENDPATH**/ ?>

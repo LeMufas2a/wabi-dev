@@ -246,7 +246,7 @@ body.pre-wrapper-opened #pre-wrapper{max-height: max(100vh, 999px);}
 #header > .packer > .package > .left > .logo img{height: calc(var(--header-height) - var(--gap) * 3);width: auto;}
 #header > .packer > .package > .right{flex-grow: 1;display: flex;justify-content: flex-end;padding-left: var(--padding);}
 #header > .packer > .package > .related-mobile-menu{display: none;flex-grow: 1;justify-content: flex-end;}
-#header > .packer > .package > .related-mobile-menu > .show-mobile-menu{ display: inline-flex;justify-content: center;align-items: center;width: 48px;height: 48px;border-radius: 50%;background: #FFF;box-shadow: var(--shadow);font-size: 24px;}
+#header > .packer > .package > .related-mobile-menu > .show-mobile-menu{ display: inline-flex;justify-content: center;align-items: center;width: 48px;height: 48px;font-size: 24px;}
 #header > .packer > .package > .related-mobile-menu > .show-mobile-menu:hover{text-decoration: none;box-shadow: var(--shadow), var(--shadow);}
 #header > .packer > .package > .related-mobile-menu > .show-mobile-menu > i {pointer-events: none;}
 body.mobile-menu-opened #header > .packer > .package > .related-mobile-menu > .show-mobile-menu{display: none;}
@@ -429,13 +429,13 @@ section.section-place-content > .packer > .package > .content > .holder-center{w
 section.section-download-app > .packer > .package{padding: var(--padding) 0;}
 section.section-download-app::before{content: " ";display: block;position: absolute;top: 0;left: 0;right: 0;height: 50%;background-color: var(--color-background-shadow);}
 /* box-info */
-.box-info{background: #FFF;border-radius: var(--border-radius);box-shadow: var(--shadow);width: 100%;}
-.box-info + * {margin-top: var(--gap-lg);}
+.box-info{background: #FFF;border-radius: var(--border-radius); width: 100%;}
+.box-info + * {}
 .box-info > .head{top: 0;background: #FFF;z-index: 2;}
 .box-info > .head, .box-info > .actions, .box-info > .content{padding: var(--gap);}
 .actionsCart{padding: var(--gap);}
-.box-info > .head{background: #ffbb00; border-radius: 0px 0px 23px 23px;}
-.box-info > * + .head{border-top: 1px solid #EEE;}
+.box-info > .head{background: #ffbb00; border-radius: 0px 0px 0px 0px;}
+.box-info > * + .head{}
 .box-info > .head > * + *{margin-top: var(--gap);}
 .box-info > .head > .info >  * + *{margin-top: calc(var(--gap-sm) / 2);}
 /* rounder-box */
@@ -560,3 +560,4 @@ section.section-download-app::before{content: " ";display: block;position: absol
 padding-top: 60px;
 padding-bottom: 60px;
 }
+.allergen.disabled{background:#EEE;color: #CCC;}
