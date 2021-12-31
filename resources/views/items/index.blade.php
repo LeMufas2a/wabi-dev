@@ -106,11 +106,7 @@
                                                 <span class="btn-inner--icon"><i class="fa fa-plus"></i> {{ __('Menu size limit reaced') }}</span>
                                             </a>
                                         @endif
-<<<<<<< HEAD
                                         <button class="btn btn-icon btn-1 btn-sm btn-warning" type="button" id="edit" data-toggle="modal" data-target="#modal-edit-category" data-toggle="tooltip" data-placement="top" title="{{ __('Edit category') }} {{ $category->name }}" data-id="<?= $category->id ?>"data-image="<?= $category->logom ?>"  data-name="<?= $category->name ?>" >
-=======
-                                        <button class="btn btn-icon btn-1 btn-sm btn-warning" type="button" id="edit" data-toggle="modal" data-target="#modal-edit-category" data-toggle="tooltip" data-placement="top" title="{{ __('Edit category') }} {{ $category->name }}" data-id="<?= $category->id ?>" data-name="<?= $category->name ?>" >
->>>>>>> akhtar
                                             <span class="btn-inner--icon"><i class="fa fa-edit"></i></span>
                                         </button>
 
@@ -206,18 +202,11 @@
   $("[data-target='#modal-edit-category']").on('click',function() {
     var id = $(this).attr('data-id');
     var name = $(this).attr('data-name');
-<<<<<<< HEAD
     var image = $(this).attr('data-image');
 
     
     $('#cat_name').val(name);
     $('#previewImg').attr('src',image);
-=======
-
-
-    
-    $('#cat_name').val(name);
->>>>>>> akhtar
     $("#form-edit-category").attr("action", "/categories/"+id);
 });
 
