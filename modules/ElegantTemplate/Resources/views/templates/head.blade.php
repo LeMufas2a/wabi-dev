@@ -69,6 +69,9 @@
 
      <!-- Custom CSS -->
      <link type="text/css" href="{{ asset('custom') }}/css/custom.css" rel="stylesheet">
+
+     <!-- Slim CSS -->
+     <link type="text/css" href="{{ asset('css') }}/slim.min.css" rel="stylesheet">
       
      <!-- Import Vue -->
     <script src="{{ asset('vendor') }}/vue/vue.js"></script>

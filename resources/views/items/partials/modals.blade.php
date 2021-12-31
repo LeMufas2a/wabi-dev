@@ -23,14 +23,21 @@
                                 @endif
                             </div>
 
-                            <div class="form-group{{ $errors->has('item_image') ? ' has-danger' : '' }}">
-                            <input type="file" id="imgfile" name="item_image" accept="image/x-png,image/gif,image/jpeg">
+                            <div class="slim form-group{{ $errors->has('item_image') ? ' has-danger' : '' }}" 
+                                data-ratio="16:9"
+                                data-size="1000,300"
+                            >
+                                <input type="file" id="imgfile" name="item_image">
                                 @if ($errors->has('item_image'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('item_image') }}</strong>
                                     </span>
                                 @endif
+
+                                <!-- <input type="hidden" name="cat_image" id="cat_image"> -->
                             </div>
+
+                            
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary my-4">{{ __('Save') }}</button>
                             </div>
@@ -58,6 +65,7 @@
                         <form role="form" id="form-edit-category" method="post" action="" enctype="multipart/form-data">
                             @csrf
                             @method('put')
+                            
                             <input name="cat_id" id="cat_id" type="hidden" required>
                             <div class="form-group{{ $errors->has('category_name') ? ' has-danger' : '' }}">
                                 <input class="form-control" name="category_name" id="cat_name" placeholder="{{ __('Category name') }} ..." type="text" required>
@@ -71,7 +79,7 @@
                                 <label class="form-control-label" for="item_image">{{ __('Item Image') }}</label>
                                 <div class="text-center">
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
-                                        <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;">
+                                        <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="width: auto; height: auto;">
                                             <img id="previewImg" src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg" width="200px" height="150px" alt="..."/>
                                         </div>
                                     <div>

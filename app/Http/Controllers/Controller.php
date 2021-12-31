@@ -22,6 +22,7 @@ class Controller extends BaseController
      */
     public function saveImageVersions($folder, $laravel_image_resource, $versions)
     {
+        dd($versions);
         //Make UUID
         $uuid = Str::uuid()->toString();
         // dd($uuid);
@@ -44,6 +45,38 @@ class Controller extends BaseController
         }
         
         return $uuid;
+    }
+
+    public function saveImageVersionsCustomCategory($folder, $laravel_image_resource, $versions){
+         
+        // echo "<pre>";
+        // print_r($folder);
+        // print_r($laravel_image_resource);
+        // print_r($versions);
+        // die;
+         //Make UUID
+         $uuid = Str::uuid()->toString();
+        //  dd($laravel_image_resource);
+ 
+         //Make the versions
+         foreach ($versions as $key => $version) {
+             $ext="jpg";
+             if(isset($version['type'])){
+                 $ext=$version['type'];
+             }
+            //  dd($ext);
+             if (isset($version['w']) && isset($version['h'])) {
+                 
+                $img = Image::make($laravel_image_resource)->fit($version['w'], $version['h']);
+                $img->save(public_path($folder).$uuid.'_'.$version['name'].'.'.'jpg',100,$ext);
+             } else {
+                 //Original image
+                 $img = Image::make($laravel_image_resource)->fit($version['w'], $version['h']);
+                 $img->save(public_path($folder).$uuid.'_'.$version['name'].'.'.'jpg',100,$ext);
+             }
+         }
+         
+         return $uuid;
     }
 
     private function withinArea($point, $polygon, $n)

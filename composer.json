@@ -101,7 +101,13 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "Modules\\": "modules/"
-        }
+        },
+        "classmap": [
+            "app/slimcrop/Slim.php"
+        ],
+        "files": [
+            "app/slimcrop/Slim.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

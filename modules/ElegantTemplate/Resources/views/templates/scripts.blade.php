@@ -36,6 +36,10 @@
  <!-- All in one -->
  <script src="{{ asset('custom') }}/js/js.js?id={{ config('config.version')}}"></script>
  <script src="{{ asset('custom') }}/js/eleganttemplate.js"></script>
+ 
+ <!-- SLIM Cropper JS  -->
+ <script src="{{ asset('js') }}/slim.jquery.min.js"></script>
+ 
  <script>
      function openNav(){
       document.body.classList.toggle("mobile-menu-opened");
