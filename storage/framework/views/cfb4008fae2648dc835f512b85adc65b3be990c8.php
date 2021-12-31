@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+ <?php echo $__env->make('elegant-template::templates.head', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+  <style>
+  @import  url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap');
+    body{
+      font-family: 'Ubuntu', sans-serif !important;
+    }
+	.myUbuntu{
+      font-family: 'Ubuntu', sans-serif !important;
+    }
+  </style>
+<body>
+    <?php
+        function clean($string) {
+            $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+
+            return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+        }
+    ?>
+    <?php echo $__env->make('elegant-template::templates.mobile-menu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <div id='wrapper'>
+         <?php echo $__env->make('elegant-template::templates.logo_and_menu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+         <?php echo $__env->make('restorants.partials.modals', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+         <?php echo $__env->make('elegant-template::templates.call_waiter', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+         <?php echo $__env->make('elegant-template::templates.place-header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+         <?php echo $__env->make('elegant-template::templates.place-content', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+         <?php if(isset($doWeHaveImpressumApp)&&$doWeHaveImpressumApp&&strlen($restorant->getConfig('impressum_value',''))>5): ?>
+            <?php echo $__env->make('elegant-template::templates.impressum', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php endif; ?>
+         
+    </div>
+   
+ 
+    <?php echo $__env->make('elegant-template::templates.scripts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
+    
+</body>
+
+</html><?php /**PATH C:\xampp\htdocs\wabi-dev\modules\ElegantTemplate\Providers/../Resources/views/show.blade.php ENDPATH**/ ?>
