@@ -1,3 +1,4 @@
+
 <!-- head -->
 <head>
     <meta charset="utf-8" />
@@ -15,14 +16,11 @@
     <meta name="description" content="{{ $restorant->description }}">
 
 
-	<link
-      rel="stylesheet"
-      href="https://unpkg.com/swiper/swiper-bundle.min.css"
-    />
+
     @notifyCss
 
     
-	
+
     <!-- Select2 -->
     <link type="text/css" href="{{ asset('custom') }}/css/select2.min.css" rel="stylesheet">
 

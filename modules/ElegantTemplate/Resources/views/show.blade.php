@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html>
  @include('elegant-template::templates.head')
-  <style>
-  @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap');
-    body{
-      font-family: 'Ubuntu', sans-serif !important;
-    }
-	.myUbuntu{
-      font-family: 'Ubuntu', sans-serif !important;
-    }
-  </style>
 <body>
     <?php
         function clean($string) {
