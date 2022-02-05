@@ -1,4 +1,3 @@
-
 <!-- head -->
 <head>
     <meta charset="utf-8" />
@@ -16,11 +15,14 @@
     <meta name="description" content="{{ $restorant->description }}">
 
 
-
+	<link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
     @notifyCss
 
     
-
+	
     <!-- Select2 -->
     <link type="text/css" href="{{ asset('custom') }}/css/select2.min.css" rel="stylesheet">
 
@@ -69,10 +71,16 @@
 
      <!-- Custom CSS -->
      <link type="text/css" href="{{ asset('custom') }}/css/custom.css" rel="stylesheet">
-
-     <!-- Slim CSS -->
-     <link type="text/css" href="{{ asset('css') }}/slim.min.css" rel="stylesheet">
       
+     <!-- VanillaJS CSS -->
+     <link  href="{{ asset('css') }}/vanilla-picker.csp.css" rel="stylesheet">
+
+     
+        <!-- Vanilla ColorJS Plugin -->
+        
+
+        <script src="{{ asset('js') }}/vanilla-picker.csp.min.js"></script>
+
      <!-- Import Vue -->
     <script src="{{ asset('vendor') }}/vue/vue.js"></script>
     <!-- Import AXIOS --->

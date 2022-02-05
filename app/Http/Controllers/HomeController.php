@@ -13,6 +13,7 @@ use Akaunting\Module\Facade as Module;
 use Modules\Expenses\Models\Expenses;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cookie;
+use Session;
 
 class HomeController extends Controller
 {

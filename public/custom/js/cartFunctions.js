@@ -6,6 +6,7 @@ var cartTotal=null;
 var cartTotalMobile=null;
 var footerPages=null;
 var total=null;
+var total_price_on_checkout_button=null;
 
 $('#localorder_phone').hide();
 
@@ -22,7 +23,7 @@ function updatePrices(net,delivery,enableDelivery){
   net=parseFloat(net+"");
   delivery=parseFloat(delivery+"");
   var deduct=cartTotal.deduct;
-  console.log("Deduct is "+deduct);
+  // console.log("Deduct is "+deduct);
   
   var formatter = new Intl.NumberFormat(LOCALE, {
     style: 'currency',
@@ -63,10 +64,10 @@ function updatePrices(net,delivery,enableDelivery){
   }
   total.lastChange=new Date().getTime();
   cartTotal.lastChange=new Date().getTime();
-  console.log("DAta");
-console.log(cartTotal)
-  console.log("Total is "+total.totalPrice);
-  console.log("Total is "+cartTotal.withDelivery);
+  // console.log("DAta");
+  // console.log(cartTotal)
+  // console.log("Total is "+total.totalPrice);
+  // console.log("Total is "+cartTotal.withDelivery);
   
 
 }
@@ -96,7 +97,30 @@ function getCartContentAndTotalPrice(){
    axios.get('/cart-getContent').then(function (response) {
     cartContent.items=response.data.data;
     //cartContentMobile.items=response.data.data;
+    // alert("here");
+    total_price_on_checkout_button = response.data.total;
+    // console.log("getCartContent quantity",response.data.quantity);
+    
+    if(total_price_on_checkout_button >= 1){
+      $(".third-child").show();
+      $(".custom--cart").text( response.data.quantity +"\t \t \t Checkout \t \t \t €"+ total_price_on_checkout_button.toFixed(2) );
+    }
+    else{
+      // console.log("response.data.quantity",response.data.quantity);
+      // var parent_id = $(".custom--cart").parent().parent().attr('id');
+      // alert(parent_id);
+      // $(div#theCartBottomButtonDiv).hide();
+      // $( "div.container-fluid.first-child" ).find( "div" ).css( "background-color", "red" );
+      // alert("here");
+      // $(".third-child").css( "background-color", "red" );
+      // var allListElements = $( "div" );
+      // console.log("allListElements",allListElements);
+      $(".third-child").hide();
+      // $(".custom--cart").hide();
+    }
+
     updateSubTotalPrice(response.data.total,true);
+    
    })
    .catch(function (error) {
      
@@ -367,8 +391,6 @@ window.onload = function () {
 
   
 
-  
-
   //VUE CART
   cartContent = new Vue({
     el: '#cartList',
@@ -507,11 +529,16 @@ window.onload = function () {
 
   //Call to get the total price and items
   getCartContentAndTotalPrice();
-
+  
   var addToCart1 =  new Vue({
     el:'#addToCart1',
     methods: {
         addToCartAct() {
+            let hidden_cart_value = parseInt($("#total_in_cart").val());
+            hidden_cart_value = parseInt(hidden_cart_value)  + parseInt($('#quantity').val());
+            $("#total_in_cart").val(hidden_cart_value);
+            // console.log("inside add to cart",total_price_on_checkout_button); 
+            // console.log("the quantity without adding",$('#quantity').val());
             axios.post('/cart-add', {
                 id: $('#modalID').text(),
                 quantity: $('#quantity').val(),
@@ -519,16 +546,11 @@ window.onload = function () {
                 variantID:variantID
               })
               .then(function (response) {
-
-                // console.log("the response",response);
                   if(response.data.status){
-                    console.log("response",response.data)
-
-                // console.log("the response",response);
-                  if(response.data.status){
-                    console.log("response",response.data)
-
                     $('#productModal').modal('hide');
+                    $("#theCartBottomButtonDiv").show();
+                    // $("#total_in_cart").val($('#quantity').val());
+                    $(".custom--cart").text(hidden_cart_value +"\t \t \t Checkout \t \t \t"+ total_price_on_checkout_button.toFixed(2) );
                     //$('#productModal').modal('close');
                     getCartContentAndTotalPrice();
                     if (TEMPLATE_USED== "defaulttemplate") { 
@@ -548,15 +570,7 @@ window.onload = function () {
         },
     },
   });
+
+
+  
 }
-
-
-
-function toggleIcon(e) {
-  $(e.target)
-      .prev('.panel-heading')
-      .find(".more-less")
-      .toggleClass('glyphicon-plus glyphicon-minus');
-  }
-  $('.panel-group').on('hidden.bs.collapse', toggleIcon);
-  $('.panel-group').on('shown.bs.collapse', toggleIcon);

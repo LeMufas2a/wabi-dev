@@ -264,7 +264,7 @@ body.mobile-menu-opened #header > .packer > .package > .related-mobile-menu > .s
 #mobile-menu{position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 5;background-color: rgba(0,0,0,.8);display: none;}
 body.mobile-menu-opened #mobile-menu{display: block;}
 body.mobile-menu-opened {overflow-y: hidden;}
-#mobile-menu > .close-mobile-menu{display: inline-flex;justify-content: center;align-items: center;width: 48px;height: 48px;border-radius: 50%;background: #FFF;box-shadow: var(--shadow);font-size: 24px;position: fixed;top: var(--gap-lg);right: var(--gap-lg);}
+#mobile-menu > .close-mobile-menu{display: inline-flex;justify-content: center;align-items: center;width: 40px;height: 40px;border-radius: 50%;background: #FFF;box-shadow: var(--shadow);font-size: 24px;position: fixed;top: var(--gap-lg);right: var(--gap-lg);}
 #mobile-menu > .close-mobile-menu:hover{text-decoration: none;}
 #mobile-menu > .close-mobile-menu > i{pointer-events: none;}
 
@@ -429,12 +429,12 @@ section.section-place-content > .packer > .package > .content > .holder-center{w
 section.section-download-app > .packer > .package{padding: var(--padding) 0;}
 section.section-download-app::before{content: " ";display: block;position: absolute;top: 0;left: 0;right: 0;height: 50%;background-color: var(--color-background-shadow);}
 /* box-info */
-.box-info{background: #FFF;border-radius: var(--border-radius);box-shadow: var(--shadow);width: 100%;}
-.box-info + * {margin-top: var(--gap-lg);}
+.box-info{background: #FFF;border-radius: var(--border-radius); width: 100%;}
+.box-info + * {}
 .box-info > .head{top: 0;background: #FFF;z-index: 2;}
 .box-info > .head, .box-info > .actions, .box-info > .content{padding: var(--gap);}
 .actionsCart{padding: var(--gap);}
-.box-info > .head{background: #ffbb00; border-radius: 0px 0px 0px 0px;}
+.box-info > .head{background: #ffbb00; border-radius: 0px 0px 0px 0px; height: 50px !important;}
 .box-info > * + .head{}
 .box-info > .head > * + *{margin-top: var(--gap);}
 .box-info > .head > .info >  * + *{margin-top: calc(var(--gap-sm) / 2);}
@@ -486,77 +486,3 @@ section.section-download-app::before{content: " ";display: block;position: absol
     height: 15px;
 }
 .allergen.disabled{background:#EEE;color: #CCC;}
-
-
-/* Custom CSS for place-content.blade.php */
-.how-section1{
-    margin-top:-15%;
-    padding: 10%;
-}
-.how-section1 h4{
-    color: #ffa500;
-    font-weight: bold;
-    font-size: 30px;
-}
-.how-section1 .subheading{
-    color: #3931af;
-    font-size: 20px;
-}
-.how-section1 .row
-{
-    margin-top: 10%;
-}
-.how-img 
-{
-    text-align: center;
-}
-.how-img img{
-    width: 40%;
-}
-
-
-
-/*******************************
-* Does not work properly if "in" is added after "collapse".
-* Get free snippets on bootpen.com
-*******************************/
-.panel-group .panel {
-    border-radius: 0;
-    box-shadow: none;
-    border-color: #EEEEEE;
-    margin-top:10px;
-}
-
-.panel-default > .panel-heading {
-    padding: 0;
-    border-radius: 0;
-    color: #212121;
-    background-color: #f2f7fb;
-    border-color: #EEEEEE;
-}
-
-.panel-title {
-    font-size: 14px;
-}
-
-.panel-title > a {
-    display: block;
-    padding: 15px;
-    text-decoration: none;
-}
-
-.more-less {
-    float: right;
-    color: #212121;
-}
-
-.panel-default > .panel-heading + .panel-collapse > .panel-body {
-    border-top-color: #EEEEEE;
-}
-
-
-
-.demo {
-padding-top: 60px;
-padding-bottom: 60px;
-}

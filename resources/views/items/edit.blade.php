@@ -116,7 +116,7 @@
                                             @include('partials.input',['id'=>'vat','name'=>__('VAT percentage( calculated into item price )'),'placeholder'=>__('Item VAT percentage'),'value'=>$item->vat==""?$restorant->getConfig('default_tax_value',0):$item->vat,'required'=>false,'type'=>'number'])
                                         @endif
                                         
-                                        <?php $image=['name'=>'item_image','label'=>__('Item Image'),'value'=> $item->logom,'style'=>'width: 290px; height:200']; ?>
+                                        <?php $image=['dimensions'=>'590,400','name'=>'item_image','label'=>__('Item Image'),'value'=> $item->logom,'style'=>'width: 290px; height:200']; ?>
                                         @include('partials.images',$image)
                                         @include('partials.toggle',['id'=>'itemAvailable','name'=>'Item available','checked'=>($item->available == 1)])
                                         @include('partials.toggle',['id'=>'has_variants','name'=>'Enable variants','checked'=>($item->has_variants==1)])

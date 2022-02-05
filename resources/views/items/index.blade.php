@@ -3,7 +3,7 @@
     {{__('Menu')}}
 @endsection
 @section('content')
-    @include('items.partials.modals', ['restorant_id' => $restorant_id])
+    
     
     <div class="header bg-gradient-primary pb-7 pt-5 pt-md-8">
         <div class="container-fluid">
@@ -79,6 +79,7 @@
                         @endif
                        
                         @foreach ($categories as $index => $category)
+                        @include('items.partials.modals', ['restorant_id' => $restorant_id,'img'=>$category->logom])
                         @if($category->active == 1)
                         <div class="alert alert-default">
                             <div class="row">
@@ -106,7 +107,7 @@
                                                 <span class="btn-inner--icon"><i class="fa fa-plus"></i> {{ __('Menu size limit reaced') }}</span>
                                             </a>
                                         @endif
-                                        <button class="btn btn-icon btn-1 btn-sm btn-warning" type="button" id="edit" data-toggle="modal" data-target="#modal-edit-category" data-toggle="tooltip" data-placement="top" title="{{ __('Edit category') }} {{ $category->name }}" data-id="<?= $category->id ?>"data-image="<?= $category->logom ?>"  data-name="<?= $category->name ?>" >
+                                        <button class="btn btn-icon btn-1 btn-sm btn-warning" type="button" id="edit" data-toggle="modal" data-target="#modal-edit-category" data-toggle="tooltip" data-placement="top" title="{{ __('Edit category') }} {{ $category->name }}" data-id="<?= $category->id ?>" data-image="<?= $category->logom ?>"  data-name="<?= $category->name ?>" >
                                             <span class="btn-inner--icon"><i class="fa fa-edit"></i></span>
                                         </button>
 
@@ -199,18 +200,21 @@
 
 @section('js')
 <script>
-  $("[data-target='#modal-edit-category']").on('click',function() {
+$("[data-target='#modal-edit-category']").on('click',function() {
+    
     var id = $(this).attr('data-id');
     var name = $(this).attr('data-name');
     var image = $(this).attr('data-image');
 
-    
+    // alert(image);instantEdit
+    $('#cat_image_edit').attr('src',image);
     $('#cat_name').val(name);
     $('#previewImg').attr('src',image);
     $("#form-edit-category").attr("action", "/categories/"+id);
+
 });
 
-            $(document).on('change','#imgfile', function() {
+            $(document).on('change','#imgfile11', function() {
                 let id = $(this).attr("name");
                 // console.log("name",$(this).attr("name"));
                 imagesPreview(this, 'div.gallery',id);

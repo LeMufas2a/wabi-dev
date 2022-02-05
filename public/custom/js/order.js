@@ -415,21 +415,4 @@ $(".nav-item-category").on('click', function() {
             $("."+value).hide();
         }
     });
-
-
-});
-
-// setCurrentItem upon clicking the collapse + PLUS button
-
-$(document).on("click",".collapse_plus",function(){
-    
-    let item_id = $(this).attr('data-id');
-
-    if(item_id){
-        //setCurrentItem(item_id);
-    }
-    else{
-        alert("Item not found!");
-    }
-    
 });

@@ -37,13 +37,20 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('syncV1UsersToAuth0', 'SettingsController@syncV1UsersToAuth0')->name('syncV1UsersToAuth0');
         Route::get('dontsyncV1UsersToAuth0', 'SettingsController@dontsyncV1UsersToAuth0')->name('dontsyncV1UsersToAuth0');
         Route::resource('restaurants', 'RestorantController');
+        // Route::resource('designeshop', 'DesignEshopController');
         Route::put('restaurants_app_update/{restaurant}', 'RestorantController@updateApps')->name('restaurant.updateApps');
 
         Route::get('restaurants_add_new_shift/{restaurant}', 'RestorantController@addnewshift')->name('restaurant.addshift');
-
+        
         Route::get('restaurants/loginas/{restaurant}', 'RestorantController@loginas')->name('restaurants.loginas');
         
+        /* My custom routes */
 
+        // Images for eshop - all routes listed below
+        Route::get('show-all-images/{restaurant}', 'RestorantController@show_all_images')->name('restaurants.showImages');
+
+        // Route for saving heading color
+        Route::post('save-heading-color/{restaurant}','FrontEndController@save_styles')->name('save-heading-style');
         Route::get('removedemodata', 'RestorantController@removedemo')->name('restaurants.removedemo');
         Route::get('sitemap','SettingsController@regenerateSitemap')->name('regenerate.sitemap');
 

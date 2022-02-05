@@ -12,3 +12,8 @@ $(document).on("change","#imgfile",function(){
     $("#cat_image").val($(this).val());
     console.log($("#cat_image").val());
 });
+
+
+$(document).on("change","#imgfile",function(){
+    
+});

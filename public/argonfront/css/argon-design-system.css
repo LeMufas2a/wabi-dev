@@ -4246,8 +4246,8 @@ input[type="button"].btn-block {
 
 .custom-control-input:checked~.custom-control-label::before {
   color: #fff;
-  border-color: #5e72e4;
-  background-color: #5e72e4;
+  border-color: #240c52 !important;
+  background-color: #240c52 !important;
   box-shadow: none;
 }
 
@@ -4780,6 +4780,7 @@ input[type="button"].btn-block {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1rem;
+  background : #240c52 !important;
 }
 
 .navbar>.container,
@@ -18514,7 +18515,7 @@ a.btn-icon-only {
 }
 
 .custom-checkbox .custom-control-input:checked~.custom-control-label::before {
-  border-color: #5e72e4;
+  border-color: #240c52;
 }
 
 .custom-checkbox .custom-control-input:checked~.custom-control-label::after {
@@ -18535,7 +18536,7 @@ a.btn-icon-only {
 }
 
 .custom-radio .custom-control-input:checked~.custom-control-label::before {
-  border-color: #5e72e4;
+  border-color: #240c52 !important;
 }
 
 .custom-radio .custom-control-input:checked~.custom-control-label::after {

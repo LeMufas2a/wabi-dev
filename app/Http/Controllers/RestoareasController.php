@@ -63,6 +63,7 @@ class RestoareasController extends Controller
      */
     public function index()
     {
+        
         $this->authChecker();
 
         return view($this->view_path.'index', ['setup' => [

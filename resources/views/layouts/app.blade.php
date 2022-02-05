@@ -51,12 +51,12 @@
 
         <!-- Custom CSS defined by admin -->
         <link type="text/css" href="{{ asset('byadmin') }}/back.css" rel="stylesheet">
-        <link type="text/css" href="{{ asset('custom/css') }}/img_carousal.css" rel="stylesheet">
         
         <!-- Slim Cropper -->
         <link type="text/css" href="{{ asset('css') }}/slim.min.css" rel="stylesheet">
 
-
+        <!-- VanillaJS CSS -->
+        <link  href="{{ asset('css') }}/vanilla-picker.csp.css" rel="stylesheet">
 
     </head>
     <body class="{{ $class ?? '' }}">
@@ -94,6 +94,7 @@
         </script>
 
         <!-- Navtabs -->
+        
         
 
 
@@ -176,15 +177,19 @@
             
             <!-- SLIM Cropper -->
             <!-- <script src="{{ asset('js') }}/slim.jquery.min.js"></script> -->
-            <script src="{{ asset('js') }}/slim.kickstart.min.js"></script>
-
-
-            <!-- Custom JS for slim crop -->
-            <script src="{{ asset('custom') }}/js/custom.js"></script>
-
+            <!-- <script src="{{ asset('js') }}/slim.kickstart.min.js"></script> -->
+            <script src="{{ asset('js') }}/slim.kickstart.js"></script>
 
             <!-- Custom JS for slim crop -->
             <script src="{{ asset('custom') }}/js/custom.js"></script>
+            
+            
+            <!-- Vanilla ColorJS Plugin -->
+            <script src="https://unpkg.com/vanilla-picker@2"></script>
 
+            <script src="{{ asset('js') }}/vanilla-picker.csp.min.js"></script>
+
+            
+            
     </body>
 </html>

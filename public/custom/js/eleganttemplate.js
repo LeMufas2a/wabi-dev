@@ -21,6 +21,7 @@ class mainJS {
           e.target.matches(".close-mobile-menu")
         ) {
           document.body.classList.toggle("mobile-menu-opened");
+          // $("#theCartBottomButtonDiv").show();
         }
       });
       document.querySelector("#mobile-menu").addEventListener("click", (e) => {

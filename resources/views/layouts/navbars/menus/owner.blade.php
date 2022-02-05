@@ -30,6 +30,11 @@
             <i class="ni ni-collection text-pink"></i> {{ __('Menu') }}
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.restaurants.showImages', auth()->user()->restorant->id ) }}">
+            <i class="ni ni-ruler-pencil text-red"></i> {{ __('Design') }}
+        </a>
+    </li>
 
     @if (config('app.isqrsaas') && (!config('settings.qrsaas_disable_odering') || config('settings.enable_guest_log')))
         @if(!config('settings.is_whatsapp_ordering_mode') || in_array("poscloud", config('global.modules',[]))  || in_array("deliveryqr", config('global.modules',[])) )

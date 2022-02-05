@@ -1,6 +1,15 @@
 @extends('layouts.front', ['class' => ''])
 
 @section('content')
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap');
+    body{
+      font-family: 'Ubuntu', sans-serif !important;
+    }
+	.myUbuntu{
+      font-family: 'Ubuntu', sans-serif !important;
+    }
+  </style>
     @if( !request()->get('location') )
         @include('layouts.headers.search')
     @else

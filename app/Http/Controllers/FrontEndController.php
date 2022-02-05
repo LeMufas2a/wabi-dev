@@ -12,6 +12,7 @@ use App\Categories;
 use App\Settings;
 use App\Tables;
 use App\User;
+use App\Models\CustomStyle;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -32,6 +33,8 @@ use App\Models\Allergens;
 use App\Models\Config;
 use DateTime;
 use Spatie\OpeningHours\Exceptions\MaximumLimitExceeded;
+
+use DB;
 
 class FrontEndController extends Controller
 {
@@ -147,6 +150,7 @@ class FrontEndController extends Controller
 
     public function index()
     {
+        
         $hasQuery = \Request::has('q') && strlen(\Request::input('q')) > 1;
         $hasLocation = \Request::has('location') && strlen(\Request::input('location')) > 1;
 
@@ -741,7 +745,7 @@ class FrontEndController extends Controller
     public function restorant($alias)
     {
        
-
+        
         //Do we have impressum app
         $doWeHaveImpressumApp=Module::has('impressum');
 
@@ -751,7 +755,11 @@ class FrontEndController extends Controller
             return redirect()->route('restorant', $subDomain);
         }
         $restorant = Restorant::whereRaw('REPLACE(subdomain, "-", "") = ?', [str_replace("-","",$alias)])->first();
+        // dd(auth()->user()->id); // id of the logged in user
+        // dd($restorant->user_id);
 
+        // Following id is the ID of the user of that restaurant which is going to be viewed
+        $restorant_to_view_has_user_id = $restorant->user_id;
         //Do we have google translate app
         $doWeHaveGoogleTranslateApp=Module::has('googletranslate')&&$restorant->getConfig('gt_enable',false);
 
@@ -830,8 +838,20 @@ class FrontEndController extends Controller
            if($menuTemplate!='defaulttemplate'){
             $viewFile=config('settings.front_end_template','defaulttemplate')."::show";
            }
-          
 
+            $all_pages = new Pages();
+        
+            $all_pages = Pages::where(['showAsLink'=>1])->get();
+                        
+            $pages_links = array();
+            foreach ($all_pages as $key => $page) {
+                $pages_links[] = $page->slug;
+                
+            }
+           
+        
+           
+            
            $wh=$businessHours->forWeek();
            
 
@@ -849,7 +869,18 @@ class FrontEndController extends Controller
                //throw $th;
            }
 
-
+            
+            $color = DB::table('custom_styles')
+                ->where('restaurant_id', '=', $restorant->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+                // dd($color);
+            if( !empty($color) ){
+                $color = @$color[0]->style;
+            }
+            else{
+                $color = '';
+            }
 
            $viewData=[
                 'wh'=>$wh,
@@ -868,11 +899,14 @@ class FrontEndController extends Controller
                 'showLanguagesSelector'=>env('ENABLE_MILTILANGUAGE_MENUS', false) && $restorant->localmenus()->count() > 1,
                 'hasGuestOrders'=>count($previousOrderArray) > 0,
                 'fields'=>[['class'=>'col-12', 'classselect'=>'noselecttwo', 'ftype'=>'select', 'name'=>'Table', 'id'=>'table_id', 'placeholder'=>'Select table', 'data'=>$tablesData, 'required'=>true]],
+                'pages_links' => $pages_links,
+                'heading_color'=>$color,
+                'restorant_to_view_has_user_id'=>$restorant_to_view_has_user_id,
            ];
            
 
            $response = new \Illuminate\Http\Response(view($viewFile,$viewData));
-
+            //    dd($viewData);
            if(isset($_GET['tid'])){
                 $response->withCookie(cookie('tid', $_GET['tid'], 360));
            }else{
@@ -899,6 +933,31 @@ class FrontEndController extends Controller
 
         return response()->json([
             'data' => $res,
+            'status' => true,
+            'errMsg' => '',
+        ]);
+    }
+
+    public function save_styles(Request $request){
+        
+        // dd($request);
+
+        $color = $request->color;
+        $res_id = $request->restaurant_id;
+        $ele_class = $request->element_class;
+
+        $style = new CustomStyle();
+
+        $style->element_class = $ele_class;
+        $style->style = $color;
+        $style->restaurant_id = $res_id;
+        $style->save();
+
+        // dd($style);        
+        
+        
+        return response()->json([
+            // 'data' => $res,
             'status' => true,
             'errMsg' => '',
         ]);

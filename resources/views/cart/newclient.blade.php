@@ -1,4 +1,4 @@
-<div class="card card-profile shadow  mt-4" id="clientBox">
+<div class="card card-profile shadow" id="clientBox">
     <div class="px-4">
       <div class="mt-5">
         <h3>{{ __('customers_him_self') }}<span class="font-weight-light"></span></h3>

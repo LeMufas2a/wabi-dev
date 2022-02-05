@@ -1,6 +1,6 @@
   <!-- mobile-menu -->
   <section id='mobile-menu'>
-      <a class='close-mobile-menu' href='javascript:;'>
+      <a class='close-mobile-menu cross-menu' onclick="getCartContentAndTotalPrice()" href='javascript:;' >
           <i class="las la-times"></i>
       </a>
       <div class='content'>
@@ -49,3 +49,4 @@
           @include('elegant-template::templates.side_cart',['id'=>'cartListMobile','idtotal'=>"totalPricesMobile"])
       </div>
   </section>
+ 

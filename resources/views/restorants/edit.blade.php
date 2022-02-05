@@ -3,7 +3,7 @@
     {{__('Restaurant Management')}}
 @endsection
 @section('content')
-<?php //die("her111111e"); ?>
+
 <div class="header bg-gradient-info pb-6 pt-5 pt-md-8">
     <div class="container-fluid">
 
@@ -47,7 +47,7 @@
             <br />
 
             @include('partials.flash')
-
+            
             <div class="tab-content" id="tabs">
 
 
@@ -87,14 +87,13 @@
                         </div>
                         <div class="card-body">
                             <h6 class="heading-small text-muted mb-4">{{ __('Restaurant information') }}</h6>
-                            
                             @include('restorants.partials.info')
                             <hr />
                             @include('restorants.partials.owner')
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Tab Apps -->
                 @if(count($appFields)>0)
                     <div class="tab-pane fade show" id="apps" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">

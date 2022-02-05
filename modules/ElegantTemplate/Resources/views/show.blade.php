@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html>
  @include('elegant-template::templates.head')
+  <style>
+	@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;700&display=swap');
+    body{
+      font-family: 'Ubuntu', sans-serif !important;
+      font-weight: 700;
+    }
+	.myUbuntu{
+      font-family: 'Ubuntu', sans-serif !important;
+      font-weight : 700; 
+    }
+    .myUbuntu3{
+      font-family: 'Ubuntu', sans-serif !important;
+      font-weight : 300; 
+    }
+
+    
+  </style>
+
 <body>
     <?php
         function clean($string) {
@@ -8,7 +26,10 @@
 
             return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
         }
+
+        
     ?>
+    
     @include('elegant-template::templates.mobile-menu')
     <div id='wrapper'>
          @include('elegant-template::templates.logo_and_menu')

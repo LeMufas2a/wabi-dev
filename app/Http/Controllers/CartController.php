@@ -110,6 +110,7 @@ class CartController extends Controller
         return response()->json([
             'data' => Cart::getContent(),
             'total' => Cart::getSubTotal(),
+            'quantity' => Cart::getTotalQuantity(),
             'status' => true,
             'errMsg' => '',
         ]);

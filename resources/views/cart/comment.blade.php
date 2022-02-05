@@ -1,5 +1,5 @@
-<br />
-<div class="card card-profile shadow">
+
+<div class="card card-profile">
     <div class="px-4">
       <div class="mt-5">
         <h3>{{ __('Comment') }}<span class="font-weight-light"></span></h3>
@@ -19,4 +19,3 @@
       <br />
     </div>
 </div>
-<br />

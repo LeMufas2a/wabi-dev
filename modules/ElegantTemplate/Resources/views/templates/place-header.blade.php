@@ -1,4 +1,67 @@
 <style>
+  section.section-place-content-menu nav{
+    display: block;
+  }
+  li.nav-item.swiper-slide.myTake {
+    width: auto!important;
+}
+  .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+		    background: #f8f5f2;
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        list-style: none;
+          cursor: grab;
+    width: fit-content!important;
+    padding-right: 6px;
+      }
+  
+  .left-part > div, .left-part > div ~ section {
+}
+
+  .myTit { 
+    font-size : 24px;
+  }
+.swiper-button-prev.swiper-button-disabled {
+    display: none;
+}
+
+.swiper-button-next.swiper-button-disabled {
+    display: none;
+}
+
+.swiper-button-prev {
+    color: #070707;
+}
+
+section.section.section-place-content-menu.muf {
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.swiper-button-prev:after, .swiper-rtl .swiper-button-next:after {
+    font-size: 14px;
+}
+
+.swiper-button-next:after, .swiper-rtl .swiper-button-prev:after {
+    font-size: 14px;
+}
+
+.swiper-button-next {
+    color: #070707;
+}
   
     .myLogo{
         height: 80%;
@@ -32,9 +95,15 @@
     color:red;
     
   }
-
+  
+.myModif{
+      color : #240c52 !important;
+      background:white !important;
+      border-bottom : 2px #240c52 solid !important;
+      
+    }
   .infoBtn{
-    color: #de8e00;
+    color: #240c52;
   }
   @media only screen and (max-width: 600px) {
  	 .myLogo{
@@ -51,8 +120,16 @@
   	.myMarge2{
     font-size : 12px !important;  
   }
+    .myModif{
+      width : 375 px !important;
+      height: 70px !important;
+      color : #240c52 !important;
+      background:white !important;
+      border-bottom : 2px #240c52 solid !important;
+      
+    }
 
-
+    
 }
   
   
@@ -61,17 +138,15 @@
     margin-right: auto;
 }
   div#addToCart1 .btn {
-    background-color: #de8e00;
-    border-color: #de8e00;
+    background-color: #240c52;
+    border-color: #240c52;
 }
   picture[data-background="true"] {
-    border-radius: 8px 8px 0 0;
     background-color: #fff;
     overflow: hidden;
 }
 
 picture[data-background="true"] source, picture[data-background="true"] img {
-    border-radius: 8px 8px 0 0;
     background-color: #fff;
 }
 
@@ -80,24 +155,24 @@ picture[data-background="true"] source, picture[data-background="true"] img {
 }
   
 @media (min-width: 576px){
-    div#wrapper {
+    /*div#wrapper {
         max-width: 540px;
-    }
+    }*/
 	 
 }
 @media (min-width: 768px){
-    div#wrapper {
+    /*div#wrapper {
         max-width: 720px;
-    }
+    }*/
   .box-info .col-md-3{
     max-width: calc(50% - 2rem);
     flex-basis: auto;
   }
 }
 @media (min-width: 992px){
-    div#wrapper {
+   /* div#wrapper {
         max-width: 960px;
-    }
+    }*/
 }
   
   @media (min-width: 1025px){
@@ -107,17 +182,17 @@ picture[data-background="true"] source, picture[data-background="true"] img {
   }
 
 @media (min-width: 1200px){
-    div#wrapper {
+    /*div#wrapper {
         max-width: 1140px;
-    }
+    }*/
   .box-info .col-md-3{
     max-width: calc(25% - 2rem);
   }
 }
 @media (min-width: 1400px){
-    div#wrapper {
+    /*div#wrapper {
        max-width: 1320px; 
-    }
+    }*/
 }
 
 
@@ -129,12 +204,13 @@ img.myLogo {
 
 .box-info .col-md-3 {
     background: #FFFFFF;
-    border: 1px solid #E3F0F6;
+    border: 1px solid #ebeae8;
     box-sizing: border-box;
     box-shadow: 0px 1px 8px rgb(29 33 57 / 8%);
-    border-radius: 8px;
+    border-radius: 2px;
     margin: 1rem;
     padding: 0;
+    overflow: hidden;
 }
 
 div#subsection-89 {
@@ -147,7 +223,6 @@ div#subsection-89 {
 
 }
   .top-header > .packer{
-    box-shadow: 0 3px 6px rgb(61 87 119 / 20%);
   }
   picture.d-flex.myPic {
     left: 10%;
@@ -171,7 +246,7 @@ div#place-info {
     margin-bottom: 60px;
 }
   .box-info .col-md-3 img {
-    border-radius: 8px 8px 0 0;
+    border-radius: 0px 0px 0px 0px;
 }
   
   .price-btn-wrap {
@@ -202,7 +277,7 @@ a.item-offer-horizontal {
 }
 
 .box-info .card-body {
-    padding: .5rem 1rem;
+    padding: .5rem 0.7rem;
 }
   .box-info .col-md-3{
     width: auto!important;
@@ -223,7 +298,7 @@ img.myLogo {
 }
   }
   .top-header {
-    padding: 15px !important;
+    
 }
 @media (max-width: 576px){
   .box-info .col-md-3{
@@ -239,7 +314,7 @@ img.myLogo {
 }
   .info.p-3.myCent {
     margin-left: 0;
-    padding-top: 80px!important;
+    padding-top: 70px!important;
     padding-bottom : 10px !important;
 }
 
@@ -274,8 +349,511 @@ picture.d-flex.myPic {
   /**#theCartBottomButton{
     display: block!important;
   }**/
-</style>
+  
+  h5#modalTitle {
+    font-size: 26px;
+    color: #0d0f26;
+    margin-bottom: 8px;
+}
 
+span#modalPrice {
+    font-size: 26px;
+    color: #240c52;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.quantity-area label.form-control-label {
+    font-size: 12px;
+    color: #2a2e43;
+    margin-bottom: 6px;
+}
+
+.quantity-area input#quantity {
+    width: 14px;
+    padding-left: 22px;
+    padding-right: 22px;
+    text-align: center;
+}
+
+.product.description {
+    margin-top: 24px;
+}
+
+.product.description p {
+    font-size: 14px;
+    color: #0d0f26;
+}
+
+.product.description div {
+    border-top: 1px solid #c7ceec;
+    border-bottom: 1px solid #c7ceec;
+    padding-top: 8px;
+    padding-bottom: 12px;
+}
+
+p.legend.mb-0 {
+    color: #0d0f26;
+}
+  #variants-area label.form-control-label {
+    color: #0d0f26;
+}
+
+#variants-area label.btn.btn-outline-primary {
+    font-size: 14px;
+    border-color: #240c52;
+    color: #0d0f26;
+    margin-right: 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    box-shadow: none !important;
+}
+  #variants-area label.btn.btn-outline-primary:hover{
+    background-color:  #240c52 !important;
+    color : white !important;
+  }
+  .quantity-controller {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+  
+  .btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show>.btn-outline-primary.dropdown-toggle {
+    color: #fff!important;
+    background-color: #240c52 !important;
+    box-shadow: none !important;
+}
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before{
+  background-color: #240c52 !important;
+}
+span#minus,span#plus {
+    font-size: 12px;
+    padding: 8px;
+    line-height: 1.2;
+    cursor: pointer;
+  color: #0d0f26;
+  font-weight: 700;
+}
+  
+  .minus-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.quantity-controller {
+    position: relative;
+    width: 60px;
+  overflow: hidden;
+}
+
+.plus-container {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+}
+  div#addToCart1 > .btn {
+    width: 100%;
+}
+  .plus-container,.minus-container {
+    display: flex;
+    align-items: center;
+}
+  
+  .minus-container {
+    width: 22.85px;
+}
+  
+  input#quantity::-webkit-outer-spin-button,
+input#quantity::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+  input#quantity[type=number] {
+  -moz-appearance: textfield;
+}
+  
+  /*New Design*/
+  
+  
+  .content-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.holder-right {
+    width: 344px;
+    min-height: 100vh;
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgb(29 33 55 / 12%), 0 2px 4px 0 rgb(29 33 55 / 14%), 0 2px 4px 0 rgb(29 33 55 / 12%);
+    position: relative;
+}
+
+.left-part {
+    width: calc(100% - 344px);
+}
+
+.info.checkcheck {
+    position: absolute;
+    top: 0;
+    width: 344px;
+    min-height: 100vh;
+}
+
+section#header {
+    position: relative;
+}
+  
+  section.section-place-header {
+    height: 200px;
+}
+
+picture.d-flex.myPic {
+    left: 50%;
+    transform: translateX(-50%);
+    top: -10px;
+    z-index: 9999999;
+}
+
+img.myLogo {
+    height: 128px;
+    width: 128px;
+    border: 1px solid #ccc;
+}
+
+.info.p-3.myCent {
+    text-align: left;
+}
+
+.info.p-3.myCent h1 {
+    font-size: 25px;
+}
+
+.info.p-3.myCent p.myMarge2 {
+    font-size: 14px;
+    line-height: 2;
+}
+
+.info.p-3.myCent p.myMarge {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.top-header > .packer {
+    width: 100%;
+    max-width: 1080px;
+}
+
+	.left-part > div ,
+  .left-part > div ~ section {
+    
+}
+ .left-part .section.section-place-content-menu.muf ~ section{
+   max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+   padding-left: 15px;
+    padding-right: 15px;
+ }
+
+.top-header .packer {
+}
+
+i.btn.infoBtn.las.la-info-circle.myPlacement {
+    right: 15px;
+    top: 42px !important;
+}
+  
+  .box-info .col-md-3 {
+    max-width: 100%;
+    width: 100%!important;
+    display: flex;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.box-info .col-md-3 img {
+    max-width: 240px;
+}
+
+.box-info .row.mt-3 {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.box-info .card-body.myBack {
+    position: relative;
+}
+
+.box-info .card-body.myBack div#addToCart1 > .btn {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 46.2px;
+  border-radius : 2px 2px 2px 2px !important;
+}
+
+.box-info h5.card-title {
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.box-info p.card-text {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.box-info .price {
+    font-size: 18px;
+    position: absolute;
+    bottom: 10px;
+}
+  
+  .info.checkcheck p.product-item_quantity.positioned {
+    position: absolute;
+    left: -4px;
+}
+
+div#cartList {
+    position: relative;
+}
+
+.info.checkcheck .name-price {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info.checkcheck .d-flex.flex-row-reverse {
+    margin-top: 20px;
+}
+
+.packer nav.tabbable.sticky .btn.nav-link.active {
+    background: #240c52;
+  color : white !important;
+    border-radius: 236px;
+}
+
+.packer nav.tabbable.sticky .btn.nav-link {
+    line-height: 1.2;
+    padding: 0.25rem 0.5rem;
+}
+section#header {
+    background: #240c52;
+  	height: 50px;
+}
+
+#header > .packer > .package {
+    height: 70px;
+}
+  
+  #header > .packer > .package > .left > .logo img {
+
+    width: 100%;
+    margin-bottom : 25px;
+    height : 58px;
+}
+  
+  .content-wrapper.fixed-cart .info.checkcheck {
+    position: fixed;
+}
+  
+.holder-right .box-info,#mobile-menu .box-info {
+    /*display: flex;*/
+    flex-direction: column;
+    /*min-height: calc(100vh - 70px);*/
+}
+
+  #mobile-menu .box-info {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 70px);
+}
+
+.holder-right  div#totalPrices,#mobile-menu div#totalPricesMobile{
+    margin-top: auto;
+}
+
+.fixed-cart .holder-right .box-info {
+    /*min-height: 100vh;*/
+}
+  
+.swiper-button-next, .swiper-rtl .swiper-button-prev {
+    right: 0;
+}
+
+.swiper-button-prev, .swiper-rtl .swiper-button-next {
+    left: 0;
+}
+  
+.section-place-content .align-center.myDeco img#previewImg {
+    height: 100px;
+    object-fit: cover;
+  margin-top : 18px;
+}
+  
+  .myDeco{
+    border-radius : 0px 0px 2px 2px !important;
+    background : #fdfdf9 !important;
+    color : #240c52 !important;
+  }
+
+.content-wrapper.fixed-nav section.section.section-place-content-menu.muf {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    left: 0;
+      right: 0;
+  margin-top: 0;
+}
+
+.left-part {
+    position: relative;
+}
+  
+  .swiper.mySwiper.swiper-initialized.swiper-horizontal {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.swiper-button-prev {
+    left: -9px;
+}
+
+.swiper-button-next {
+    right: -9px;
+}
+  
+section.section-place-content-menu a:hover::after, section.section-place-content-menu a.current::after {
+    opacity: 0;
+}
+
+@media (max-width: 992px){
+  .box-info .col-md-3 {
+        flex-direction: column;
+    }
+
+    .box-info .col-md-3 img {
+        height: 200px;
+        width: 100%;
+        max-width: none;
+        object-fit: cover;
+    }
+
+    .holder-right {
+        display: none;
+    }
+
+    .left-part {
+        width: 100%;
+    } 
+    #mobile-menu > .content {
+        max-width: none;
+        width: 100%;
+        right: 0;
+    }
+
+    #mobile-menu > .close-mobile-menu {
+        background: #240c52;
+        color: #FFF;
+        position: fixed;
+        z-index: 9;
+    }
+
+    #mobile-menu > .content .info.checkcheck {
+        width: 100%;
+    } 
+  div#theCartBottomButton {
+    border-radius: 0!important;
+    left: 15px;
+    right: 15px;
+}
+
+div#theCartBottomButton lottie-player {
+    position: absolute;
+    left: 2px;
+    z-index: 9999999;
+    top: -7px;
+}
+
+div#theCartBottomButton button.btn.btn-primary.custom--cart {
+    width: 100%;
+}
+  .content-wrapper.fixed-nav section.section.section-place-content-menu.muf{
+    max-width: 100%;
+    margin-top: 0!important;
+    margin-bottom: 0!important;
+  }
+  .content-wrapper section.section.section-place-content-menu.muf{
+    position: sticky!important;
+    margin-top: 0!important;
+    margin-bottom: 0!important;
+  }
+  .left-part .section.section-place-content-menu.muf ~ section{
+   padding-left: 0px;
+    padding-right: 0px;
+ }
+  .info.p-3.myCent{
+    padding-top: 48px!important;
+  }
+}
+  .swiper.mySwiper.swiper-initialized.swiper-horizontal{
+      padding-left: 0;
+    }
+  @media (max-width: 576px){
+    .swiper.mySwiper.swiper-initialized.swiper-horizontal{
+      padding-left: 0;
+    }
+  }
+
+  .popup.popup_right {
+    top: 0;
+    left: 8% !important;
+    position: relative !important;
+}
+
+  /* Checkout Page design 
+  
+  form#order-form {
+    border: 1px solid #C7CEEC;
+    padding: 8px 8px 16px;
+    border-radius: 10px;
+}
+
+.custom-control.custom-radio.mb-3 {
+    border: 1px solid #C7CEEC;
+    padding: 16px;
+    border-radius: 6px;
+}
+
+.custom-control-label:after, .custom-control-label:before {
+    left: -1rem;
+}
+
+.custom-radio .custom-control-input~.custom-control-label {
+    padding-left: .75rem;
+}
+
+input#custom\[client_name\],input#custom\[client_phone\] {
+    border: none;
+    border-bottom: 1px solid #222;
+    border-radius: unset;
+}
+
+span.select2.select2-container.select2-container--default {
+    width: 100%!important;
+}
+  */
+</style>
+<div class="content-wrapper">
+  
+<div class="left-part">
 <div class="top-header">
 
 <section class='section section-place-header grayscale-05'>
@@ -306,36 +884,46 @@ picture.d-flex.myPic {
     </div>
     <picture data-background=true >
         <source  srcset="{{ $restorant->coverm }}" media="(min-width: 569px)" />
-        <img class="grayscale-05" loading="lazy" src='{{ $restorant->coverm }}' />
+        <img class="grayscale-05 myRounded" loading="lazy" src='{{ $restorant->coverm }}' />
         
     </picture>
    
 </section>
-  <div class='packer'>
+  <div class='packer myl'>
 
-        <div class="package">
+        <div class="package" id="full">
             <div class='info p-3 myCent'>
-                <h1 ><b>{{ $restorant->name }}</b></h1>
-              <i   class="btn infoBtn las la-info-circle myPlacement "></i>
-              
-                <p>
-                    <small >
-                        <!--
-                                <strong class='colorize'>
-                                    <i class="las la-star"></i> 
-                                    4.3
-                                </strong> 
+                <p class="myTit myCoul">
+                  <b>{{ $restorant->name }}</b>
+                    @if($restorant_to_view_has_user_id == auth()->user()->id)
+                      <div id="parent">
+                        <img style="width:40px;height:40px" src="https://img.icons8.com/external-kiranshastry-gradient-kiranshastry/64/000000/external-paintbrush-fine-arts-kiranshastry-gradient-kiranshastry.png"/>
+                      </div>
+                    @endif
+                </p>
+                   
+                <i class="btn infoBtn las la-info-circle myPlacement" onClick="openInfoModal()" id="infoBtn"></i>
+               
+                <p id="reviewBtn">
+                    <small>
+                        
+                          <strong class='colorize'>
+                              <i class="las la-star"></i> 
+                              4.3
+                          </strong> 
 
-                                (693) 
-                                -->
-                        <p class="myMarge2">{{ $restorant->description }}</p>
+                          (693) 
+                                
+                        <p class="myMarge2 myCoul">{{ $restorant->description }}</p>
                     </small>
                 </p>
-                <p class="myMarge">
-                    <!-- <small>45'</small> -->
-                    <small>{{ __('Minimum order') }} @money($restorant->minimum, config('settings.cashier_currency'),config('settings.do_convertion'))</small>
-                </p>
 
+                <p class="myMarge">
+                    @if(!empty($restorant->minimum))
+                      <small class="myCoul">{{ __('Minimum order') }} @money($restorant->minimum, config('settings.cashier_currency'),config('settings.do_convertion'))</small>
+                    @endif
+                </p>
+               
             </div>
      </div>
   </div>
