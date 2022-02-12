@@ -25,11 +25,15 @@ COPY public/000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY . /var/www/html
 WORKDIR /var/www/html
 
-
+RUN chmod -R 777 /var/www
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 #RUN composer dump-autoload
 
 RUN composer install 
 RUN composer update --no-scripts --ignore-platform-reqs
+#RUN composer require symfony/symfony:5.4.x  --ignore-platform-reqs
+#RUN php artisan config:cache
+#RUN php artisan cache:clear
+#RUN php artisan route:clear
 
 EXPOSE 80
