@@ -31,7 +31,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN composer install 
 RUN composer update --no-scripts --ignore-platform-reqs
-#RUN composer require symfony/symfony:5.4.x  --ignore-platform-reqs
+RUN composer require symfony/symfony:5.4.x  --ignore-platform-reqs
 #RUN php artisan config:cache
 #RUN php artisan cache:clear
 #RUN php artisan route:clear
