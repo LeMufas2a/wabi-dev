@@ -21,6 +21,7 @@ RUN docker-php-ext-install gd
 #            pgsql \
 RUN chown -R $USER:www-data /var
 RUN chmod -R 777 /var
+COPY php.ini /usr/local/etc/php.ini
 COPY public/000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY . /var/www/html
 WORKDIR /var/www/html
