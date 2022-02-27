@@ -30,11 +30,12 @@ RUN chmod -R 777 /var/www
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 #RUN composer dump-autoload
 
-#RUN composer install 
+RUN composer install 
 #RUN composer update --no-scripts --ignore-platform-reqs
 #RUN composer dump-autoload
 #RUN composer require symfony/symfony:5.4.x  --ignore-platform-reqs
-RUN composer update --no-scripts
+#RUN composer update --no-scripts
+RUN composer dump-autoload
 RUN php artisan config:cache
 RUN php artisan cache:clear
 RUN php artisan route:clear
