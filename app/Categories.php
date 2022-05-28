@@ -30,7 +30,6 @@ class Categories extends TranslateAwareModel implements Sortable
         return static::query()->where('restorant_id', $this->restorant_id);
     }
 
-    
 
     public function items()
     {

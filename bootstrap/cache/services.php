@@ -31,7 +31,7 @@
     27 => 'Cmixin\\BusinessDay\\Laravel\\ServiceProvider',
     28 => 'BusinessTime\\Laravel\\ServiceProvider',
     29 => 'Codedge\\Updater\\UpdaterServiceProvider',
-    30 => 'dacoto\\SetEnv\\ServiceProvider',
+    30 => 'dacoto\\SetEnv\\SetEnvServiceProvider',
     31 => 'Darryldecode\\Cart\\CartServiceProvider',
     32 => 'Dnsimmons\\OpenWeather\\OpenWeatherServiceProvider',
     33 => 'Facade\\Ignition\\IgnitionServiceProvider',
@@ -172,6 +172,7 @@
     'command.config.cache' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.config.clear' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'Illuminate\\Database\\Console\\DbCommand' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
+    'command.db.prune' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.db.wipe' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.down' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.environment' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
@@ -187,7 +188,9 @@
     'command.queue.flush' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.queue.forget' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.queue.listen' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
+    'command.queue.monitor' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.queue.prune-batches' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
+    'command.queue.prune-failed-jobs' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.queue.restart' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.queue.retry' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.queue.retry-batch' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
@@ -200,6 +203,7 @@
     'Illuminate\\Console\\Scheduling\\ScheduleFinishCommand' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'Illuminate\\Console\\Scheduling\\ScheduleListCommand' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'Illuminate\\Console\\Scheduling\\ScheduleRunCommand' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
+    'Illuminate\\Console\\Scheduling\\ScheduleClearCacheCommand' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'Illuminate\\Console\\Scheduling\\ScheduleTestCommand' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'Illuminate\\Console\\Scheduling\\ScheduleWorkCommand' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
     'command.storage.link' => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
@@ -269,12 +273,11 @@
     'translation.loader' => 'JoeDixon\\Translation\\TranslationBindingsServiceProvider',
     'validator' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
-    'setenv' => 'dacoto\\SetEnv\\ServiceProvider',
     'NotificationChannels\\Twilio\\TwilioConfig' => 'NotificationChannels\\Twilio\\TwilioProvider',
     'Twilio\\Rest\\Client' => 'NotificationChannels\\Twilio\\TwilioProvider',
     'NotificationChannels\\Twilio\\TwilioChannel' => 'NotificationChannels\\Twilio\\TwilioProvider',
-    'sail.install-command' => 'Laravel\\Sail\\SailServiceProvider',
-    'sail.publish-command' => 'Laravel\\Sail\\SailServiceProvider',
+    'Laravel\\Sail\\Console\\InstallCommand' => 'Laravel\\Sail\\SailServiceProvider',
+    'Laravel\\Sail\\Console\\PublishCommand' => 'Laravel\\Sail\\SailServiceProvider',
     'Laravel\\Socialite\\Contracts\\Factory' => 'Laravel\\Socialite\\SocialiteServiceProvider',
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
   ),
@@ -316,7 +319,7 @@
     'Illuminate\\Validation\\ValidationServiceProvider' => 
     array (
     ),
-    'dacoto\\SetEnv\\ServiceProvider' => 
+    'dacoto\\SetEnv\\SetEnvServiceProvider' => 
     array (
     ),
     'JoeDixon\\Translation\\TranslationBindingsServiceProvider' => 

@@ -8,7 +8,7 @@ class OrderRepoGenerator extends BaseOrderRepository
    
     public static function makeOrderRepo($vendor_id,$request,$expedition,$hasPayment,$isStripe,$isMobile=false,$vendorHasOwnPayment=null,$serviceType=null){
 
-
+        // dd("make order repo");
         //Find the type
         if($serviceType==null){
             $serviceType=$isMobile?"MobileApp":"WebService"; //FT
@@ -49,6 +49,7 @@ class OrderRepoGenerator extends BaseOrderRepository
             }
         }
 
+        // dd($serviceType);
         //Class
         $generatedClass='App\Repositories\Orders\\'.$serviceType."\\".$expeditionType.$paymentType."Order";
         return new $generatedClass($vendor_id,$request,$expedition,$hasPayment,$isStripe);

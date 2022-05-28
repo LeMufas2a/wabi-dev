@@ -51,13 +51,20 @@
 
         <!-- Custom CSS defined by admin -->
         <link type="text/css" href="{{ asset('byadmin') }}/back.css" rel="stylesheet">
-        <link type="text/css" href="{{ asset('custom/css') }}/img_carousal.css" rel="stylesheet">
         
         <!-- Slim Cropper -->
         <link type="text/css" href="{{ asset('css') }}/slim.min.css" rel="stylesheet">
 
-
-
+        <!-- VanillaJS CSS -->
+        <link  href="{{ asset('css') }}/vanilla-picker.csp.css" rel="stylesheet">
+        
+        
+        <!-- Calendar CSS -->
+        <link  href="{{ asset('css') }}/main_calendar.css" rel="stylesheet">
+        
+        <!-- jquery alert (jquery confirm) Plugin -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+        
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()
@@ -94,6 +101,7 @@
         </script>
 
         <!-- Navtabs -->
+        
         
 
 
@@ -176,12 +184,23 @@
             
             <!-- SLIM Cropper -->
             <!-- <script src="{{ asset('js') }}/slim.jquery.min.js"></script> -->
-            <script src="{{ asset('js') }}/slim.kickstart.min.js"></script>
-<<<<<<< HEAD
+            <!-- <script src="{{ asset('js') }}/slim.kickstart.min.js"></script> -->
+            <script src="{{ asset('js') }}/slim.kickstart.js"></script>
 
             <!-- Custom JS for slim crop -->
             <script src="{{ asset('custom') }}/js/custom.js"></script>
-=======
->>>>>>> akhtar
+            
+            
+            <!-- Vanilla ColorJS Plugin -->
+            <script src="https://unpkg.com/vanilla-picker@2"></script>
+            
+            <script src="{{ asset('js') }}/vanilla-picker.csp.min.js"></script>
+            
+            <!-- Calendar Plugin -->
+            <script src="{{ asset('js') }}/main_calendar.js"></script>
+            
+            <!-- jquery alert (jquery confirm) Plugin -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+            
     </body>
 </html>

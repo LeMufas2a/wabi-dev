@@ -6,6 +6,10 @@ use App\Coupons;
 use App\Order;
 use App\Restorant as Vendor;
 use App\Items;
+use App\Models\ServiceBookingsLogs;
+use App\Models\BookingsSlots;
+use App\Models\BookedService;
+use App\Models\ServiceItem;
 use App\Models\Variants;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -91,6 +95,7 @@ class BaseOrderRepository extends Controller
     
 
     public function constructOrder(){
+        
         //Create the order 
         $this->createOrder();
 
@@ -129,6 +134,7 @@ class BaseOrderRepository extends Controller
     }
 
     private function createOrder(){
+        
         if($this->order==null){
             $this->order=new Order;
             $this->order->restorant_id=$this->vendor->id;
@@ -146,10 +152,10 @@ class BaseOrderRepository extends Controller
 
             $this->order->order_price=0;
             $this->order->vatvalue=0;
-
+            
             //Save order
             $this->order->save();
-
+            
             $this->order->md=md5($this->order->id);
             $this->order->update();
 
@@ -164,20 +170,129 @@ class BaseOrderRepository extends Controller
     }
     
     private function setItems(){
+        
+        
+        // dd($this->request->items);
+        // dd(request()->session());
+
+        $item_type = '';
+        $booking_id = null;
+        $service_from = null;
+        $service_slot_from = null;
+        $service_to = null;
+        $service_slot_to = null;
+        $sess_arr = request()->session()->get('session_arr');
 
         foreach ($this->request->items as $key => $item) {
 
-            
-            //Obtain the item
-            $theItem = Items::findOrFail($item['id']);
+            if(request()->session()->get('item_type')){
+                $item_type = request()->session()->get('item_type');
+            }
 
+            // if(request()->session()->get('booking_id')){
+            //     $booking_id = (int)request()->session()->get('booking_id');
+            // }
+             
+            // dd((int)$booking_id);
+            //Obtain the item
+
+            if($item_type == 'services'){
+                $theItem = ServiceItem::findOrFail($item['id']);
+            }
+            else{
+                $theItem = Items::findOrFail($item['id']);
+            }
+
+            // dd($theItem);
+            // Now deduct 1 value from the column total_bookings_allowed in ServiceBookingsLogs 
+            // and 1 from BookingsSlots
+
+            // dd($sess_arr);
+            // $search = array_search($item['id'],$sess_arr);
+            // dd($search);
+            foreach($sess_arr as $key=>$value){
+                if($value['service_id'] == $item['id']){
+                    $booking_id = $value['booking_id'];
+                    $service_from = $value['service_from'];
+                    $service_to = $value['service_to'];
+                    $service_slot_from = $value['service_slot_from'];
+                    $service_slot_to = $value['service_slot_to'];
+                }
+            }
+            // dd($sess_arr);
+            $logs = \App\Models\ServiceBookingsLogs::find($booking_id);
+            // dd($logs);
+            if($logs){
+                $val = $logs->total_bookings_allowed;
+                $logs->total_bookings_allowed = $val - 1;
+                $logs->save();
+            }
+            // dd($logs);
+
+            // if(request()->session()->get('service_from')){
+            //     $service_from = request()->session()->get('service_from');
+            // }
+
+            // if(request()->session()->get('service_to')){
+            //     $service_to = request()->session()->get('service_to');
+            // }
+            
+            // if(request()->session()->get('service_slot_from')){
+            //     $service_slot_from = request()->session()->get('service_slot_from');
+            // }
+            
+            // if(request()->session()->get('service_slot_to')){
+            //     $service_slot_to = request()->session()->get('service_slot_to');
+            // }
+            
+            $slots = BookingsSlots::where('total_bookings_idFk', '=', $booking_id)
+            ->where('service_from','=',$service_slot_from)
+            ->where('service_to','=',$service_slot_to)
+            ->get();
+
+            // dd($this->order->id);
+            
+            
+            $av = $slots[0]->available_bookings;
+            $slots[0]->available_bookings = $av - 1;
+            $slots[0]->update();
+            
+            // Make entry in the booked_services table
+            // so that it can be fetched from the 
+            // calendar
+            
+            
+            $booked = new BookedService();
+            $booked->booking_slot_idFk = $slots[0]->id;
+            $booked->order_id = $this->order->id;
+            
+            $booked->save();
+            
+            // dd($booked);
+
+            // Here forget the session values as the order has been placed and
+            // ready to be move forward
+            
+            session()->forget('session_arr');
+            
+
+            
+
+            // dd($slots);
             //List of extras
             $extras = [];
             
             //The price of the item or variant
-            $itemSelectedPrice = $theItem->price;
+            if($item_type == 'services'){
+                $itemSelectedPrice = $theItem->service_price;
 
-            //Find the variant
+            }
+            else{
+                $itemSelectedPrice = $theItem->price;
+            }
+            
+            // dd($item['variant']);
+            // Find the variant
             $variantName = '';
             if ($item['variant']) {
                 //Find the variant
@@ -185,28 +300,32 @@ class BaseOrderRepository extends Controller
                 $itemSelectedPrice = $variant->price;
                 $variantName = $variant->optionsList;
             }
-
+            // dd($item['extrasSelected']);
            //Find the extras
             foreach ($item['extrasSelected'] as $key => $extra) {
                 $theExtra = $theItem->extras()->findOrFail($extra['id']);
                 $itemSelectedPrice+=$theExtra->price;
                 array_push($extras, $theExtra->name.' + '.money($theExtra->price, config('settings.cashier_currency'), config('settings.do_convertion')));
             }
-            
+                
             //Total vat on this item
             $totalCalculatedVAT = $item['qty'] * ($theItem->vat > 0?$itemSelectedPrice * ($theItem->vat / 100):0);
+            
 
+            
+                    
             $this->order->items()->attach($item['id'], [
                 'qty'=>$item['qty'], 
                 'extras'=>json_encode($extras), 
                 'vat'=>$theItem->vat, 
+                'booking_id'=>$booking_id, 
                 'vatvalue'=>$totalCalculatedVAT, 
                 'variant_name'=>$variantName, 
                 'variant_price'=>$itemSelectedPrice
             ]);
         } 
 
-
+        
         //After we have updated the list of items, we need to update the order price
         $order_price=0;
         $total_order_vat=0;
@@ -216,7 +335,7 @@ class BaseOrderRepository extends Controller
         }
         $this->order->order_price=$order_price;
         $this->order->vatvalue=$total_order_vat;
-
+        
         //Set coupons
         if($this->request->has('coupon_code')&&strlen($this->request->coupon_code)>0){
             $coupon = Coupons::where(['code' => $this->request->coupon_code])->where('restaurant_id',$this->vendor->id)->get()->first();
@@ -239,7 +358,7 @@ class BaseOrderRepository extends Controller
             }
         }
         
-
+        
         //Update the order with the item
         $this->order->update();
     }

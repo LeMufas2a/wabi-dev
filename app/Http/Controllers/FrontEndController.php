@@ -12,6 +12,11 @@ use App\Categories;
 use App\Settings;
 use App\Tables;
 use App\User;
+use App\Models\CustomStyle;
+use App\Models\ServiceCategory;
+use App\Models\ServiceItem;
+use App\Models\BookingsSlots;
+use App\Models\ServiceBookingsLogs;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -32,6 +37,8 @@ use App\Models\Allergens;
 use App\Models\Config;
 use DateTime;
 use Spatie\OpeningHours\Exceptions\MaximumLimitExceeded;
+
+use DB;
 
 class FrontEndController extends Controller
 {
@@ -147,6 +154,7 @@ class FrontEndController extends Controller
 
     public function index()
     {
+        
         $hasQuery = \Request::has('q') && strlen(\Request::input('q')) > 1;
         $hasLocation = \Request::has('location') && strlen(\Request::input('location')) > 1;
 
@@ -741,7 +749,7 @@ class FrontEndController extends Controller
     public function restorant($alias)
     {
        
-
+        
         //Do we have impressum app
         $doWeHaveImpressumApp=Module::has('impressum');
 
@@ -751,7 +759,11 @@ class FrontEndController extends Controller
             return redirect()->route('restorant', $subDomain);
         }
         $restorant = Restorant::whereRaw('REPLACE(subdomain, "-", "") = ?', [str_replace("-","",$alias)])->first();
+        // dd(auth()->user()->id); // id of the logged in user
+        // dd($restorant);
 
+        // Following id is the ID of the user of that restaurant which is going to be viewed
+        $restorant_to_view_has_user_id = $restorant->user_id;
         //Do we have google translate app
         $doWeHaveGoogleTranslateApp=Module::has('googletranslate')&&$restorant->getConfig('gt_enable',false);
 
@@ -830,8 +842,20 @@ class FrontEndController extends Controller
            if($menuTemplate!='defaulttemplate'){
             $viewFile=config('settings.front_end_template','defaulttemplate')."::show";
            }
-          
 
+            $all_pages = new Pages();
+        
+            $all_pages = Pages::where(['showAsLink'=>1])->get();
+                        
+            $pages_links = array();
+            foreach ($all_pages as $key => $page) {
+                $pages_links[] = $page->slug;
+                
+            }
+           
+        
+           
+            
            $wh=$businessHours->forWeek();
            
 
@@ -849,9 +873,221 @@ class FrontEndController extends Controller
                //throw $th;
            }
 
+            
+            $color = DB::table('custom_styles')
+                ->where('restaurant_id', '=', $restorant->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+                // dd($color);
+            if( !empty($color) ){
+                $color = @$color[0]->style;
+            }
+            else{
+                $color = '';
+            }
+
+            // Calculate the services here -
+            // Fetch all the services being associated with that restorant
+            
+            $service_items = array();
+            $restorant_id = $restorant->id;
+            
+            $service_items = DB::table('service_items as si')
+            ->join('service_categories', 'service_categories.id', '=', 'si.service_category_id')
+            ->leftjoin('extras', 'si.id', '=', 'extras.service_item_idFk')
+            // ->join('services_bookings_logs as sbl', 'sbl.service_idFk', '=', 'si.id')
+            // ->join('total_bookings_slots as tbs', 'tbs.total_bookings_idFk', '=', 'sbl.id')
+            ->select('si.*','service_categories.name as categoryName','service_categories.id as category_id',
+            'service_categories.image','extras.item_id as extraItemId','extras.name as extraItemName','extras.price as extraItemPrice',
+            // 'tbs.id','tbs.service_from','tbs.service_to','tbs.available_bookings'
+            //'hs.id as hsId','hs.day','hs.service_from_time','hs.service_to_time'
+            )
+            ->where('si.available','=','1')
+            ->where('service_categories.restorant_id','=',$restorant_id)
+            // ->where('sbl.total_bookings_allowed','>',0)
+            ->get();
 
 
-           $viewData=[
+            // dd($service_items);
+
+            $booking_slots = DB::table('total_bookings_slots as tbs')
+            ->join('services_bookings_logs as sbl','tbs.total_bookings_idFk', '=', 'sbl.id')
+            ->join('service_items as si','sbl.service_idFk', '=', 'si.id')
+            ->select('si.id as service_id','sbl.id as booking_id','sbl.service_hour_idFk',
+                    'sbl.restorant_id','sbl.service_from as sfrom','sbl.service_to as sto','tbs.id','tbs.service_from',
+                    'tbs.service_to','tbs.total_bookings_idFk',
+                    'tbs.available_bookings')
+            ->where('tbs.available_bookings','>','0')
+            ->get();
+            
+            // dd($booking_slots);
+            $booking_logs = DB::table('services_bookings_logs as sbl')
+            // ->join('total_bookings_slots as tbs','tbs.total_bookings_idFk', '=', 'sbl.id')
+            ->select('sbl.id','sbl.service_idFk as service_id_fk','sbl.service_day as log_day','sbl.service_from as parent_service_from',
+            'sbl.service_to as parent_service_to','sbl.service_hour_idFk as parent_service_hour')
+            ->where('sbl.restorant_id','=',$restorant_id)
+            ->get();
+
+            // dd($booking_logs[0]);
+
+            //// Divide Total service time in Hours
+            // 02:00 PM to 5:00 PM means
+            // 02:00 to 03:00
+            // 03:00 to 04:00
+            // 04:00 to 05:00
+            
+            $iterator = 1;
+
+            foreach($booking_logs as $k=>&$v){
+
+                $time1 = strtotime($v->parent_service_from);
+                $time2 = strtotime($v->parent_service_to);
+                $difference = round(abs($time2 - $time1) / 3600,2);
+                
+                $v->hour_difference = (int)$difference;
+                $outer_loop_start_time = 1;
+                $startTime = date("h:i",strtotime($v->parent_service_from));
+                
+                $counter = 0;
+                while($counter<$difference){
+                // for($i=0;$i<$difference;$i++){
+                        
+                    if($outer_loop_start_time == 1){
+                        $fromTime = date("h:i",strtotime($startTime));
+                    }
+                    else{
+                        $fromTime = date("h:i",strtotime($fromTime));
+                    }
+
+                    $tmp_to = date("h:i",strtotime($fromTime) + 60 * 60);
+                    $toTime = date("h:i", strtotime($tmp_to));
+                    
+                    
+                    $hourly_book_timings[] = array(
+                        'iterator'=>$iterator,
+                        'booking_log_idFk'=>$v->id,
+                        'service_id_fk'=>$v->service_id_fk,
+                        'log_day'=>$v->log_day,
+                        'hour_service_from' => $fromTime, 
+                        'hour_service_to' => $toTime
+                    );
+                         
+                    $fromTime = $toTime;
+                    
+                    $outer_loop_start_time = 0;
+
+                    $counter++;
+
+                    if($counter >= $difference){
+                        $v->hour_booking_logs = $hourly_book_timings;
+                        $hourly_book_timings = array();
+                    }
+                    $iterator++;
+                } 
+
+            } // end loop booking_logs
+            
+            // dd($booking_logs);
+            
+            //// Divide Total service time in Hours
+            
+
+            
+            $booking_slots_logs = DB::table('services_bookings_logs as sbl')
+            ->join('total_bookings_slots as tbs','tbs.total_bookings_idFk', '=', 'sbl.id')
+            ->join('service_items as si','sbl.service_idFk', '=', 'si.id')
+            ->select('si.id as service_id','si.service_category_id','sbl.id as booking_id','sbl.service_hour_idFk',
+                     'sbl.restorant_id','tbs.service_from','tbs.service_to','tbs.total_bookings_idFk',
+                     'tbs.available_bookings')
+            ->where('tbs.available_bookings','>','0')
+            ->get();
+            
+            // dd($booking_slots_logs);
+
+            $repeated_keys = array();
+            
+            
+            
+            $query_results_hours = array();
+
+            
+
+            $query_results_hours = DB::table('hours_services as hs')
+                ->where('hs.restorant_id','=',$restorant_id)
+                ->get()
+                ->toArray();
+
+                
+                
+                
+
+            // dd($service_items);
+
+                foreach($service_items as $key => &$value){
+                    
+                    $hours = array();
+                    $days = array();
+
+                    foreach($query_results_hours as $k=>$v){
+    
+                        if($value->id == $v->service_item_id){
+                            // echo $value->id.'<-Service Item'.'!!'.'query result hours->'.$v->service_item_id;
+                            // echo '<br>';
+                            
+                            $hours[] = array(
+                                'arr_key'=>$k,
+                                'hour_id'=>$v->id,
+                                'service_from_time' => $v->service_from_time,
+                                'service_to_time'   => $v->service_to_time,
+                                'day' => $v->day,
+                                'service_id' => $v->service_item_id
+                            );
+
+                            if($v->day == "Sunday"){
+                                $days[] = 0;
+                            }
+                            elseif($v->day == "Monday"){
+                                $days[] = 1;
+                                
+                            }
+                            elseif($v->day == "Tuesday"){
+                                $days[] = 2;
+                                
+                            }
+                            elseif($v->day == "Wednesday"){
+                                $days[] = 3;
+                                
+                            }
+                            elseif($v->day == "Thursday"){
+                                $days[] = 4;
+                                
+                            }
+                            elseif($v->day == "Friday"){
+                                $days[] = 5;
+
+                            }
+                            elseif($v->day == "Saturday"){
+                                $days[] = 6;
+
+                            }
+                            // $days[] = $v->day;
+                            
+                            $value->service_hours = $hours;
+                            $value->service_days =  $days;
+
+                            
+                            
+                        }
+                        
+                    }
+                    
+                }
+            
+            // dd($booking_logs);
+            
+            
+            
+           $viewData=[  
                 'wh'=>$wh,
                 'allergens'=>in_array("allergens", config('global.modules',[]))?Allergens::where('post_type','allergen')->get():[],
                 'currentDay'=>strtolower((new DateTime())->format('l')),
@@ -868,17 +1104,25 @@ class FrontEndController extends Controller
                 'showLanguagesSelector'=>env('ENABLE_MILTILANGUAGE_MENUS', false) && $restorant->localmenus()->count() > 1,
                 'hasGuestOrders'=>count($previousOrderArray) > 0,
                 'fields'=>[['class'=>'col-12', 'classselect'=>'noselecttwo', 'ftype'=>'select', 'name'=>'Table', 'id'=>'table_id', 'placeholder'=>'Select table', 'data'=>$tablesData, 'required'=>true]],
+                'pages_links' => $pages_links,
+                'heading_color'=>$color,
+                'restorant_to_view_has_user_id'=>$restorant_to_view_has_user_id,
+                'service_categories'=>$service_items,
+                'service_hours'=>$query_results_hours,
+                'booking_slots'=>$booking_slots,
+                'booking_logs'=>$booking_logs,
+                'booking_slots_logs'=>$booking_slots_logs,
            ];
            
-
+        
            $response = new \Illuminate\Http\Response(view($viewFile,$viewData));
-
+            //    dd($viewData);
            if(isset($_GET['tid'])){
                 $response->withCookie(cookie('tid', $_GET['tid'], 360));
            }else{
                 $response->withCookie(cookie('tid',"", 360));
            }
-
+           
             return $response;
         } else {
             return abort(404,__('The selected restaurant is not active at this moment!'));
@@ -899,6 +1143,31 @@ class FrontEndController extends Controller
 
         return response()->json([
             'data' => $res,
+            'status' => true,
+            'errMsg' => '',
+        ]);
+    }
+
+    public function save_styles(Request $request){
+        
+        // dd($request);
+
+        $color = $request->color;
+        $res_id = $request->restaurant_id;
+        $ele_class = $request->element_class;
+
+        $style = new CustomStyle();
+
+        $style->element_class = $ele_class;
+        $style->style = $color;
+        $style->restaurant_id = $res_id;
+        $style->save();
+
+        // dd($style);        
+        
+        
+        return response()->json([
+            // 'data' => $res,
             'status' => true,
             'errMsg' => '',
         ]);

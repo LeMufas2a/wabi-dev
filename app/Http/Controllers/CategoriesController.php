@@ -4,13 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Categories;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
 use Illuminate\Support\Str;
 
 // use App\slimcrop\SlimStatus;
 use Slim;
-=======
->>>>>>> akhtar
 
 class CategoriesController extends Controller
 {
@@ -23,6 +20,7 @@ class CategoriesController extends Controller
     public function index()
     {
         //
+        
     }
 
     /**
@@ -43,58 +41,91 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-<<<<<<< HEAD
-        $images = new Slim();
-        $images = $images->getImages('item_image');
-        $image = $images[0];
-
-        // dd($images);
-=======
-        // dd(config());
->>>>>>> akhtar
+        // dd($request);
         
         $category = new Categories;
         $category->name = strip_tags($request->category_name);
         $category->restorant_id = $request->restaurant_id;
-<<<<<<< HEAD
-        
-        
-        $ext = "jpg";
-        
-        $data = $image['output']['data'];
-
-
-        // $data_large = $image['input']['data'];
-        $uuid = Str::uuid()->toString();
-        $uuid_large = $uuid."_large".".".$ext;
-        $uuid_medium = $uuid."_medium".".".$ext;
-        $uuid_thumbail = $uuid."_thumbnail".".".$ext;
-        $category->image = $uuid;
-        $count_for_sizes = 0;
-        
-
-        $file_large = Slim::saveFile($data, $uuid_large, public_path($this->imagePath));
-        $file_medium = Slim::saveFile($data, $uuid_medium, public_path($this->imagePath));
-        $file_thumbail = Slim::saveFile($data, $uuid_thumbail, public_path($this->imagePath));
-            
-=======
 
         // Storing image for category
-        if ($request->hasFile('item_image')) {
-            $category->image = $this->saveImageVersions(
+        if($request['item_image']){
+            $image_to_send = json_decode($request['item_image']);
+            $image_to_send = $image_to_send->output->image;
+        
+
+            $category->image = $this->saveImageVersionsUsingSlim(
                 $this->imagePath,
-                $request->item_image,
+                $image_to_send,
                 [
-                    ['name'=>'large', 'w'=>1000, 'h'=>300],
-                    //['name'=>'thumbnail','w'=>300,'h'=>300],
-                    ['name'=>'medium', 'w'=>295, 'h'=>200],
-                    ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
+                        ['name'=>'large', 'w'=>1000, 'h'=>300],
+                        ['name'=>'thumbnail','w'=>300,'h'=>300],
+                        ['name'=>'medium', 'w'=>295, 'h'=>200],
+                        ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
                 ]
             );
-            // dd($category->image);
         }
->>>>>>> akhtar
 
+        $category->save();
+
+        if (auth()->user()->hasRole('admin')) {
+            //Direct to that page directly
+            return redirect()->route('items.admin', ['restorant'=>$request->restaurant_id])->withStatus(__('Category successfully created.'));
+        }
+
+        return redirect()->route('items.index')->withStatus(__('Category successfully created.'));
+    }
+    public function store111(Request $request)
+    {
+        // dd($request['item_image']);
+        $category = new Categories;
+
+        if($request['item_image']){
+            $image_to_send = json_decode($request['item_image']);
+            $image_to_send = $image_to_send->output->image;
+        // }
+        
+        // if($request['item_image']){
+
+            $category->image = $this->saveImageVersionsUsingSlim(
+                $this->imagePath,
+                $image_to_send,
+                [
+                        ['name'=>'large', 'w'=>1000, 'h'=>300],
+                        ['name'=>'thumbnail','w'=>300,'h'=>300],
+                        ['name'=>'medium', 'w'=>295, 'h'=>200],
+                        ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
+                ]
+            );
+        }
+        
+        // $images = new Slim();
+        // $images = $images->getImages('item_image');
+        // $image = $images[0];
+
+
+        // $category = new Categories;
+        $category->name = strip_tags($request->category_name);
+        
+        
+        
+        // $ext = "jpg";
+        
+        // $data = $image['output']['data'];
+
+
+        // $uuid = Str::uuid()->toString();
+        // $uuid_large = $uuid."_large".".".$ext;
+        // $uuid_medium = $uuid."_medium".".".$ext;
+        // $uuid_thumbail = $uuid."_thumbnail".".".$ext;
+        // $category->image = $uuid;
+        // $count_for_sizes = 0;
+        
+
+        // $file_large = Slim::saveFile($data, $uuid_large, public_path($this->imagePath));
+        // $file_medium = Slim::saveFile($data, $uuid_medium, public_path($this->imagePath));
+        // $file_thumbail = Slim::saveFile($data, $uuid_thumbail, public_path($this->imagePath));
+            
+        $category->restorant_id = $request->restaurant_id;
         $category->save();
 
         if (auth()->user()->hasRole('admin')) {
@@ -136,20 +167,28 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, Categories $category)
     {
-        $category->name = $request->category_name;
+        
+        $category->name = strip_tags($request->category_name);
 
-        if ($request->hasFile('item_image')) {
-            $category->image = $this->saveImageVersions(
+        if($request['item_image']){
+            
+            $image_to_send = json_decode($request['item_image']);
+            $image_to_send = $image_to_send->output->image;
+            
+            
+            $category->image = $this->saveImageVersionsUsingSlim(
                 $this->imagePath,
-                $request->item_image,
+                $image_to_send,
                 [
-                    ['name'=>'large', 'w'=>1000, 'h'=>300],
-                    //['name'=>'thumbnail','w'=>300,'h'=>300],
-                    ['name'=>'medium', 'w'=>295, 'h'=>200],
-                    ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
+                        ['name'=>'large', 'w'=>1000, 'h'=>300],
+                        ['name'=>'thumbnail','w'=>300,'h'=>300],
+                        ['name'=>'medium', 'w'=>295, 'h'=>200],
+                        ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
                 ]
             );
-            // dd($category->image);
+        }
+        else{
+            $category->image = NULL;
         }
 
         $category->update();
@@ -165,6 +204,7 @@ class CategoriesController extends Controller
      */
     public function destroy(Categories $category)
     {
+        
         $category->delete();
         return redirect()->route('items.index')->withStatus(__('Category successfully deleted.'));
     }

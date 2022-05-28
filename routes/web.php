@@ -37,13 +37,20 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('syncV1UsersToAuth0', 'SettingsController@syncV1UsersToAuth0')->name('syncV1UsersToAuth0');
         Route::get('dontsyncV1UsersToAuth0', 'SettingsController@dontsyncV1UsersToAuth0')->name('dontsyncV1UsersToAuth0');
         Route::resource('restaurants', 'RestorantController');
+        // Route::resource('designeshop', 'DesignEshopController');
         Route::put('restaurants_app_update/{restaurant}', 'RestorantController@updateApps')->name('restaurant.updateApps');
 
         Route::get('restaurants_add_new_shift/{restaurant}', 'RestorantController@addnewshift')->name('restaurant.addshift');
-
+        
         Route::get('restaurants/loginas/{restaurant}', 'RestorantController@loginas')->name('restaurants.loginas');
         
+        /* My custom routes */
 
+        // Images for eshop - all routes listed below
+        Route::get('show-all-images/{restaurant}', 'RestorantController@show_all_images')->name('restaurants.showImages');
+
+        // Route for saving heading color
+        Route::post('save-heading-color/{restaurant}','FrontEndController@save_styles')->name('save-heading-style');
         Route::get('removedemodata', 'RestorantController@removedemo')->name('restaurants.removedemo');
         Route::get('sitemap','SettingsController@regenerateSitemap')->name('regenerate.sitemap');
 
@@ -170,6 +177,54 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
     Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 
+    // Service Category and Items routes
+    Route::resource('serviceitems', 'ServiceItemController')->middleware('isOwnerOnPro');
+
+    Route::post('all-time-slots/','ServiceItemController@all_time_slots')->name('all-time-slots');
+
+    // All Calender routes
+    Route::get('calender-events/','ServiceItemController@calender_main')->middleware('isOwnerOnPro');
+    Route::get('all-service-hours/','ServiceItemController@get_services_hours')->middleware('isOwnerOnPro')->name('all-service-hours');
+    
+    
+    // update single service hour
+    Route::post('save-single-service-hour/','ServiceItemController@save_single_service_hour')->middleware('isOwnerOnPro')->name('serviceitems.singlehour');
+    
+    // Create single service hour when edit mode is open
+    Route::post('create-single-service-hour/','ServiceItemController@create_single_service_hour')->middleware('isOwnerOnPro')->name('serviceitems.createsinglehour');
+    Route::post('delete-single-service-hour/{service_hour}','ServiceItemController@delete_service_hour_single')->middleware('isOwnerOnPro')->name('serviceitems.deletesinglehour');
+    
+    Route::prefix('serviceitems')->name('serviceitems.')->group(function () {
+        Route::get('reorder/{up}', 'ServiceItemController@reorderCategories')->name('reorder');
+        Route::get('list/{restorant}', 'ServiceItemController@indexAdmin')->name('admin');
+
+        // Options
+        Route::get('options/{item}', 'Items\OptionsController@index')->name('options.index');
+        Route::get('options/{option}/edit', 'Items\OptionsController@edit')->name('options.edit');
+        Route::get('options/{item}/create', 'Items\OptionsController@create')->name('options.create');
+        Route::post('options/{item}', 'Items\OptionsController@store')->name('options.store');
+        Route::put('options/{option}', 'Items\OptionsController@update')->name('options.update');
+        Route::get('options/del/{option}', 'Items\OptionsController@destroy')->name('options.delete');
+
+        // Variants
+        Route::get('variants/{item}', 'Items\VariantsController@index')->name('variants.index');
+        Route::get('variants/{variant}/edit', 'Items\VariantsController@edit')->name('variants.edit');
+        Route::get('variants/{item}/create', 'Items\VariantsController@create')->name('variants.create');
+        Route::post('variants/{item}', 'Items\VariantsController@store')->name('variants.store');
+        Route::put('variants/{variant}', 'Items\VariantsController@update')->name('variants.update');
+
+        Route::get('variants/del/{variant}', 'Items\VariantsController@destroy')->name('variants.delete');
+    });
+
+    // Service Items Extras routes
+    Route::post('/import/items', 'ItemsController@import')->name('import.items');
+    Route::post('/item/change/{item}', 'ServiceItemController@change');
+    Route::post('/{serviceitem}/serviceextras', 'ServiceItemController@storeExtras')->name('serviceextras.store');
+    Route::post('/{serviceitem}/serviceextras/edit', 'ServiceItemController@editExtras')->name('serviceextras.edit');
+    Route::delete('/{serviceitem}/serviceextras/{serviceextras}', 'ServiceItemController@deleteExtras')->name('serviceextras.destroy');
+    
+    Route::resource('servicecategories', 'ServiceController');
+    
     Route::resource('items', 'ItemsController')->middleware('isOwnerOnPro');
     Route::prefix('items')->name('items.')->group(function () {
         Route::get('reorder/{up}', 'ItemsController@reorderCategories')->name('reorder');
@@ -246,6 +301,7 @@ Route::get('/footer-pages', 'PagesController@getPages');
 Route::get('/cart-getContent', 'CartController@getContent')->name('cart.getContent');
 Route::get('/cart-getContent-POS', 'CartController@getContentPOS')->name('cart.getContentPOS');
 Route::post('/cart-add', 'CartController@add')->name('cart.add');
+Route::post('/cart-add-service-items', 'CartController@addServiceItem')->name('cart.addserviceitem');
 Route::post('/cart-remove', 'CartController@remove')->name('cart.remove');
 Route::get('/cart-update', 'CartController@update')->name('cart.update');
 Route::get('/cartinc/{item}', 'CartController@increase')->name('cart.increase');

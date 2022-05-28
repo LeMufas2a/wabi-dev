@@ -30,7 +30,7 @@
         </svg>
       </div>
     </section>
-
+     
     <section class="section pt-lg-0 mb--5 mt--9 d-none d-md-none d-lg-block d-lx-block">
         <div class="container">
             <div class="row">

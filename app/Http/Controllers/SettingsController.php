@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Storage;
 use Image;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
+
+use Slim;
 
 class SettingsController extends Controller
 {
@@ -285,9 +288,11 @@ class SettingsController extends Controller
     }
 
     public function index(Settings $settings)
-    {
+    {   
+        
         if (auth()->user()->hasRole('admin')) {
-
+            
+            
             $curreciesArr = [];
             static::$currencies = require __DIR__.'/../../../config/money.php';
 
@@ -302,11 +307,11 @@ class SettingsController extends Controller
 
 
             $hasDemoRestaurants = Restorant::where('phone', '(530) 625-9694')->count() > 0;
-
+            
             if (config('settings.is_demo') | config('settings.is_demo')) {
                 $hasDemoRestaurants = false;
             }
-
+            //dd($this->getCurrentEnv());
             return view('settings.index', [
                 'settings' => $settings->first(),
                 'currencies' => $curreciesArr,
@@ -370,6 +375,7 @@ class SettingsController extends Controller
     {
        
         $envFile = app()->environmentFilePath();
+        // dd($envFile);
         $str = "\n";
         $str .= file_get_contents($envFile);
         $str .= "\n"; // In case the searched variable is in the last line without \n
@@ -405,6 +411,7 @@ class SettingsController extends Controller
         return true;
     }
 
+
     /**
      * Update the specified resource in storage.
      *
@@ -414,6 +421,9 @@ class SettingsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
+        // dd($request->env);
+        
         if (config('settings.is_demo') | config('settings.is_demo')) {
             //Demo, don;t allow
             return redirect()->route('settings.index')->withStatus(__('Settings not allowed to be updated in DEMO mode!'));
@@ -424,12 +434,14 @@ class SettingsController extends Controller
         }
 
         $this->setEnvironmentValue($request->env);
+        // die("no");
+        // Artisan::call('cache:clear');
+        // Cache::flush();
+        Artisan::call('config:cache');
         Artisan::call('config:clear');
-        Artisan::call('cache:clear');
-        Cache::flush();
 
         $settings = Settings::find($id);
-
+        
         $settings->site_name = strip_tags($request->site_name);
         $settings->description = strip_tags($request->site_description);
         $settings->header_title = $request->header_title;
@@ -450,23 +462,183 @@ class SettingsController extends Controller
         fwrite(fopen(__DIR__.'/../../../public/byadmin/back.js', 'w'), str_replace('tagscript', 'script', $request->jsback));
         fwrite(fopen(__DIR__.'/../../../public/byadmin/front.css', 'w'), str_replace('tagscript', 'script',$request->cssfront) );
         fwrite(fopen(__DIR__.'/../../../public/byadmin/back.css', 'w'),  str_replace('tagscript', 'script',$request->cssback) );
+        
+        
+        // if($request['site_logo']){
+            
 
-        if ($request->hasFile('site_logo')) {
-            $settings->site_logo = $this->saveImageVersions(
+        //     // dd($settings->site_logo);
+
+        //     $images = new Slim();
+        //     $images = $images->getImages('site_logo');
+        //     $image = $images[0];        
+            
+        //     $img_data = $image['output']['data'];
+        //     $ext = explode(".",$image['output']['name']);
+        //     $ext = $ext[1];
+            
+            
+        //     $db_name_site_logo =  Str::uuid()->toString();
+        
+        //     // dd($db_name_site_logo);
+            
+        //     $settings->site_logo = $db_name_site_logo;
+
+        //     $db_name_site_logo = $db_name_site_logo."_logo".".jpg";
+
+        //     $site_logo_file = Slim::saveFile($img_data, $db_name_site_logo, public_path($this->imagePath));
+        //     // dd($site_logo_file);
+        // }
+
+        // if($request['site_logo_dark']){
+
+        //     $images = new Slim();
+        //     $images = $images->getImages('site_logo_dark');
+        //     $image = $images[0];        
+            
+        //     $img_data = $image['output']['data'];
+        //     $ext = explode(".",$image['output']['name']);
+        //     $ext = $ext[1];
+            
+            
+        //     $db_name_site_logo_dark =  Str::uuid()->toString();
+        
+            
+        //     $settings->site_logo_dark = $db_name_site_logo_dark;
+
+        //     $db_name_site_logo_dark = $db_name_site_logo_dark."_site_logo_dark".".jpg";
+
+        //     $site_logo_dark_file = Slim::saveFile($img_data, $db_name_site_logo_dark, public_path($this->imagePath));
+        // }
+
+        // if($request['restorant_details_image']){
+
+        //     $images = new Slim();
+        //     $images = $images->getImages('restorant_details_image');
+        //     $image = $images[0];        
+            
+        //     $img_data = $image['output']['data'];
+        //     $ext = explode(".",$image['output']['name']);
+        //     $ext = $ext[1];
+            
+            
+        //     $db_name_restorant_details_image =  Str::uuid()->toString();
+        
+            
+        //     $settings->restorant_details_image = $db_name_restorant_details_image;
+
+        //     $db_name_restorant_details_image = $db_name_restorant_details_image."_large".".jpg";
+
+        //     $restorant_details_image_file = Slim::saveFile($img_data, $db_name_restorant_details_image, public_path($this->imagePath));
+        // }
+
+
+        // if($request['restorant_details_cover_image']){
+
+        //     $images = new Slim();
+        //     $images = $images->getImages('restorant_details_cover_image');
+        //     $image = $images[0];        
+            
+        //     $img_data = $image['output']['data'];
+        //     $ext = explode(".",$image['output']['name']);
+        //     $ext = $ext[1];
+            
+            
+        //     $db_name_restorant_details_cover_image =  Str::uuid()->toString();
+        
+            
+        //     $settings->restorant_details_cover_image = $db_name_restorant_details_cover_image;
+
+        //     $db_name_restorant_details_cover_image = $db_name_restorant_details_cover_image."_cover".".jpg";
+
+        //     $restorant_details_cover_image_file = Slim::saveFile($img_data, $db_name_restorant_details_cover_image, public_path($this->imagePath));
+        // }
+
+        if($request['wphomehero']){
+            
+            $images = new Slim();
+            $images = $images->getImages('wphomehero');
+            $image = $images[0];        
+            
+            
+            $img_data = $image['output']['data'];
+            $ext = explode(".",$image['output']['name']);
+            $ext = ".".$ext[1];
+            
+            // dd($ext);
+            $db_name_wphomehero =  Str::uuid()->toString();
+            
+            
+            $settings->wphosmehero = $db_name_wphomehero;
+
+            $db_name_wphomehero = $db_name_wphomehero."_wphomehero".".jpg";
+            // dd($db_name_wphomehero);
+
+            $wphomehero_file = Slim::saveFile($img_data, $db_name_wphomehero, public_path($this->imagePath));
+            
+        }
+
+
+        if ($request['site_logo']) {
+            
+            $image_to_send = json_decode($request['site_logo']);
+            $image_to_send = $image_to_send->output->image;
+            
+            
+            
+            $settings->site_logo = $this->saveImageVersionsUsingSlim(
                 $this->imagePath,
-                $request->site_logo,
+                $image_to_send,
                 [
-                    ['name'=>'logo', 'type'=>'png'],
+                        ['name'=>'logo', 'w'=>500, 'h'=>500],
+                        // ['name'=>'thumbnail','w'=>300,'h'=>300],
+                        // ['name'=>'medium', 'w'=>295, 'h'=>200],
+                        ['name'=>'thumbnail', 'w'=>50, 'h'=>50],
+                ]
+            );
+            // dd($settings->site_logo);
+        }
+
+        if ($request['site_logo_dark']) {
+            
+            $image_to_send = json_decode($request['site_logo_dark']);
+            $image_to_send = $image_to_send->output->image;
+            
+            $settings->site_logo_dark = $this->saveImageVersionsUsingSlim(
+                $this->imagePath,
+                $image_to_send,
+                [
+                    ['name'=>'site_logo_dark', 'w'=>500, 'h'=>500],
+                    // ['name'=>'site_logo_dark', 'type'=>'png'],
                 ]
             );
         }
 
-        if ($request->hasFile('site_logo_dark')) {
-            $settings->site_logo_dark = $this->saveImageVersions(
+        if ($request['restorant_details_image']) {
+
+            $image_to_send = json_decode($request['restorant_details_image']);
+            $image_to_send = $image_to_send->output->image;
+
+            $settings->restorant_details_image = $this->saveImageVersionsUsingSlim(
                 $this->imagePath,
-                $request->site_logo_dark,
+                $image_to_send,
                 [
-                    ['name'=>'site_logo_dark', 'type'=>'png'],
+                    ['name'=>'large', 'w'=>590, 'h'=>490],
+                    ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
+                ]
+            );
+        }
+
+        if ($request['restorant_details_cover_image']) {
+
+            $image_to_send = json_decode($request['restorant_details_cover_image']);
+            $image_to_send = $image_to_send->output->image;
+
+            $settings->restorant_details_cover_image = $this->saveImageVersionsUsingSlim(
+                $this->imagePath,
+                $image_to_send,
+                [
+                    ['name'=>'cover', 'w'=>1000, 'h'=>300],
                 ]
             );
         }
@@ -480,37 +652,16 @@ class SettingsController extends Controller
                 ]
             );
         }
-
-        if ($request->hasFile('restorant_details_image')) {
-            $settings->restorant_details_image = $this->saveImageVersions(
-                $this->imagePath,
-                $request->restorant_details_image,
-                [
-                    ['name'=>'large', 'w'=>590, 'h'=>400],
-                    ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
-                ]
-            );
-        }
-
-        if ($request->hasFile('restorant_details_cover_image')) {
-            $settings->restorant_details_cover_image = $this->saveImageVersions(
-                $this->imagePath,
-                $request->restorant_details_cover_image,
-                [
-                    ['name'=>'cover', 'w'=>2000, 'h'=>1000],
-                ]
-            );
-        }
-
+            
         if ($request->hasFile('qrdemo')) {
             $imDemo = Image::make($request->qrdemo->getRealPath())->fit(512, 512);
             $imDemo->save(public_path().'/impactfront/img/qrdemo.jpg');
         }
-
-        if ($request->hasFile('wphomehero')) {
-            $wpDemo = Image::make($request->wphomehero->getRealPath());
-            $wpDemo->save(public_path().'/social/img/wpordering.svg'); 
-        }
+        
+        // if ($request->hasFile('wphomehero')) {
+        //     $wpDemo = Image::make($request->wphomehero->getRealPath());
+        //     $wpDemo->save(public_path().'/social/img/wpordering.svg'); 
+        // }
 
         if ($request->hasFile('poshomehero')) {
             $wpDemo = Image::make($request->poshomehero->getRealPath());
@@ -526,7 +677,7 @@ class SettingsController extends Controller
             public_path().'/impactfront/img/payments.jpg',
             public_path().'/impactfront/img/customerlog.jpg',
         ];
-
+        
         for ($i = 0; $i < 7; $i++) {
             if ($request->hasFile('ftimig'.$i)) {
                 chmod($images[$i], 0777);
@@ -538,7 +689,7 @@ class SettingsController extends Controller
                 $imDemo->save($images[$i]);
             }
         }
-
+        
         if ($request->hasFile('favicons')) {
             $imAC256 = Image::make($request->favicons->getRealPath())->fit(256, 256);
             $imgAC192 = Image::make($request->favicons->getRealPath())->fit(192, 192);
@@ -556,9 +707,9 @@ class SettingsController extends Controller
             $img32->save(public_path().'/favicon-32x32.png');
             $img16->save(public_path().'/favicon-16x16.png');
         }
-
+        
         $settings->update();
-
+        
         return redirect()->route('settings.index')->withStatus(__('Settings successfully updated!'));
     }
 

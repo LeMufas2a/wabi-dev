@@ -4,6 +4,7 @@
 @endsection
 @section('content')
     @include('restorants.partials.modals')
+    <?php //die("her111111e"); ?>
     <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
     </div>
 
@@ -43,6 +44,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($restorants as $restorant)
+                                
                                     <tr>
                                         <td><a href="{{ route('admin.restaurants.edit', $restorant) }}">{{ $restorant->name }}</a></td>
                                         <td><img class="rounded" src={{ $restorant->icon }} width="50px" height="50px"></img></td>

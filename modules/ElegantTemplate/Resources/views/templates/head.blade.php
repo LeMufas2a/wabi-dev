@@ -1,4 +1,3 @@
-
 <!-- head -->
 <head>
     <meta charset="utf-8" />
@@ -16,11 +15,14 @@
     <meta name="description" content="{{ $restorant->description }}">
 
 
-
+	<link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
     @notifyCss
 
     
-
+	
     <!-- Select2 -->
     <link type="text/css" href="{{ asset('custom') }}/css/select2.min.css" rel="stylesheet">
 
@@ -42,7 +44,9 @@
     @yield('head')
     @laravelPWA
     @include('layouts.rtl')
-  
+    
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -66,17 +70,37 @@
     <link type="text/css" rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
     <link type="text/css" href="{{ asset('css') }}/elegant.css" rel="stylesheet">
     
+    
 
-     <!-- Custom CSS -->
-     <link type="text/css" href="{{ asset('custom') }}/css/custom.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link type="text/css" href="{{ asset('custom') }}/css/custom.css" rel="stylesheet">
+    
+    <!-- VanillaJS CSS -->
+    <link  href="{{ asset('css') }}/vanilla-picker.csp.css" rel="stylesheet">
+    
+    
+    {{-- <!-- MDB CSS -->
+    <link type="text/css" href="{{ asset('css') }}/mdb.min.css" rel="stylesheet"> --}}
 
-     <!-- Slim CSS -->
-     <link type="text/css" href="{{ asset('css') }}/slim.min.css" rel="stylesheet">
-      
+    <!-- Flatpickr datepicker -->
+    <link rel="stylesheet" href="{{ asset('vendor') }}/flatpickr/flatpickr.min.css">
+
+    
+    <!-- jquery alert (jquery confirm) Plugin -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+     
+    
+    
+    
+
      <!-- Import Vue -->
     <script src="{{ asset('vendor') }}/vue/vue.js"></script>
     <!-- Import AXIOS --->
     <script src="{{ asset('vendor') }}/axios/axios.min.js"></script>
+
+    
+
 
     @if (isset($showGoogleTranslate)&&$showGoogleTranslate&&!$showLanguagesSelector)
         <!-- Style  Google Translate -->

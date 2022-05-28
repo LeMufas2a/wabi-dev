@@ -3,8 +3,8 @@
     {{__('Menu')}}
 @endsection
 @section('content')
-    @include('items.partials.modals', ['restorant_id' => $restorant_id])
     
+    <?php //dd($categories); ?>
     <div class="header bg-gradient-primary pb-7 pt-5 pt-md-8">
         <div class="container-fluid">
             <div class="header-body">
@@ -63,6 +63,7 @@
                     <div class="col-12">
                         @include('partials.flash')
                     </div>
+                    <?php //var_dump(count($categories)); ?>
                     <div class="card-body">
                         @if(count($categories)==0)
                             <div class="col-lg-3" >
@@ -76,119 +77,147 @@
                                 </a>
                                 <br />
                             </div>
+                            @include('items.partials.modals', ['restorant_id' => $restorant_id,'img'=>''])
                         @endif
                        
+                        <?php //dd($categories); ?>
+                        <?php $count_for_images = 1; ?>
                         @foreach ($categories as $index => $category)
-                        @if($category->active == 1)
-                        <div class="alert alert-default">
-                            <div class="row">
-                                <div class="col">
-                                    <span class="h1 font-weight-bold mb-0 text-white">{{ $category->name }}</span>
-                                </div>
-                                <div class="col-auto">
+                            
+                            <?php 
+                                // $imgVal = 'img-';
+                                // $imgVal = $imgVal.$count_for_images;
+                                // echo $imgVal;
+                                $cats = array();
+                            ?>
+                            @include('items.partials.modals', 
+                            [   'category_name'=> $category->name,
+                                'restorant_id' => $restorant_id,
+                                'img'=>$category->logom,
+                                'imga'=>$category->logom,
+                                'count'=>$count_for_images,
+                                'cat_data' =>   array(
+                                                    
+                                                    'category_name' => $category->name,
+                                                    'img' => $category->logom,
+                                                    'restorant_id' => $restorant_id
+                                                    
+                                                ),
+                            ]
+                            )
+                            @if($category->active == 1)
+                                <div class="alert alert-default">
                                     <div class="row">
-                                        <script>
-                                            function setSelectedCategoryId(id){
-                                                $('#category_id').val(id);
-                                            }
-
-                                            function setRestaurantId(id){
-                                                $('#res_id').val(id);
-                                            }
-
-                                        </script>
-                                        @if($canAdd)
-                                            <button class="btn btn-icon btn-1 btn-sm btn-primary" type="button" data-toggle="modal" data-target="#modal-new-item" data-toggle="tooltip" data-placement="top" title="{{ __('Add item') }} in {{$category->name}}" onClick=(setSelectedCategoryId({{ $category->id }})) >
-                                                <span class="btn-inner--icon"><i class="fa fa-plus"></i></span>
-                                            </button>
-                                        @else
-                                            <a href="{{ route('plans.current')}}" class="btn btn-icon btn-1 btn-sm btn-warning" type="button"  >
-                                                <span class="btn-inner--icon"><i class="fa fa-plus"></i> {{ __('Menu size limit reaced') }}</span>
-                                            </a>
-                                        @endif
-                                        <button class="btn btn-icon btn-1 btn-sm btn-warning" type="button" id="edit" data-toggle="modal" data-target="#modal-edit-category" data-toggle="tooltip" data-placement="top" title="{{ __('Edit category') }} {{ $category->name }}" data-id="<?= $category->id ?>"data-image="<?= $category->logom ?>"  data-name="<?= $category->name ?>" >
-                                            <span class="btn-inner--icon"><i class="fa fa-edit"></i></span>
-                                        </button>
-
-                                       
-
-                                        <form action="{{ route('categories.destroy', $category) }}" method="post">
-                                            @csrf
-                                            @method('delete')
-                                            <button class="btn btn-icon btn-1 btn-sm btn-danger" type="button" onclick="confirm('{{ __("Are you sure you want to delete this category?") }}') ? this.parentElement.submit() : ''" data-toggle="tooltip" data-placement="top" title="{{ __('Delete') }} {{$category->name}}">
-                                                <span class="btn-inner--icon"><i class="fa fa-trash"></i></span>
-                                            </button>
-                                        </form>
-
-                                        @if(count($categories)>1)
-                                            <div style="margin-left: 10px; margin-right: 10px">|</div>
-                                        @endif
-
-                                         <!-- UP -->
-                                         @if ($index!=0)
-                                            <a href="{{ route('items.reorder',['up'=>$category->id]) }}"  class="btn btn-icon btn-1 btn-sm btn-success" >
-                                                <span class="btn-inner--icon"><i class="fas fa-arrow-up"></i></span>
-                                            </a>
-                                         @endif
-                                         
-
-                                        <!-- DOWN -->
-                                        @if ($index+1!=count($categories))
-                                            <a href="{{ route('items.reorder',['up'=>$categories[$index+1]->id]) }}" class="btn btn-icon btn-1 btn-sm btn-success">
-                                                <span class="btn-inner--icon"><i class="fas fa-arrow-down"></i></span>
-                                            </a>
-                                        @endif
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-                        @if($category->active == 1)
-                        <div class="row justify-content-center">
-                            <div class="col-lg-12">
-                                <div class="row row-grid">
-                                    @foreach ( $category->items as $item)
-                                        <div class="col-lg-3">
-                                            <a href="{{ route('items.edit', $item) }}">
-                                                <div class="card">
-                                                    <img class="card-img-top" src="{{ $item->logom }}" alt="...">
-                                                    <div class="card-body">
-                                                        <h3 class="card-title text-primary text-uppercase">{{ $item->name }}</h3>
-                                                        <p class="card-text description mt-3">{{ $item->description }}</p>
-
-                                                        <span class="badge badge-primary badge-pill">@money($item->price, config('settings.cashier_currency'),config('settings.do_convertion'))</span>
-
-                                                        <p class="mt-3 mb-0 text-sm">
-                                                            @if($item->available == 1)
-                                                            <span class="text-success mr-2">{{ __("AVAILABLE") }}</span>
-                                                            @else
-                                                            <span class="text-danger mr-2">{{ __("UNAVAILABLE") }}</span>
-                                                            @endif
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                            </a>
+                                        <div class="col">
+                                            <span class="h1 font-weight-bold mb-0 text-white">{{ $category->name }}</span>
                                         </div>
-                                    @endforeach
-                                    @if($canAdd)
-                                    <div class="col-lg-3" >
-                                        <a   data-toggle="modal" data-target="#modal-new-item" data-toggle="tooltip" data-placement="top" href="javascript:void(0);" onclick=(setSelectedCategoryId({{ $category->id }}))>
-                                            <div class="card">
-                                                <img class="card-img-top" src="{{ asset('images') }}/default/add_new_item.jpg" alt="...">
-                                                <div class="card-body">
-                                                    <h3 class="card-title text-primary text-uppercase">{{ __('Add item') }}</h3>
-                                                </div>
+                                        <div class="col-auto">
+                                            <div class="row">
+                                                <script>
+                                                    function setSelectedCategoryId(id){
+                                                        $('#category_id').val(id);
+                                                    }
+
+                                                    function setRestaurantId(id){
+                                                        $('#res_id').val(id);
+                                                    }
+
+                                                </script>
+                                                @if($canAdd)
+                                                    <button class="btn btn-icon btn-1 btn-sm btn-primary" type="button" data-toggle="modal" data-target="#modal-new-item" data-toggle="tooltip" data-placement="top" title="{{ __('Add item') }} in {{$category->name}}" onClick=(setSelectedCategoryId({{ $category->id }})) >
+                                                        <span class="btn-inner--icon"><i class="fa fa-plus"></i></span>
+                                                    </button>
+                                                @else
+                                                    <a href="{{ route('plans.current')}}" class="btn btn-icon btn-1 btn-sm btn-warning" type="button"  >
+                                                        <span class="btn-inner--icon"><i class="fa fa-plus"></i> {{ __('Menu size limit reaced') }}</span>
+                                                    </a>
+                                                @endif
+                                                <button class="btn btn-icon btn-1 btn-sm btn-warning" type="button" id="edit" data-toggle="modal" data-target="#modal-edit-category" data-toggle="tooltip" data-placement="top" title="{{ __('Edit category') }} {{ $category->name }}" data-id="<?= $category->id ?>" data-image="<?= $category->logom ?>"  data-name="<?= $category->name ?>" >
+                                                    <span class="btn-inner--icon"><i class="fa fa-edit"></i></span>
+                                                </button>
+
+                                            
+
+                                                <form action="{{ route('categories.destroy', $category) }}" method="post">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-icon btn-1 btn-sm btn-danger" type="button" onclick="confirm('{{ __("Are you sure you want to delete this category?") }}') ? this.parentElement.submit() : ''" data-toggle="tooltip" data-placement="top" title="{{ __('Delete') }} {{$category->name}}">
+                                                        <span class="btn-inner--icon"><i class="fa fa-trash"></i></span>
+                                                    </button>
+                                                </form>
+
+                                                @if(count($categories)>1)
+                                                    <div style="margin-left: 10px; margin-right: 10px">|</div>
+                                                @endif
+
+                                                <!-- UP -->
+                                                @if ($index!=0)
+                                                    <a href="{{ route('items.reorder',['up'=>$category->id]) }}"  class="btn btn-icon btn-1 btn-sm btn-success" >
+                                                        <span class="btn-inner--icon"><i class="fas fa-arrow-up"></i></span>
+                                                    </a>
+                                                @endif
+                                                
+
+                                                <!-- DOWN -->
+                                                @if ($index+1!=count($categories))
+                                                    <a href="{{ route('items.reorder',['up'=>$categories[$index+1]->id]) }}" class="btn btn-icon btn-1 btn-sm btn-success">
+                                                        <span class="btn-inner--icon"><i class="fas fa-arrow-down"></i></span>
+                                                    </a>
+                                                @endif
+
                                             </div>
-                                        </a>
-                                        <br />
+                                        </div>
                                     </div>
-                                    @endif
                                 </div>
-                            </div>
-                        </div>
-                        @endif
+                            @endif
+                        
+                            <!-- Check for items -->
+                            @if($category->active == 1)
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-12">
+                                        <div class="row row-grid">
+                                            @foreach ( $category->items as $item)
+                                                <div class="col-lg-3">
+                                                    <a href="{{ route('items.edit', $item) }}">
+                                                        <div class="card">
+                                                            <img class="card-img-top" src="{{ $item->logom }}" alt="...">
+                                                            <div class="card-body">
+                                                                <h3 class="card-title text-primary text-uppercase">{{ $item->name }}</h3>
+                                                                <p class="card-text description mt-3">{{ $item->description }}</p>
+
+                                                                <span class="badge badge-primary badge-pill">@money($item->price, config('settings.cashier_currency'),config('settings.do_convertion'))</span>
+
+                                                                <p class="mt-3 mb-0 text-sm">
+                                                                    @if($item->available == 1)
+                                                                    <span class="text-success mr-2">{{ __("AVAILABLE") }}</span>
+                                                                    @else
+                                                                    <span class="text-danger mr-2">{{ __("UNAVAILABLE") }}</span>
+                                                                    @endif
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                            @if($canAdd)
+                                            <div class="col-lg-3" >
+                                                <a  data-toggle="modal" data-target="#modal-new-item" data-toggle="tooltip" data-placement="top" href="javascript:void(0);" onclick=(setSelectedCategoryId({{ $category->id }}))>
+                                                    <div class="card">
+                                                        <img class="card-img-top" src="{{ asset('images') }}/default/add_new_item.jpg" alt="...">
+                                                        <div class="card-body">
+                                                            <h3 class="card-title text-primary text-uppercase">{{ __('Add item') }}</h3>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <br />
+                                            </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            <?php $count_for_images++; ?>
                         @endforeach
                     </div>
                 </div>
@@ -199,18 +228,85 @@
 
 @section('js')
 <script>
-  $("[data-target='#modal-edit-category']").on('click',function() {
+
+var cropper = '';
+
+$(document).ready(function(){
+    // cropper = new Slim(document.getElementById("cate_image"));
+    // console.log("croppero bject in ready",cropper);
+
+}); // end document.ready
+
+$("[data-target='#modal-edit-category']").on('click',function() {
+    
     var id = $(this).attr('data-id');
     var name = $(this).attr('data-name');
     var image = $(this).attr('data-image');
-
+    console.log("image",image);
     
-    $('#cat_name').val(name);
-    $('#previewImg').attr('src',image);
+    $("#cat_name").val(name);
+    // $("#cate_image").attr("src",image);
     $("#form-edit-category").attr("action", "/categories/"+id);
+
+    //$("#modal-edit-category #addClassHere").addClass("slim");
+    cropper = new Slim(document.getElementById("cate_image"));
+
+    cropper.forceSize = { width:1000, height:300 };
+    elem_id = "cate_image";
+
+    // cropper = new Slim(document.getElementById("cate_image"),{
+    //     download:true,
+    //     buttonRemove:true,
+    //     edit:true,
+    // });
+
+    // cropper = new Slim(document.getElementById("cate_image"), {
+    //     ratio: '4:3',
+    //     minSize: {
+    //         width: 640,
+    //         height: 480,
+    //     },
+    //     crop: {
+    //         x: 0,
+    //         y: 0,
+    //         width: 1000,
+    //         height: 1000
+    //     },
+    //     service: 'upload-async.php',
+    //     download: true,
+    //     willSave: function(data, ready) {
+    //         // alert('saving!');
+    //         // ready(data);
+    //     },
+    //     label: 'Drop your image here.',
+    //     buttonConfirmLabel: 'Ok',
+    //     meta: {
+    //         // userId:'1234'
+    //     }
+    // });
+    
+
+        
+
+        cropper.load(image, function(error, data){
+            console.log("error in load",error);
+            console.log("data in load",data);
+            // Upload a selected image to the server
+            cropper.upload(function(error, logs, response){
+                // console.log("error",error);
+                // console.log("data",logs);
+                // console.log("response",response);
+                // Done uploading!
+
+            });
+
+        });
+
 });
 
-            $(document).on('change','#imgfile', function() {
+    
+
+            $(document).on('change','#imgfile11', function() {
                 let id = $(this).attr("name");
                 // console.log("name",$(this).attr("name"));
                 imagesPreview(this, 'div.gallery',id);
@@ -264,13 +360,23 @@
 
 
             $('#modal-new-item').on('hidden.bs.modal', function () {
+                
                 $("#imgfileItem").val('');
                 $("#previewImgItem").attr('src',"https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg");
             });
 
             $('#modal-edit-category').on('hidden.bs.modal', function () {
-                $("#imgFile").val('');
-                $("#previewImg").attr('src',"https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg");
+                // alert("here");
+                // $("#my_id").attr('src','');
+                $("#cate_image").attr('src','');
+                $("#cat_name").val('');
+                cropper.destroy("cate_image");
+                // console.log("croppero bject in hide modal",cropper.data.input.file);
+                // cropper.data.input.file = {};
+                // console.log("croppero bject in hide modal after cropper",cropper.data.input.file);
+                // var data = cropper.remove();
+                //$("#imgFile").val('');
+                //$("#previewImg").attr('src',"https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-square-1-768x768.jpg");
             });
 
         function previewFile(input){

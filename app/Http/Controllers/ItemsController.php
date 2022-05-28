@@ -15,6 +15,8 @@ use App\Services\ConfChanger;
 use Akaunting\Module\Facade as Module;
 use App\Models\Allergens;
 
+use Slim;
+
 class ItemsController extends Controller
 {
     private $imagePath = 'uploads/restorants/';
@@ -30,7 +32,7 @@ class ItemsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
+    {
         
         if (auth()->user()->hasRole('owner')) {
 
@@ -83,15 +85,16 @@ class ItemsController extends Controller
 
             //Since 2.1.7 - there is sorting. 
             $categories=auth()->user()->restorant->categories;
-
+            // dd(auth()->user()->restorant->categories);
+            
             //If first item order starts with 0
-            if($categories->first()&&$categories->first()->order_index==0){
+            if($categories->first() && $categories->first()->order_index==0){
                 Categories::setNewOrder($categories->pluck('id')->toArray());
 
                 //Re-get categories
                 $categories=auth()->user()->restorant->categories;
             }
-
+            
             return view('items.index', [
                 'hasMenuPDf'=>Module::has('menupdf'),
                 'canAdd'=>$canAdd,
@@ -133,6 +136,7 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
+        
         $item = new Items;
         $item->name = strip_tags($request->item_name);
         $item->description = strip_tags($request->item_description);
@@ -144,19 +148,39 @@ class ItemsController extends Controller
             $defVat=$resto->getConfig('default_tax_value',0);
         }
         $item->vat=$defVat;
-        
-        if ($request->hasFile('item_image')) {
-            $item->image = $this->saveImageVersions(
+
+        $image_to_send = json_decode($request['item_image']);
+        $image_to_send = $image_to_send->output->image;
+
+        if($request['item_image']){
+            
+            $item->image = $this->saveImageVersionsUsingSlim(
                 $this->imagePath,
-                $request->item_image,
+                $image_to_send,
                 [
-                    ['name'=>'large', 'w'=>590, 'h'=>400],
-                    //['name'=>'thumbnail','w'=>300,'h'=>300],
-                    ['name'=>'medium', 'w'=>295, 'h'=>200],
-                    ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
+                        ['name'=>'large', 'w'=>590, 'h'=>400],
+                        ['name'=>'thumbnail','w'=>300,'h'=>300],
+                        ['name'=>'medium', 'w'=>295, 'h'=>200],
+                        ['name'=>'thumbnail', 'w'=>590, 'h'=>400],
                 ]
             );
+
         }
+
+        
+        // if ($request->hasFile('item_image')) {
+        //     $item->image = $this->saveImageVersions(
+        //         $this->imagePath,
+        //         $request->item_image,
+        //         [
+        //             ['name'=>'large', 'w'=>590, 'h'=>400],
+        //             //['name'=>'thumbnail','w'=>300,'h'=>300],
+        //             ['name'=>'medium', 'w'=>295, 'h'=>200],
+        //             ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
+        //         ]
+        //     );
+        // }
+        
         $item->save();
 
         return redirect()->route('items.index')->withStatus(__('Item successfully updated.'));
@@ -181,6 +205,7 @@ class ItemsController extends Controller
      */
     public function edit(Items $item)
     {
+        // dd($item);
         //if item belongs to owner restorant menu return view
         if (auth()->user()->hasRole('owner') && $item->category->restorant->id == auth()->user()->restorant->id || auth()->user()->hasRole('admin')) {
             
@@ -194,8 +219,8 @@ class ItemsController extends Controller
             }
 
             
-            
-            
+               
+            dd($item);
             return view('items.edit',
             [
                 'extraViews'=>$extraViews,
@@ -268,21 +293,29 @@ class ItemsController extends Controller
                 $item->systemvariants()->forceDelete();
             }
         }
+        
+        if($request['item_image']){
+            $image_to_send = json_decode($request['item_image']);
+            $image_to_send = $image_to_send->output->image;
+        
 
-        if ($request->hasFile('item_image')) {
-            if ($request->hasFile('item_image')) {
-                $item->image = $this->saveImageVersions(
-                    $this->imagePath,
-                    $request->item_image,
-                    [
-                        ['name'=>'large'],
-                        //['name'=>'thumbnail','w'=>300,'h'=>300],
-                        ['name'=>'medium', 'w'=>295, 'h'=>200],
-                        ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
-                    ]
-                );
-            }
+            $item->image = $this->saveImageVersionsUsingSlim(
+                $this->imagePath,
+                $image_to_send,
+                [
+                    ['name'=>'large', 'w'=>590, 'h'=>400],
+                    ['name'=>'thumbnail','w'=>300,'h'=>300],
+                    ['name'=>'medium', 'w'=>295, 'h'=>200],
+                    ['name'=>'thumbnail', 'w'=>590, 'h'=>400],
+
+                ]
+            );
         }
+        else{
+            // The user has delete the image
+            $item->image = null;
+        }
+
 
         $item->update();
 

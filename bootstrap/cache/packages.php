@@ -25,7 +25,7 @@
     ),
     'aliases' => 
     array (
-      'Debugbar' => 'Barryvdh\\Debugbar\\Facade',
+      'Debugbar' => 'Barryvdh\\Debugbar\\Facades\\Debugbar',
     ),
   ),
   'berkayk/onesignal-laravel' => 
@@ -79,11 +79,11 @@
   array (
     'providers' => 
     array (
-      0 => 'dacoto\\SetEnv\\ServiceProvider',
+      0 => 'dacoto\\SetEnv\\SetEnvServiceProvider',
     ),
     'aliases' => 
     array (
-      'SetEnv' => 'dacoto\\SetEnv\\Facade',
+      'SetEnv' => 'dacoto\\SetEnv\\Facades\\SetEnv',
     ),
   ),
   'darryldecode/cart' => 

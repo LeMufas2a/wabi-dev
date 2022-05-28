@@ -73,6 +73,7 @@ class PagesController extends Controller
     public function blog($slug)
     {
         $pages = Pages::where('id', '>', 0)->get();
+
         foreach ($pages as $key => $page) {
             if ($page->slug == $slug) {
                 return view('pages.show', ['page' => $page]);

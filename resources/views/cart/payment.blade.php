@@ -1,4 +1,4 @@
-<div class="card card-profile shadow mt--300">
+<div class="card card-profile shadow">
     <div class="px-4">
       <div class="mt-5">
         <h3>{{ __('Checkout') }}<span class="font-weight-light"></span></h3>
@@ -12,10 +12,10 @@
                         <div class="col">
                             <span v-if="totalPrice==0">{{ __('Cart is empty') }}!</span>
 
-                            <span v-if="totalPrice"><strong>{{ __('Subtotal') }}:</strong></span>
+                            <span v-if="totalPrice"><strong class="myUbuntu3">{{ __('Subtotal') }}:</strong></span>
                             <span v-if="totalPrice" class="ammount"><strong>@{{ totalPriceFormat }}</strong></span>
                             @if(config('app.isft')||config('settings.is_whatsapp_ordering_mode')|| in_array("poscloud", config('global.modules',[])) || in_array("deliveryqr", config('global.modules',[])) )
-                                <span v-if="totalPrice&&deliveryPrice>0"><br /><strong>{{ __('Delivery') }}:</strong></span>
+                                <span v-if="totalPrice&&deliveryPrice>0"><br /><strong class="myUbuntu3">{{ __('Delivery') }}:</strong></span>
                                 <span v-if="totalPrice&&deliveryPrice>0" class="ammount"><strong>@{{ deliveryPriceFormated }}</strong></span><br />
                             @endif
                             <br />  
@@ -26,7 +26,7 @@
                                 <br />  
                             </div>
                            
-                            <span v-if="totalPrice"><strong>{{ __('TOTAL') }}:</strong></span>
+                            <span v-if="totalPrice"><strong class="myUbuntu3">{{ __('TOTAL') }}:</strong></span>
                             <span v-if="totalPrice" class="ammount"><strong>@{{ withDeliveryFormat   }}</strong></span>
                             <input v-if="totalPrice" type="hidden" id="tootalPricewithDeliveryRaw" :value="withDelivery" />
                         </div>
@@ -89,7 +89,7 @@
         <!-- END Payment -->
 
         <div class="text-center">
-            <div class="custom-control custom-checkbox mb-3">
+            <div class="custom-control custom-checkbox mb-3 myUbuntu3">
                 <input class="custom-control-input" id="privacypolicy" type="checkbox">
                 <!--<label class="custom-control-label" for="privacypolicy">{{ __('I agree to the Terms and Conditions and Privacy Policy') }}</label>-->
                 <label class="custom-control-label" for="privacypolicy">

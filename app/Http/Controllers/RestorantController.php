@@ -35,6 +35,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 use Spatie\Geocoder\Geocoder;
 
+use Slim;
+
 class RestorantController extends Controller
 {
     use Fields;
@@ -57,7 +59,7 @@ class RestorantController extends Controller
      */
     public function index(Restorant $restaurants)
     {
-      
+        
         if (auth()->user()->hasRole('admin')) {
             return view('restorants.index', ['restorants' => $restaurants->orderBy('id', 'desc')->paginate(10)]);
         } else {
@@ -67,6 +69,7 @@ class RestorantController extends Controller
 
     public function loginas(Restorant $restaurant)
     {
+        
         if (auth()->user()->hasRole('admin')) {
             //Login as owner
             Auth::login($restaurant->user, true);
@@ -207,7 +210,7 @@ class RestorantController extends Controller
      */
     public function edit(Restorant $restaurant)
     {
-		
+        
         //Days of the week
         $timestamp = strtotime('next Monday');
         for ($i = 0; $i < 7; $i++) {
@@ -331,26 +334,60 @@ class RestorantController extends Controller
      */
     public function update(Request $request, Restorant $restaurant)
     {
-        $restaurant->name = strip_tags($request->name);
-        $restaurant->address = strip_tags($request->address);
-        $restaurant->phone = strip_tags($request->phone);
+        $redirect_to_design_route = false;
+
+        if($request['info_images']){
+            $redirect_to_design_route = true;
+        }
+        // dd($restaurant);
+        // dd($request);
+
+        if($request->name){
+            $restaurant->name = strip_tags($request->name);
+        }
+        
+        if($request->address){
+            $restaurant->address = strip_tags($request->address);
+        }
+        
+        if($request->phone){
+            $restaurant->phone = strip_tags($request->phone);
+        }
+        if($request->minimum){
+            $restaurant->minimum = strip_tags($request->minimum);
+        }
         
         $restaurant->description = strip_tags($request->description);
-        $restaurant->minimum = strip_tags($request->minimum);
 
         if($request->has('fee')){
             $restaurant->fee = $request->fee;
             $restaurant->static_fee = $request->static_fee;
         }
-    
+        
+        // dd(Carbon::parse($restaurant->created_at)->diffInDays(Carbon::now()));
         //Update subdomain only if rest is not older than 1 day
-        if(Carbon::parse($restaurant->created_at)->diffInDays(Carbon::now())<2){
-            $restaurant->subdomain = $this->makeAlias(strip_tags($request->name));
+        // if(Carbon::parse($restaurant->created_at)->diffInDays(Carbon::now())<2){
+        
+        if($request->name){
+            if(Carbon::parse($restaurant->created_at)->diffInDays(Carbon::now())){
+                $restaurant->subdomain = $this->makeAlias(strip_tags($request->name));
+            }
+        }
+
+
+        
+        // dd($request->name);
+        
+        if($restaurant->can_pickup){
+            $restaurant->can_pickup = $request->can_pickup == 'true' ? 1 : 0;
+        }
+
+        if($restaurant->can_deliver){
+            $restaurant->can_deliver = $request->can_deliver == 'true' ? 1 : 0;
         }
         
+        
         $restaurant->is_featured = $request->is_featured != null ? 1 : 0;
-        $restaurant->can_pickup = $request->can_pickup == 'true' ? 1 : 0;
-        $restaurant->can_deliver = $request->can_deliver == 'true' ? 1 : 0;
         if($request->has('self_deliver')){
             $restaurant->self_deliver = $request->self_deliver == 'true' ? 1 : 0;
         }
@@ -380,44 +417,180 @@ class RestorantController extends Controller
         if (isset($request->city_id)) {
             $restaurant->city_id = $request->city_id;
         }
+        // echo "<pre>";
+        // print_r($request);
+        // exit;
+        // dd($request);
 
-        if ($request->hasFile('resto_logo')) {
-            $restaurant->logo = $this->saveImageVersions(
-                $this->imagePath,
-                $request->resto_logo,
-                [
-                    ['name'=>'large', 'w'=>590, 'h'=>400],
-                    ['name'=>'medium', 'w'=>295, 'h'=>200],
-                    ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
-                ]
-            );
-        }
+        
+        
+        if($request['change_resto_wide_logo'] == "empty" || $request['resto_wide_logo'] != null){
+            
 
-        if ($request->hasFile('resto_wide_logo')) {
-       
-            $uuid = Str::uuid()->toString();
-            $request->resto_wide_logo->move(public_path($this->imagePath), $uuid.'_original.'.'png');
-            $restaurant->setConfig('resto_wide_logo',$uuid);
-        }
+            // Store whatever is posted in the request attribute
+            // It can either be
+            // 1 changed
+            // 2 deleted
 
-        if ($request->hasFile('resto_wide_logo_dark')) {
-       
-            $uuid = Str::uuid()->toString();
-            $request->resto_wide_logo_dark->move(public_path($this->imagePath), $uuid.'_original.'.'png');
-            $restaurant->setConfig('resto_wide_logo_dark',$uuid);
+            $images = new Slim();
+            $images = $images->getImages('resto_wide_logo');
+            
+            if($images){
+                $image = $images[0];        
+                $img_data = $image['output']['data'];
+                $ext = explode(".",$image['output']['name']);
+                $ext = $ext[1];
+                
+                $db_name_resto_wide_logo =  Str::uuid()->toString();
+                // dd($request);
+                
+                
+                // $settings->wphosmehero = $db_name_resto_wide_logo;
+    
+                $db_name_resto_wide_logo = $db_name_resto_wide_logo;
+                $resto_wide_logo_file = Slim::saveFile($img_data, $db_name_resto_wide_logo."_original.png", public_path($this->imagePath));
+            }
+            else{
+                $db_name_resto_wide_logo = '';
+            }
+
+            
+            $restaurant->setConfig('resto_wide_logo',$db_name_resto_wide_logo);
         }
 
         
-        if ($request->hasFile('resto_cover')) {
-            $restaurant->cover = $this->saveImageVersions(
-                $this->imagePath,
-                $request->resto_cover,
-                [
-                    ['name'=>'cover', 'w'=>2000, 'h'=>1000],
-                    ['name'=>'thumbnail', 'w'=>400, 'h'=>200],
-                ]
-            );
+
+
+        
+        
+        if($request['change_resto_wide_logo_dark'] == "empty" || $request['resto_wide_logo_dark'] != null){
+            // Store whatever is posted in the request attribute
+            // It can either be
+            // 1 changed
+            // 2 deleted
+
+            $images = new Slim();
+            $images = $images->getImages('resto_wide_logo_dark');
+
+            if($images){
+
+                $image = $images[0];        
+                
+                $img_data = $image['output']['data'];
+                $ext = explode(".",$image['output']['name']);
+                $ext = $ext[1];
+                
+                // dd("Here resto wide dark");
+                $db_name_resto_wide_logo_dark =  Str::uuid()->toString();
+                $resto_wide_logo_dark_file = Slim::saveFile($img_data, $db_name_resto_wide_logo_dark."_original.png", public_path($this->imagePath));
+                $db_name_resto_wide_logo_dark = $db_name_resto_wide_logo_dark;
+                
+                // dd($db_name_resto_wide_logo_dark);
+                // $settings->wphosmehero = $db_name_resto_wide_logo_dark;
+            }
+            else{
+                $db_name_resto_wide_logo_dark = NULL;
+            }
+
+
+            $restaurant->setConfig('resto_wide_logo_dark',$db_name_resto_wide_logo_dark);
         }
+
+        
+
+        if($request['change_resto_logo'] == "empty" || $request['resto_logo'] != null){
+            // Store whatever is posted in the request attribute
+            // It can either be
+            // 1 changed
+            // 2 deleted
+
+            $image_to_send = json_decode($request['resto_logo']);
+            if($image_to_send){
+                
+                $image_to_send = $image_to_send->output->image;
+                // dd($image_to_send);
+                $restaurant->logo = $this->saveImageVersionsUsingSlim(
+                    $this->imagePath,
+                    $image_to_send,
+                    [
+                        ['name'=>'large', 'w'=>590, 'h'=>400],
+                        ['name'=>'medium', 'w'=>295, 'h'=>200],
+                        ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
+                    ]
+                );
+            }
+            else{
+                $restaurant->logo = '';
+            }
+            
+        }
+
+        
+        if($request['change_resto_cover'] == "empty" || $request['resto_cover'] != null){
+            // Store whatever is posted in the request attribute
+            // It can either be
+            // 1 changed
+            // 2 deleted
+
+            $image_to_send = json_decode($request['resto_cover']);
+            
+            if($image_to_send){
+                $image_to_send = $image_to_send->output->image;
+                
+                $restaurant->cover = $this->saveImageVersionsUsingSlim(
+                    $this->imagePath,
+                    $image_to_send,
+                    [
+                        ['name'=>'cover', 'w'=>2000, 'h'=>1000],
+                        ['name'=>'thumbnail', 'w'=>400, 'h'=>200],
+                    ]
+                );
+            }
+            else{
+                $restaurant->cover = '';
+            }
+        }
+
+        
+        
+
+        // if ($request->hasFile('resto_logo')) {
+        //     $restaurant->logo = $this->saveImageVersions(
+        //         $this->imagePath,
+        //         $request->resto_logo,
+        //         [
+        //             ['name'=>'large', 'w'=>590, 'h'=>400],
+        //             ['name'=>'medium', 'w'=>295, 'h'=>200],
+        //             ['name'=>'thumbnail', 'w'=>200, 'h'=>200],
+        //         ]
+        //     );
+        // }
+
+        // if ($request->hasFile('resto_wide_logo')) {
+       
+        //     $uuid = Str::uuid()->toString();
+        //     $request->resto_wide_logo->move(public_path($this->imagePath), $uuid.'_original.'.'png');
+        //     $restaurant->setConfig('resto_wide_logo',$uuid);
+        // }
+
+        // if ($request->hasFile('resto_wide_logo_dark')) {
+       
+        //     $uuid = Str::uuid()->toString();
+        //     $request->resto_wide_logo_dark->move(public_path($this->imagePath), $uuid.'_original.'.'png');
+        //     $restaurant->setConfig('resto_wide_logo_dark',$uuid);
+        // }
+
+        
+        // if ($request->hasFile('resto_cover')) {
+        //     $restaurant->cover = $this->saveImageVersions(
+        //         $this->imagePath,
+        //         $request->resto_cover,
+        //         [
+        //             ['name'=>'cover', 'w'=>2000, 'h'=>1000],
+        //             ['name'=>'thumbnail', 'w'=>400, 'h'=>200],
+        //         ]
+        //     );
+        // }
 
         //Change default language
         //If language is different than the current one
@@ -437,10 +610,14 @@ class RestorantController extends Controller
         
 
         //Change currency
-        $restaurant->currency=$request->currency;
+        if($request->currency){
+            $restaurant->currency=$request->currency;
+        }
 
         //Change do converstion
-        $restaurant->do_covertion=$request->do_covertion=="true"?1:0;
+        if($request->do_covertion){
+            $restaurant->do_covertion=$request->do_covertion=="true"?1:0;
+        }
 
 
         $restaurant->update();
@@ -449,6 +626,10 @@ class RestorantController extends Controller
         //Update custom fields
         if($request->has('custom')){
             $restaurant->setMultipleConfig($request->custom);
+        }
+
+        if($redirect_to_design_route){
+            return redirect()->route('admin.restaurants.showImages', ['restaurant' => $restaurant->id])->withStatus(__('Restaurant Image(s) successfully updated.'));
         }
 
         if (auth()->user()->hasRole('admin')) {
@@ -867,5 +1048,120 @@ class RestorantController extends Controller
 
         //5. Redirect
         return redirect()->route('items.index')->withStatus(__('New language successfully created.'));
+    }
+
+
+    /* 
+     All Design changes here
+     Weblogo and other images changes will be displayed and updated here
+    */
+    public function show_all_images(Restorant $restaurant) {
+        
+        
+        //Days of the week
+        $timestamp = strtotime('next Monday');
+        for ($i = 0; $i < 7; $i++) {
+            $days[] = strftime('%A', $timestamp);
+            $timestamp = strtotime('+1 day', $timestamp);
+        }
+
+        //Generate days columns
+        $hoursRange = ['id'];
+        for ($i = 0; $i < 7; $i++) {
+            $from = $i.'_from';
+            $to = $i.'_to';
+
+            array_push($hoursRange, $from);
+            array_push($hoursRange, $to);
+        }
+
+        
+
+        
+
+        //Languages
+        $available_languages=[];
+        $default_language=null;
+
+        try {
+            if($restaurant->localMenus()->get()){
+                $available_languages=$restaurant->localMenus()->get()->pluck('languageName','id');
+                foreach ($restaurant->localMenus()->get() as $key => $localMenu) {
+                    if($localMenu->default.""=="1"){
+                        $default_language= $localMenu->id;
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+        }
+        
+        
+
+        //currency
+        if(strlen($restaurant->currency)>1){
+            $currency= $restaurant->currency;
+        }else{
+            $currency=config('settings.cashier_currency');
+        }
+
+        //App fields
+        $rawFields=$this->vendorFields($restaurant->getAllConfigs());
+        //Stripe fields
+        if(config('settings.stripe_useVendor')){
+            array_push($rawFields,[
+                "separator"=>"Stripe configuration",
+                "title"=> "Enable Stripe for payments when ordering",
+                "key"=> "stripe_enable",
+                "ftype"=> "bool",
+                "value"=>$restaurant->getConfig('stripe_enable',"false"),
+                "onlyin"=>"qrsaas"
+            ],[
+                "title"=>"Stripe key", 
+                "key"=>"stripe_key", 
+                "value"=>$restaurant->getConfig('stripe_key',""),
+                "onlyin"=>"qrsaas"
+            ],
+            [
+                "title"=>"Stripe secret", 
+                "key"=>"stripe_secret", 
+                "value"=>$restaurant->getConfig('stripe_secret',""),
+                "onlyin"=>"qrsaas"
+            ]);
+        }
+  
+       
+        $appFields=$this->convertJSONToFields($rawFields);
+
+        $shiftsData = Hours::where(['restorant_id' => $restaurant->id])->get($hoursRange);
+        $shifts=[];
+        foreach ($shiftsData as $key => $hours) {
+            $shiftId=$hours->id;
+            $workingHours=$hours->toArray();
+            unset($workingHours['id']);
+            $shifts[$shiftId]=$workingHours;
+        }
+
+        if (auth()->user()->id == $restaurant->user_id || auth()->user()->hasRole('admin')) {
+            $cities=[];
+            try {
+                $cities=City::get()->pluck('name', 'id');
+            } catch (\Throwable $th) {
+            }
+            // dd($restaurant);
+            return view('restorants.edit_images', [
+                'hasCloner'=>Module::has('cloner')&& auth()->user()->hasRole('admin'),
+                'restorant' => $restaurant,
+                'shifts'=>$shifts,
+                'days'=>$days,
+                'cities'=> $cities,
+                'plans'=>Plans::get()->pluck('name', 'id'),
+                'available_languages'=> $available_languages,
+                'default_language'=>$default_language,
+                'currency'=>$currency,
+                'appFields'=>$appFields
+                ]);
+        }
+
+        return redirect()->route('home')->withStatus(__('No Access'));
     }
 }

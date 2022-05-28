@@ -88,8 +88,9 @@
                   </nav>
               </div>
               <div class='related-mobile-menu'>
-                  <a href="javascript:;" class='show-mobile-menu'><i class="las la-bars"></i></a>
-              </div>
+                  <a href="javascript:;" class='show-mobile-menu' style="background:transparent !important;"><i class="las la-bars" style="color:black;"></i></a>
+                
+                </div>
           </div>
       </div>
   </section>

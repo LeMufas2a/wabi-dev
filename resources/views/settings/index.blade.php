@@ -126,22 +126,23 @@
                                         <div class="row">
                                             <?php
                                                 $images=[
-                                                    ['name'=>'site_logo','label'=>__('Site Logo'),'value'=>config('global.site_logo'),'style'=>'width: 200px;'],
-                                                    ['name'=>'restorant_details_image','help'=>"590x400px",'label'=>__('Restaurant Default Image'),'value'=>config('global.restorant_details_image'),'style'=>'width: 200px;'],
-                                                    ['name'=>'restorant_details_cover_image','label'=>__('Restaurant Details Cover Image'),'value'=>config('global.restorant_details_cover_image'),'style'=>'width: 200px;'],
-                                                    ['help'=>"256,256px",'name'=>'favicons','label'=>__('Favicon'),'value'=>'/apple-touch-icon.png','style'=>'width: 120px; height: 120px;']
+                                                    ['name'=>'site_logo','label'=>__('Site Logo (500x500)'),'dimensions'=>'500,500','value'=>config('global.site_logo'),'style'=>'width: 200px;'],
+                                                    ['name'=>'restorant_details_image','dimensions'=>'590,490','label'=>__('Restaurant Default Image (590x490)'),'value'=>config('global.restorant_details_image'),'style'=>'width: 200px;height:100px;'],
+                                                    ['name'=>'restorant_details_cover_image','dimensions'=>'1000,300','label'=>__('Restaurant Details Cover Image (1000x300)'),'value'=>config('global.restorant_details_cover_image'),'style'=>'width: 200px;'],
+                                                    ['name'=>'favicons','dimensions'=>'256,256','label'=>__('Favicon (256x256)'),'value'=>'/apple-touch-icon.png','style'=>'width: 120px; height: 120px;']
                                                  ];
-
+                                                // dd($images);
                                                 if(config('app.isft')){
                                                     array_splice($images, 1, 0, [['name'=>'search','label'=>__('Search Cover'),'value'=>config('global.search'),'style'=>'width: 200px;']] );
                                                 }
 
+                                                // dd();
                                                 if(config('settings.is_whatsapp_ordering_mode')){
-                                                    array_splice($images, 1, 0, [['name'=>'site_logo_dark','label'=>__('Site Logo Dark'),'value'=>config('global.site_logo_dark'),'style'=>'width: 200px;']] );
+                                                    array_splice($images, 1, 0, [['name'=>'site_logo_dark','dimensions'=>'500,500','label'=>__('Site Logo Dark (500x500)'),'value'=>config('global.site_logo_dark'),'style'=>'width: 200px;height:100px;']] );
                                                     if(config('app.isqrexact')){
                                                         array_push($images,['help'=>"512x512px",'name'=>'qrdemo','label'=>__('Front QR'),'value'=>'/impactfront/img/qrdemo.jpg','style'=>'width: 120px; height: 120px;']);
                                                     }
-                                                    array_push($images,['help'=>"",'name'=>'wphomehero','label'=>__('Hero image'),'value'=>'/social/img/wpordering.svg','style'=>'width: 200px; height: 120px;']);
+                                                    array_push($images,['help'=>"",'dimensions'=>'200,200','name'=>'wphomehero','label'=>__('Hero image'),'value'=>"uploads/settings/".$settings->wphosmehero."_wphomehero".".jpg",'style'=>'width: 200px; height: 120px;']);
 
                                                 }
 
@@ -168,7 +169,7 @@
 
 
                                                 }
-
+                                                // dd($images);
                                             ?>
                                             @foreach ($images as $image)
                                                 <div class="col-md-4">

@@ -1,23 +1,28 @@
-<nav id="navbar-main" class="navbar navbar-light navbar-expand-lg fixed-top">
+<nav id="navbar-main" class="navbar navbar-light navbar-expand-lg fixed-top" style="background : #240c52 !important; height: 50px;">
 
 
     <div class="container-fluid">
+
+                
         @if(!config('settings.hide_project_branding')||(!isset($restorant)))
           <a class="navbar-brand mr-lg-5" href="/">
             <img class="theProjectLogo" src="{{ config('global.site_logo') }}">
           </a>
+      
         @else
           <a class="navbar-brand mr-lg-5" id="topLightLogo" href="#">
             <img class="theProjectLogo" src="{{$restorant->logowide }}">
           </a>
+  
           <a class="navbar-brand mr-lg-5" id="topDarkLogo" style="display: none" href="#">
-            <img class="theProjectLogo" src="{{$restorant->logowidedark }}">
+            <img class="theProjectLogo" src="{{$restorant->logowide }}">
           </a>
         @endif
+          
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+     <!--   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
-        </button>
+        </button> -->
 
 
         <div class="navbar-collapse collapse" id="navbar_global">

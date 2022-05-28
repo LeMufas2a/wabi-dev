@@ -123,6 +123,11 @@ class Order extends Model
         return $this->belongsToMany(\App\Items::class, 'order_has_items', 'order_id', 'item_id')->withPivot(['qty', 'extras', 'vat', 'vatvalue', 'variant_price', 'variant_name','id']);
     }
 
+    public function service_items()
+    {
+        return $this->belongsToMany(\App\Models\ServiceItem::class, 'order_has_items', 'order_id', 'item_id')->withPivot(['qty', 'extras', 'vat', 'vatvalue', 'variant_price', 'variant_name','id']);
+    }
+
     public function ratings()
     {
         return $this->belongsToMany(\App\Ratings::class, 'ratings', 'order_id', 'id');

@@ -26,10 +26,10 @@ class SocialOrderRepository extends BaseOrderRepository implements OrderTypeInte
     }
 
     public function makeOrder(){
-
+        // dd("make order()");
         //From Parent - Construct the order
         $this->constructOrder();
-
+        
         //From trait - set fee and time slot
         $this->setAddressAndApplyDeliveryFee();
         $this->setTimeSlot();

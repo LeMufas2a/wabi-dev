@@ -1,5 +1,8 @@
 "use strict";
 var items=[];
+var service_items=[];
+var slot_items=[];
+var parent_log_items=[];
 var currentItem=null;
 var currentItemSelectedPrice=null;
 var lastAdded=null;
@@ -62,8 +65,6 @@ function loadExtras(variant_id){
             }
         })
 }
-
-
 
 
 /**
@@ -240,6 +241,7 @@ function setCurrentItem(id){
 
 
     var item=items[id];
+    
     currentItem=item;
     previouslySelected=[];
     $('#modalTitle').text(item.name);
@@ -308,6 +310,92 @@ function setCurrentItem(id){
         });
         $('#exrtas-area').show();
     }
+}
+
+/* Service Item Set Current Item method */
+function setCurrentServiceItem(id){
+    
+    var item=service_items[id];
+
+    // console.log("service item array",service_items);
+    // console.log("SLOT Items",slot_items);
+
+    currentItem=item;
+    previouslySelected=[];
+    $('#modalTitleServices').text(item.name);
+    $('#modalName').text(item.name);
+    $('#modalPriceServices').html(item.price);
+    // $('#modalID').text(item.id);
+    $('#modalIDServices').text(item.id);
+    $('#quantityServices').val(1);
+    $('#hide_days').val(item.days);
+
+    if(item.image != "/default/restaurant_large.jpg"){
+
+        $("#modalImgServices").attr("src",item.image);
+        $("#modalDialogItem").addClass("modal-lg");
+        $("#modalImgPartServices").show();
+
+        $("#modalItemDetailsPart").removeClass("col-sm-6 col-md-6 col-lg-6 offset-3");
+        $("#modalItemDetailsPart").addClass("col-sm col-md col-lg");
+    }else{
+        
+        $("#modalImgPartServices").hide();
+        $("#modalItemDetailsPart").removeClass("col-sm col-md col-lg");
+        $("#modalItemDetailsPart").addClass("col-sm-6 col-md-6 col-lg-6 offset-3");
+
+        $("#modalDialogItem").removeClass("modal-lg");
+        $("#modalDialogItem").addClass("col-sm-6 col-md-6 col-lg-6 offset-3");
+    }
+
+    $('#modalDescriptionServices').html(item.description);
+
+
+    if(item.has_variants){
+        //Vith variants
+        //Hide the counter, and extrasts
+        $('.quantity-area').hide();
+
+       //Now show the variants options
+       $('#variants-area-inside').empty();
+       $('#variants-area').show();
+       setVariants();
+
+
+
+
+    }else{
+        //Normal
+        currentItemSelectedPrice=item.priceNotFormated;
+        $('#variants-area').hide();
+        $('.quantity-area').show();
+    }
+
+
+    $('#productModalServices').modal('show');
+
+    extrasSelected=[];
+
+    variantID=null;
+
+
+    $('#exrtas-area-inside').empty();
+    $('#exrtas-area').hide();
+
+    //Now set the extrast
+    // if(item.extras.length==0||item.has_variants){
+        
+    //     $('#exrtas-area-inside').empty();
+    //     $('#exrtas-area').hide();
+    // }else{
+        
+    //     $('#exrtas-area-inside').empty();
+    //     item.extras.forEach(element => {
+            
+    //         $('#exrtas-area-inside').append('<div class="custom-control custom-checkbox mb-3"><input onclick="recalculatePrice('+id+');" class="custom-control-input" id="'+element.id+'" name="extra"  value="'+element.price+'" type="checkbox"><label class="custom-control-label" for="'+element.id+'">'+element.name+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+'+element.priceFormated+'</label></div>');
+    //     });
+    //     $('#exrtas-area').show();
+    // }
 }
 
 function recalculatePrice(id,value){
@@ -415,22 +503,4 @@ $(".nav-item-category").on('click', function() {
             $("."+value).hide();
         }
     });
-<<<<<<< HEAD
-});
-
-// setCurrentItem upon clicking the collapse + PLUS button
-
-$(document).on("click",".collapse_plus",function(){
-    
-    let item_id = $(this).attr('data-id');
-
-    if(item_id){
-        //setCurrentItem(item_id);
-    }
-    else{
-        alert("Item not found!");
-    }
-    
-=======
->>>>>>> akhtar
 });

@@ -182,6 +182,15 @@ class Restorant extends MyModel
         return $this->hasMany(\App\Categories::class, 'restorant_id', 'id')->where(['categories.active' => 1])->ordered();
     }
 
+    // Create functino to fetch all service categories for the restorant 
+    public function service_categories()
+    {
+        
+        return $this->hasMany(\App\Models\ServiceCategory::class, 'restorant_id', 'id')->where(['service_categories.active' => 1])->ordered();
+        // $aa =  $this->hasMany(\App\Models\ServiceCategory::class, 'restorant_id', 'id')->where(['active' => 1])->ordered();
+        // dd($aa);
+    }
+
     public function localmenus()
     {
         return $this->hasMany(\App\Models\LocalMenu::class, 'restaurant_id', 'id');

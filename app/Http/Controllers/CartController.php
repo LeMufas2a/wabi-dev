@@ -9,8 +9,12 @@ use App\Order;
 use App\Restorant;
 use App\Tables;
 use App\Plans;
+use App\Models\ServiceCategory;
+use App\Models\ServiceItem;
+use App\Models\ServiceHours;
 use Carbon\Carbon;
 use Cart;
+use Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use App\Services\ConfChanger;
@@ -34,23 +38,8 @@ class CartController extends Controller
         if(isset($request->session_id)){
             $this->setSessionID($request->session_id);
         }
-<<<<<<< HEAD
-		// dd($request->id);
-        // if(!$request->id){
-        //     return response()->json([
-        //         'status' => false,
-        //         'errMsg' => __("You can't add items from other restaurant!"),
-        //     ]);
-        // }    
+		    
         $item = Items::find($request->id);
-        echo "<pre>";
-        print_r($item);
-        // if(isset($item)){
-        // }
-=======
-		//dd($request->session_id);    
-        $item = Items::find($request->id);
->>>>>>> akhtar
         $restID = $item->category->restorant->id;
 
         $restaurant = Restorant::findOrFail($restID);
@@ -114,6 +103,128 @@ class CartController extends Controller
         }
     }
 
+    // Service Item - Add to cart method
+    
+    public function addServiceItem(Request $request)
+    {
+        // dd($request->all());
+        if(isset($request->session_id)){
+            $this->setSessionID($request->session_id);
+        }
+
+        $item = ServiceItem::find($request->id);
+		
+        // Service additional Data
+        
+        $slots = explode("--",$request->service_button_from);
+        // dd($slots);
+        $item_type = $request->item_type;
+        $service_from = $request->service_from;
+        $service_to = $request->service_to;
+        $booking_id = $request->booking_idFk;
+        $booking_day = $request->booking_day;
+        $service_slot_from = $slots[0];
+        $service_slot_to = $slots[1];
+        
+        // Store some of the information in Session to retrieve it
+        // during making an order and also to deduct the available booking_count
+
+        $session_arr = array(
+            'item_type' => $item_type,
+            'service_from' => $service_from,
+            'service_to' => $service_to,
+            'booking_id' => $booking_id,
+            'booking_day' => $booking_day,
+            'service_slot_from' => $service_slot_from,
+            'service_slot_to' => $service_slot_to,
+            'service_id' => $request->id
+        );
+
+        Session::push('session_arr',$session_arr);
+
+        Session::put('booking_id', $booking_id);
+        Session::put('item_type', $item_type);
+        Session::put('service_from', $service_from);
+        Session::put('service_to', $service_to);
+        Session::put('service_slot_from', $service_slot_from);
+        Session::put('service_slot_to', $service_slot_to);
+        
+
+        $cate_id = ServiceCategory::find($item->service_category_id);
+        
+        // $restID = $item->category->restorant->id;
+        $restID = $cate_id->restorant_id;
+
+        $restaurant = Restorant::findOrFail($restID);
+        \App\Services\ConfChanger::switchCurrency($restaurant);
+        
+
+        //Check if added item is from the same restorant as previus items in cart
+        $canAdd = false;
+        if (Cart::getContent()->isEmpty()) {
+            $canAdd = true;
+        } else {
+            $canAdd = true;
+            foreach (Cart::getContent() as $key => $cartItem) {
+                if ($cartItem->attributes->restorant_id.'' != $restID.'') {
+                    $canAdd = false;
+                    break;
+                }
+            }
+        }
+
+        /* **************** Calculation of days and hours - Matching with posted days and hours */
+        
+        /* **************** Calculation of days and hours - Matching with posted days and hours */
+
+
+        if ($item && $canAdd) {
+
+            //are there any extras
+            $cartItemPrice = $item->service_price;
+            $cartItemName = $item->service_name;
+            $theElement = '';
+
+            //Is there a varaint
+
+            //variantID - Condition set to false
+            if ($request->variantID || false) {
+                //Get the variant
+                $variant = Variants::findOrFail($request->variantID);
+
+                //Validate is this variant is from the current item
+                if ($variant->item->id == $item->id) {
+                    $cartItemPrice = $variant->price;
+
+                    //For each option, find the option on the
+                    $cartItemName = $item->name.' '.$variant->optionsList;
+                }
+            }
+
+            foreach ($request->extras as $key => $value) {
+                $cartItemName .= "\n+ ".$item->extras()->findOrFail($value)->name;
+                $cartItemPrice += $item->extras()->findOrFail($value)->price;
+                $theElement .= $value.' -- '.$item->extras()->findOrFail($value)->name.'  --> '.$cartItemPrice.' ->- ';
+            }
+            // dd($cartItemPrice);
+            Cart::add((new \DateTime())->getTimestamp(), $cartItemName, $cartItemPrice, $request->quantity, ['id'=>$item->id, 'booking_id'=>$booking_id,'service_from'=>$service_from,'service_to'=>$service_to, 'booking_day'=>$booking_day,'item_type'=>$item_type,'variant'=>$request->variantID, 'extras'=>$request->extras, 'restorant_id'=>$restID, 'image'=>$item->icon, 'friendly_price'=>  Money($cartItemPrice, config('settings.cashier_currency'), config('settings.do_convertion'))->format()]);
+
+            return response()->json([
+                'status' => true,
+                'errMsg' => $theElement,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errMsg' => __("You can't add items from other restaurant!"),
+            ]);
+        }
+    }
+    
+    // Service Item - Add to cart method
+
+
+
     public function getContent()
     {
 
@@ -125,6 +236,7 @@ class CartController extends Controller
         return response()->json([
             'data' => Cart::getContent(),
             'total' => Cart::getSubTotal(),
+            'quantity' => Cart::getTotalQuantity(),
             'status' => true,
             'errMsg' => '',
         ]);
@@ -156,7 +268,9 @@ class CartController extends Controller
 
     public function cart()
     {
-        
+        // dd($request->all());
+        // dd(Session::get('booking_id'));
+        // dd("here");
         if(isset($_GET['session_id'])){
             $this->setSessionID($_GET['session_id']);
         }

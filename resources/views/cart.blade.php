@@ -8,7 +8,7 @@
 
         </div>
     </section>
-    <section class="section bg-secondary">
+    <section class="section" style="background:white;">
 
       <div class="container">
 
@@ -20,8 +20,7 @@
             <!-- Left part -->
             <div class="col-md-7">
 
-              <!-- List of items -->
-              @include('cart.items')
+              
 
                 <form id="order-form" role="form" method="post" action="{{route('order.store')}}" autocomplete="off" enctype="multipart/form-data">
                 @csrf
@@ -120,12 +119,15 @@
 
               <!-- Restaurant -->
               @include('cart.restaurant')
+                  
             </div>
 
 
           <!-- Right Part -->
           <div class="col-md-5">
-
+            <!-- List of items -->
+              @include('cart.items')
+			
             @if (count($timeSlots)>0)
                 <!-- Payment -->
                 @include('cart.payment')
@@ -134,7 +136,7 @@
                 @include('cart.closed')
             @endif
 
-
+    
           </div>
         </div>
 

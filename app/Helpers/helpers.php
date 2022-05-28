@@ -40,4 +40,10 @@ if (! function_exists('trans')) {
         return $message;
     }
 }
+
+if(! function_exists('get_all_pages')){
+    // function get_all_pages(){
+
+    // }
+}
 ?>

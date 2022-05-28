@@ -1053,11 +1053,7 @@ a:hover {
  }
 
  .callOutShoppingButtonBottom {
-<<<<<<< HEAD
-    position: fixed;
-=======
    	position: fixed;
->>>>>>> akhtar
     bottom: 0px;
     right: 20px;
     z-index: 1000;  
@@ -2629,4 +2625,140 @@ lottie-player {
 
 input{
 font-size : 16px !important
+}
+
+/* By 74di */
+
+@media screen and (min-width: 768px) {
+    section.section-place-header{
+		height:400px !important;
+	}
+	picture.d-flex.myPic{
+		top: 160px !important;
+	}
+	#productModal .modal-body{
+		height: 400px;
+    	overflow-y: auto;
+	}
+	div#productModal {
+    	overflow: hidden !important;
+	}
+}
+
+@media only screen and (max-device-width: 480px) {
+	div#modalDialogItem{
+		min-height:calc(100% - (3rem * 2));
+	}
+	#productModal .modal-dialog{
+		margin:0px;
+	}
+	body.modal-open {
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+    }
+
+	#productModal .modal-body{
+		overflow-y: auto !important;
+		height: calc(95vh - 132px);
+	}
+	div#productModal{
+		overflow:hidden !important;
+	}
+}
+
+@med.modal-body {
+//	height: 90vh;
+}
+
+/* Weekdays checkboxes */
+.weekDays-selector input {
+    display: none!important;
+  }
+  
+  .weekDays-selector input[type=checkbox] + label {
+    display: inline-block;
+    border-radius: 6px;
+    background: #dddddd;
+    height: 40px;
+    width: 20%;
+    margin-right: 25px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .weekDays-selector input[type=checkbox]:checked + label {
+    background: #5e72e4;
+    color: #ffffff;
+  }
+
+  /* Seperate styles for long booking - arrival and departure */
+
+  .weekDays-selector-long input {
+    display: none!important;
+  }
+
+  .weekDays-selector-long-departure input {
+    display: none!important;
+  }
+  
+  .weekDays-selector-long input[type=checkbox] + label {
+    display: inline-block;
+    border-radius: 6px;
+    background: #dddddd;
+    height: 40px;
+    width: 10%;
+    margin-right: 25px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .weekDays-selector-long-departure input[type=checkbox] + label {
+    display: inline-block;
+    border-radius: 6px;
+    background: #dddddd;
+    height: 40px;
+    width: 10%;
+    margin-right: 25px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .weekDays-selector-long input[type=checkbox]:checked + label {
+    background: #5e72e4;
+    color: #ffffff;
+  }
+
+  .weekDays-selector-long-departure input[type=checkbox]:checked + label {
+    background: #5e72e4;
+    color: #ffffff;
+  }
+
+  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+
+/* 
+        Custom CSS for mobile
+        written by Ali
+        Specifically for services module
+*/
+
+.service_type{
+    position: static;
+}
+
+.jconfirm.jconfirm-black .jconfirm-box, .jconfirm.jconfirm-dark .jconfirm-box {
+    background: #3C4D69 !important;
+    /* -webkit-box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+    border-radius: 5px;
+    color: white; */
 }

@@ -11,6 +11,7 @@ use App\Status;
 use App\User;
 use Carbon\Carbon;
 use Cart;
+// use Session;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -283,6 +284,8 @@ class OrderController extends Controller
 
     public function store(Request $request){
 
+        // dd(session()->all());
+        // dd($request);
         //Convert web request to mobile like request
         $mobileLikeRequest=$this->toMobileLike($request);
 
@@ -317,9 +320,9 @@ class OrderController extends Controller
 
         //Repo Holder
         $orderRepo=OrderRepoGenerator::makeOrderRepo($vendor_id,$mobileLikeRequest,$expedition,$hasPayment,$isStripe,false,$vendorHasOwnPayment);
-
         //Proceed with validating the data
         $validator=$orderRepo->validateData();
+        
         if ($validator->fails()) { 
             notify()->error($validator->errors()->first());
             return $orderRepo->redirectOrInform(); 
@@ -327,6 +330,7 @@ class OrderController extends Controller
 
         //Proceed with making the order
         $validatorOnMaking=$orderRepo->makeOrder();
+        // dd($validatorOnMaking);
         if ($validatorOnMaking->fails()) { 
             notify()->error($validatorOnMaking->errors()->first()); 
             return $orderRepo->redirectOrInform(); 

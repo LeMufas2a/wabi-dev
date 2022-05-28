@@ -3,7 +3,7 @@
 class Slim {
 
     public static function getImages($inputName = 'slim') {
-
+        
         $values = Slim::getPostData($inputName);
         
         // test for errors

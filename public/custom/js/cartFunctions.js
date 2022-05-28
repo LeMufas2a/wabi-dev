@@ -6,6 +6,7 @@ var cartTotal=null;
 var cartTotalMobile=null;
 var footerPages=null;
 var total=null;
+var total_price_on_checkout_button=null;
 
 $('#localorder_phone').hide();
 
@@ -22,7 +23,7 @@ function updatePrices(net,delivery,enableDelivery){
   net=parseFloat(net+"");
   delivery=parseFloat(delivery+"");
   var deduct=cartTotal.deduct;
-  console.log("Deduct is "+deduct);
+  // console.log("Deduct is "+deduct);
   
   var formatter = new Intl.NumberFormat(LOCALE, {
     style: 'currency',
@@ -63,10 +64,10 @@ function updatePrices(net,delivery,enableDelivery){
   }
   total.lastChange=new Date().getTime();
   cartTotal.lastChange=new Date().getTime();
-  console.log("DAta");
-console.log(cartTotal)
-  console.log("Total is "+total.totalPrice);
-  console.log("Total is "+cartTotal.withDelivery);
+  // console.log("DAta");
+  // console.log(cartTotal)
+  // console.log("Total is "+total.totalPrice);
+  // console.log("Total is "+cartTotal.withDelivery);
   
 
 }
@@ -93,10 +94,38 @@ function updateSubTotalPrice(net,enableDelivery){
  * Saves the values in vue
  */
 function getCartContentAndTotalPrice(){
+  
    axios.get('/cart-getContent').then(function (response) {
     cartContent.items=response.data.data;
+    // dta = response.data.data;
     //cartContentMobile.items=response.data.data;
+    // alert("here");
+    total_price_on_checkout_button = response.data.total;
+    
+    // console.log("cartContent object",cartContent.items.price);
+    // console.log("get cart response",response.data.data['1653497223'].attributes);
+    // console.log("cartcontent with attributes",items.attributes.service_from);
+    
+    if(total_price_on_checkout_button >= 1){
+      $(".third-child").show();
+      $(".custom--cart").text( response.data.quantity +"\t \t \t Checkout \t \t \t €"+ total_price_on_checkout_button.toFixed(2) );
+    }
+    else{
+      // console.log("response.data.quantity",response.data.quantity);
+      // var parent_id = $(".custom--cart").parent().parent().attr('id');
+      // alert(parent_id);
+      // $(div#theCartBottomButtonDiv).hide();
+      // $( "div.container-fluid.first-child" ).find( "div" ).css( "background-color", "red" );
+      // alert("here");
+      // $(".third-child").css( "background-color", "red" );
+      // var allListElements = $( "div" );
+      // console.log("allListElements",allListElements);
+      $(".third-child").hide();
+      // $(".custom--cart").hide();
+    }
+
     updateSubTotalPrice(response.data.total,true);
+    
    })
    .catch(function (error) {
      
@@ -364,11 +393,7 @@ function chageDeliveryCost(deliveryCost){
   }
 
 window.onload = function () {
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> akhtar
   
 
   //VUE CART
@@ -493,7 +518,13 @@ window.onload = function () {
         return cartTotal.minimalOrder
       },
       totalPriceFormat: function () {
-        return cartTotal.totalPriceFormat
+        if(cartTotal.totalPriceFormat){
+          return cartTotal.totalPriceFormat
+        }
+        else {
+          cartTotal.totalPriceFormat = 0;
+          return cartTotal.totalPriceFormat;
+        }
       },
       deliveryPriceFormated: function () {
         return cartTotal.deliveryPriceFormated
@@ -509,16 +540,16 @@ window.onload = function () {
 
   //Call to get the total price and items
   getCartContentAndTotalPrice();
-
+  
   var addToCart1 =  new Vue({
     el:'#addToCart1',
     methods: {
         addToCartAct() {
-<<<<<<< HEAD
-            
-=======
-
->>>>>>> akhtar
+            let hidden_cart_value = parseInt($("#total_in_cart").val());
+            hidden_cart_value = parseInt(hidden_cart_value)  + parseInt($('#quantity').val());
+            $("#total_in_cart").val(hidden_cart_value);
+            // console.log("inside add to cart",total_price_on_checkout_button); 
+            // console.log("the quantity without adding",$('#quantity').val());
             axios.post('/cart-add', {
                 id: $('#modalID').text(),
                 quantity: $('#quantity').val(),
@@ -526,14 +557,11 @@ window.onload = function () {
                 variantID:variantID
               })
               .then(function (response) {
-<<<<<<< HEAD
-                // console.log("the response",response);
                   if(response.data.status){
-                    console.log("response",response.data)
-=======
-                  if(response.data.status){
->>>>>>> akhtar
                     $('#productModal').modal('hide');
+                    $("#theCartBottomButtonDiv").show();
+                    // $("#total_in_cart").val($('#quantity').val());
+                    $(".custom--cart").text(hidden_cart_value +"\t \t \t Checkout \t \t \t"+ total_price_on_checkout_button.toFixed(2) );
                     //$('#productModal').modal('close');
                     getCartContentAndTotalPrice();
                     if (TEMPLATE_USED== "defaulttemplate") { 
@@ -552,18 +580,55 @@ window.onload = function () {
               });
         },
     },
-  });
+  })
+
+  // Add to Cart for services
+
+  var addToCart2 =  new Vue({
+    el:'#addToCart2',
+    methods: {
+      addToCartActServiceItem() {
+          // alert("vue js addtocartact");
+            let hidden_cart_value_services = parseInt($("#total_in_cart_services").val());
+            hidden_cart_value_services = parseInt(hidden_cart_value_services)  + parseInt($('#quantity').val());
+            $("#total_in_cart_services").val(hidden_cart_value_services);
+            
+            axios.post('/cart-add-service-items', {
+                id: $('#modalIDServices').text(),
+                quantity: $('#quantity').val(),
+                hours: 0,
+                extras:extrasSelected,
+                variantID:variantID,
+                service_from:$("#service_from").val(),
+                service_to:$("#service_to").val(),
+                booking_day:$("#booking_day").val(),
+                booking_idFk:$("#booking_idFk").val(),
+                service_button_from:$("#service_button_from").val(),
+                item_type:'services'
+              })
+              .then(function (response) {
+                  if(response.data.status){
+                    $(".slots_to_add").html('');
+                    $('#serviceday1')[0]._flatpickr.clear();
+                    $('#productModalServices').modal('hide');
+                    $("#theCartBottomButtonDiv").show();
+                    
+                    $(".custom--cart").text(hidden_cart_value_services +"\t \t \t Checkout \t \t \t"+ total_price_on_checkout_button.toFixed(2) );
+                    
+                    getCartContentAndTotalPrice();
+                    if (TEMPLATE_USED== "defaulttemplate") { 
+                      openNav();
+                    }
+                  }else{
+                    $('#productModalServices').modal('hide');
+                    js.notify(response.data.errMsg,"warning");
+                  }
+              })
+              .catch(function (error) {
+                
+              });
+        },
+    },
+  })
+  
 }
-<<<<<<< HEAD
-
-
-function toggleIcon(e) {
-  $(e.target)
-      .prev('.panel-heading')
-      .find(".more-less")
-      .toggleClass('glyphicon-plus glyphicon-minus');
-  }
-  $('.panel-group').on('hidden.bs.collapse', toggleIcon);
-  $('.panel-group').on('shown.bs.collapse', toggleIcon);
-=======
->>>>>>> akhtar
