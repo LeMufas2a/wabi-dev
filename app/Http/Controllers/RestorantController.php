@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Categories;
 use App\City;
 use App\Events\CallWaiter;
@@ -34,6 +35,9 @@ use Image;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 use Spatie\Geocoder\Geocoder;
+
+use App\Events\ServiceHoursEvent;
+use App\Listeners\ServiceHoursListener;
 
 use Slim;
 
@@ -762,6 +766,8 @@ class RestorantController extends Controller
 
     public function workingHours(Request $request)
     {
+        
+        // dd($request->all());
         $hours = Hours::where(['id' => $request->shift_id])->first();
 
         $shift="_shift".$request->shift_id;
@@ -782,6 +788,14 @@ class RestorantController extends Controller
         $hours->{'6_to'} = $request->{'6_to'.$shift} ?? null;
         $hours->update();
 
+        // Here goes the logic for updating the service hours of Service
+        // if any service has hours set to be the default hours of 
+        // the restaurant
+        
+        $hours_change = event(new ServiceHoursEvent($hours));
+        // dd($hours_change);        
+
+        die("befor return");
         return redirect()->route('admin.restaurants.edit', ['restaurant' => $request->rid])->withStatus(__('Working hours successfully updated!'));
     }
 

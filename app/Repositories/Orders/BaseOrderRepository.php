@@ -181,7 +181,10 @@ class BaseOrderRepository extends Controller
         $service_slot_from = null;
         $service_to = null;
         $service_slot_to = null;
+        $is_service_item = 0;
         $sess_arr = request()->session()->get('session_arr');
+
+        
 
         foreach ($this->request->items as $key => $item) {
 
@@ -198,6 +201,7 @@ class BaseOrderRepository extends Controller
 
             if($item_type == 'services'){
                 $theItem = ServiceItem::findOrFail($item['id']);
+                $is_service_item = 1;
             }
             else{
                 $theItem = Items::findOrFail($item['id']);
@@ -212,13 +216,15 @@ class BaseOrderRepository extends Controller
             // dd($search);
             foreach($sess_arr as $key=>$value){
                 if($value['service_id'] == $item['id']){
-                    $booking_id = $value['booking_id'];
+                    $booking_id = (int)$value['booking_id'];
                     $service_from = $value['service_from'];
                     $service_to = $value['service_to'];
                     $service_slot_from = $value['service_slot_from'];
                     $service_slot_to = $value['service_slot_to'];
+                    $service_booked_on = $value['service_booked_on'];
                 }
             }
+            // dd($booking_id);
             // dd($sess_arr);
             $logs = \App\Models\ServiceBookingsLogs::find($booking_id);
             // dd($logs);
@@ -270,10 +276,7 @@ class BaseOrderRepository extends Controller
             
             // dd($booked);
 
-            // Here forget the session values as the order has been placed and
-            // ready to be move forward
             
-            session()->forget('session_arr');
             
 
             
@@ -313,17 +316,24 @@ class BaseOrderRepository extends Controller
             
 
             
-                    
+            
             $this->order->items()->attach($item['id'], [
                 'qty'=>$item['qty'], 
                 'extras'=>json_encode($extras), 
                 'vat'=>$theItem->vat, 
                 'booking_id'=>$booking_id, 
+                'service_booked_on'=>date("Y-m-d H:i:s",strtotime($service_booked_on)), 
                 'vatvalue'=>$totalCalculatedVAT, 
                 'variant_name'=>$variantName, 
-                'variant_price'=>$itemSelectedPrice
+                'variant_price'=>$itemSelectedPrice,
+                'is_service_item'=>$is_service_item
             ]);
-        } 
+        }  // end loop for storing orders
+
+        // Here forget the session values as the order has been placed and
+        // ready to be move forward
+        
+        session()->forget('session_arr');
 
         
         //After we have updated the list of items, we need to update the order price

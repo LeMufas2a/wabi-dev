@@ -229,8 +229,8 @@
                             </div>
 
                             <div class="form-group{{ $errors->has('service_duration') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="items_excel">{{ __('Service Duration (In Minutes)') }}</label>
-                                <input class="form-control" name="service_duration" id="service_duration" placeholder="{{ __('Service Duration') }} ..." onkeypress="return event.charCode >= 48 || event.charCode == 46" type="number" min="1"  required>
+                                <label class="form-control-label service_duration_label"  for="items_excel">{{ __('') }}</label>
+                                <input class="form-control" name="service_duration" id="service_duration1" min="1" placeholder="{{ __('Service Duration') }} ..." onkeypress="return event.charCode >= 48 || event.charCode == 46" type="number" min="1"  required>
                                 <p class="error_duration" style="color: red;margin-left: 10px;display:none;"></p>
                                 @if ($errors->has('service_duration'))
                                     <span class="invalid-feedback" role="alert">
@@ -400,22 +400,26 @@
                                 </div> --}}
 
                                 <div class="row">
-                                    <div class="col-4">
-                                    </div>
-                                    <div class="col-4">
+                                    <div class="col-4 custom_hours">
+                                        <label class="form-control-label" for="items_custom_hours">{{ __('Add Service Hours') }}</label>
                                         <button class="btn btn-icon btn-1 btn-lg btn-primary" id="add_more_service" type="button"  title="Add service days" onclick="addMoreDays($(this))">
                                             <span class="btn-inner--icon"><i class="fa fa-plus"></i></span>
                                         </button>
                                     </div>
                                     <div class="col-4">
                                     </div>
+                                    <div class="col-4 default_hours">
+                                        <label class="form-control-label" for="items_default_hours">{{ __('Set Default Hours') }}</label>
+                                        <input type="checkbox" name="default_hours" id="default_hours" style="width: 40px;height: 27px;" onchange="setDefaultHours($(this))" />
+                                    </div>
                                 </div>
                                 <br />
+
                                 <div class="below_div">
                                     <div class="row service_days_container daysContainer_1">
                                         <div class="col-3">
                                             <div class="form-group">
-                                                <select class="form-control service_available_days" name="service_available_days[]" id="service_available_days">
+                                                <select class="form-control service_available_days service_available_non_default" name="service_available_days[]" id="service_available_days">
                                                     <option value="Monday" selected>Monday</option>
                                                     <option value="Tuesday">Tuesday</option>
                                                     <option value="Wednesday">Wednesday</option>
@@ -437,6 +441,166 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="row default_eshop_hours" style="display: none;">
+                                    @foreach($working_hours_restaurant as $key => $value)
+                                        @if($key == "Monday_from")
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <select class="form-control service_available_days service_available_default" name="service_available_days[]" id="service_available_days">
+                                                        <option value="Monday" <?php if($key == "Monday_from" && !empty($key["Monday_from"])){ echo "selected"; } ?>>Monday</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicefromMonday" name="service_from_time[]" class="flatpickr flatpickr-input form-control servicefromdefault servicefrom" type="text" placeholder="{{ __('Start Time') }}" value="">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicetoMonday" name="service_to_time[]" class="flatpickr flatpickr-input form-control servicetodefault serviceto" type="text" placeholder="{{ __('End Time') }}" value="">
+                                                </div>
+                                            </div>
+
+                                        @endif
+                                            
+                                        @if($key == "Tuesday_from")
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <select class="form-control service_available_days service_available_default" name="service_available_days[]" id="service_available_days">
+                                                        <option value="Tuesday" <?php if($key == "Tuesday_from" && !empty($key["Tuesday_from"])){ echo "selected"; } ?>>Tuesday</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicefromTuesday" name="service_from_time[]" class="flatpickr flatpickr-input form-control servicefromdefault servicefrom" type="text" placeholder="{{ __('Start Time') }}" value="">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicetoTuesday" name="service_to_time[]" class="flatpickr flatpickr-input form-control servicetodefault serviceto" type="text" placeholder="{{ __('End Time') }}" value="">
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        @if($key == "Wednesday_from")
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <select class="form-control service_available_days service_available_default" name="service_available_days[]" id="service_available_days">
+                                                        <option value="Wednesday" <?php if($key == "Wednesday_from" && !empty($key["Wednesday_from"])){ echo "selected"; } ?>>Wednesday</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicefromWednesday" name="service_from_time[]" class="flatpickr flatpickr-input form-control servicefromdefault servicefrom" type="text" placeholder="{{ __('Start Time') }}" value="">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicetoWednesday" name="service_to_time[]" class="flatpickr flatpickr-input form-control servicetodefault serviceto" type="text" placeholder="{{ __('End Time') }}" value="">
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        @if($key == "Thursday_from")
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <select class="form-control service_available_days service_available_default" name="service_available_days[]" id="service_available_days">
+                                                        <option value="Thursday" <?php if($key == "Thursday_from" && !empty($key["Thursday_from"])){ echo "selected"; } ?>>Thursday</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicefromThursday" name="service_from_time[]" class="flatpickr flatpickr-input form-control servicefromdefault servicefrom" type="text" placeholder="{{ __('Start Time') }}" value="">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicetoThursday" name="service_to_time[]" class="flatpickr flatpickr-input form-control servicetodefault serviceto" type="text" placeholder="{{ __('End Time') }}" value="">
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        @if($key == "Friday_from")
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <select class="form-control service_available_days service_available_default" name="service_available_days[]" id="service_available_days">
+                                                        <option value="Friday" <?php if($key == "Friday_from" && !empty($key["Friday_from"])){ echo "selected"; } ?>>Friday</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicefromFriday" name="service_from_time[]" class="flatpickr flatpickr-input form-control servicefromdefault servicefrom" type="text" placeholder="{{ __('Start Time') }}" value="">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicetoFriday" name="service_to_time[]" class="flatpickr flatpickr-input form-control servicetodefault serviceto" type="text" placeholder="{{ __('End Time') }}" value="">
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        @if($key == "Saturday_from")
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <select class="form-control service_available_days service_available_default" name="service_available_days[]" id="service_available_days">
+                                                        <option value="Saturday" <?php if($key == "Saturday_from" && !empty($key["Saturday_from"])){ echo "selected"; } ?>>Saturday</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicefromSaturday" name="service_from_time[]" class="flatpickr flatpickr-input form-control servicefromdefault servicefrom" type="text" placeholder="{{ __('Start Time') }}" value="">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicetoSaturday" name="service_to_time[]" class="flatpickr flatpickr-input form-control servicetodefault serviceto" type="text" placeholder="{{ __('End Time') }}" value="">
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        @if($key == "Sunday_from")
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <select class="form-control service_available_days service_available_default" name="service_available_days[]" id="service_available_days">
+                                                        <option value="Sunday" <?php if($key == "Sunday_from" && !empty($key["Sunday_from"])){ echo "selected"; } ?>>Sunday</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicefromSunday" name="service_from_time[]" class="flatpickr flatpickr-input form-control servicefromdefault  servicefrom" type="text" placeholder="{{ __('Start Time') }}" value="">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input id="servicetoSunday" name="service_to_time[]" class="flatpickr flatpickr-input form-control servicetodefault serviceto" type="text" placeholder="{{ __('End Time') }}" value="">
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach 
+                                    
                                 </div>
 
                             </div>

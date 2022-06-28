@@ -763,7 +763,14 @@ class FrontEndController extends Controller
         // dd($restorant);
 
         // Following id is the ID of the user of that restaurant which is going to be viewed
-        $restorant_to_view_has_user_id = $restorant->user_id;
+        // dd($restorant);
+        if($restorant){
+            $restorant_to_view_has_user_id = $restorant->user_id;
+        }
+        else{
+            $restorant_to_view_has_user_id = NULL;
+        }
+        
         //Do we have google translate app
         $doWeHaveGoogleTranslateApp=Module::has('googletranslate')&&$restorant->getConfig('gt_enable',false);
 

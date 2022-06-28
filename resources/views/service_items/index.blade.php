@@ -5,7 +5,10 @@
 @endsection
 @section('content')
     
-
+    <?php 
+    // echo "<pre>";
+    // print_r($working_hours_json);
+    ?>
     <div class="header bg-gradient-primary pb-7 pt-5 pt-md-8">
         <div class="container-fluid">
             <div class="header-body">
@@ -252,11 +255,22 @@ var timeFormat = 'AM/PM';
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
+var default_hours = {};
 
 $(document).ready(function(){
-    $("#service_available_days").select2('destroy'); 
+
+    $(".service_available_default").attr("disabled",true);
+    $(".servicefromdefault").attr("disabled",true);
+    $(".servicetodefault").attr("disabled",true);
+
+    // Service Duration Label default value 
+    $(".service_duration_label").text(" Service Duration (In Hours)");
     
+    $("#service_available_days").select2('destroy'); 
+    default_hours = '<?php print_r($working_hours_json); ?>';
+    if(default_hours){
+        default_hours = JSON.parse(default_hours);
+    }    
 });
 
 // Function to dynamically add service days and hours 
@@ -322,6 +336,200 @@ function addMoreDays(exp){
     
     count++;
     
+}
+
+// Function to add Default Hours
+function setDefaultHours(exp){
+    
+    
+
+    if(exp[0].checked) {
+
+        // Set Default eshop timings 
+        $(".default_eshop_hours").show();
+        $(".custom_hours").css("opacity",0.3);
+        $("#add_more_service").prop("disabled",true);
+        $(".below_div").hide();
+
+        // Enable Default days and time
+        $(".service_available_default").attr("disabled",false);
+        $(".servicefromdefault").attr("disabled",false);
+        $(".servicetodefault").attr("disabled",false); 
+
+        // Normal Days and time
+        $(".service_available_non_default").attr("disabled",true);
+        $(".servicefrom1").attr("disabled",true);
+        $(".serviceto1").attr("disabled",true);
+        // Set the days and hours in below_div div
+
+        // defaultDate: "13:45"
+
+        const Monday_from = $('#servicefromMonday').flatpickr({
+            defaultDate: default_hours["Monday_from"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const monday_to = $('#servicetoMonday').flatpickr({
+            defaultDate: default_hours["Monday_to"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Tuesday_from = $('#servicefromTuesday').flatpickr({
+            defaultDate: default_hours["Tuesday_from"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Tuesday_to = $('#servicetoTuesday').flatpickr({
+            defaultDate: default_hours["Tuesday_to"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Wednesday_from = $('#servicefromWednesday').flatpickr({
+            defaultDate: default_hours["Wednesday_from"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Wednesday_to = $('#servicetoWednesday').flatpickr({
+            defaultDate: default_hours["Wednesday_to"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Thursday_from = $('#servicefromThursday').flatpickr({
+            defaultDate: default_hours["Thursday_from"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Thursday_to = $('#servicetoThursday').flatpickr({
+            defaultDate: default_hours["Thursday_to"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Friday_from = $('#servicefromFriday').flatpickr({
+            defaultDate: default_hours["Friday_from"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Friday_to = $('#servicetoFriday').flatpickr({
+            defaultDate: default_hours["Friday_to"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+
+        const Saturday_from = $('#servicefromSaturday').flatpickr({
+            defaultDate: default_hours["Saturday_from"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Saturday_to = $('#servicetoSaturday').flatpickr({
+            defaultDate: default_hours["Saturday_to"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Sunday_from = $('#servicefromSunday').flatpickr({
+            defaultDate: default_hours["Sunday_from"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+
+        const Sunday_to = $('#servicetoSunday').flatpickr({
+            defaultDate: default_hours["Sunday_to"],
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            dateFormat: timeFormat == "AM/PM" ? "h:i K": "H:i",
+            altFormat: timeFormat == "AM/PM" ? "h:i K" : "H:i",
+            time_24hr: timeFormat == "AM/PM" ? false : true,
+        });
+        
+        $(".instant_booking .below_div").append('');
+    }
+    
+    else{
+        $(".custom_hours").css("opacity",1);
+        $("#add_more_service").prop("disabled",false);
+        $(".below_div").show();
+        $(".default_eshop_hours").hide();
+
+        $(".service_available_non_default").attr("disabled",false);
+        $(".servicefrom1").attr("disabled",false);
+        $(".serviceto1").attr("disabled",false);
+        
+        
+        $(".service_available_default").attr("disabled",true);
+        $(".servicefromdefault").attr("disabled",true);
+        $(".servicetodefault").attr("disabled",true);
+    }
+}
+
+
+// Function to add Default Hours
+function resetServiceHours(exp){
+    $(".custom_hours").css("opacity",1);
+    // $(".default_hours").css("opacity",0.5);
 }
 
 // Function to remove day
@@ -551,10 +759,12 @@ $("[data-target='#modal-service-edit-category']").on('click',function() {
                 if(value == 'instant booking'){
                     $(".instant_booking").show();
                     $(".long_booking").hide();
+                    $(".service_duration_label").text(" Service Duration (In Hours)");
                 }
                 else{
                     $(".long_booking").show();
                     $(".instant_booking").hide();
+                    $(".service_duration_label").text(" Service Duration (In Days)");
                 }     
             });
 

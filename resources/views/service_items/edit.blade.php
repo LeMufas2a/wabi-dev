@@ -61,6 +61,8 @@
                             @csrf 
                                 <div class="row">
                                     <input type="hidden" name="service_id" id="service_id" value="">
+                                    <input type="hidden" name="day_changed" id="day_changed" value="">
+                                    <input type="hidden" name="time_changed" id="time_changed" value="">
                                     <div class="col-4">
                                         <div class="form-group">
                                             <select class="form-control service_available_days" name="service_available_days" id="service_available_days">
@@ -76,12 +78,12 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group">
-                                            <input id="servicefrom" name="service_from_time" class="flatpickr flatpickr-input form-control servicefrom1 servicefrom" type="text" placeholder="{{ __('Start Time') }}" value="">
+                                            <input id="servicefrom" onchange="slot_changed(this)" name="service_from_time" class="flatpickr flatpickr-input form-control servicefrom1 servicefrom" type="text" placeholder="{{ __('Start Time') }}" value="">
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group">
-                                            <input id="serviceto" name="service_to_time" class="flatpickr flatpickr-input form-control serviceto1 serviceto" type="text" placeholder="{{ __('End Time') }}" value="">
+                                            <input id="serviceto" onchange="slot_changed(this)" name="service_to_time" class="flatpickr flatpickr-input form-control serviceto1 serviceto" type="text" placeholder="{{ __('End Time') }}" value="">
                                         </div>
                                     </div>
 
@@ -118,6 +120,8 @@
                                 <div class="row">
                                     <input type="hidden" name="service_create_id" id="service_create_id" value="{{ $item->id }}">
                                     <input type="hidden" name="restorant_id" id="restorant_id" value="{{ $item->category->restorant_id }}">
+                                    <input type="hidden" name="service_duration_single" id="service_duration_single" value="{{ $item->service_duration }}">
+                                    <input type="hidden" name="service_reservations_single" id="service_reservations_single" value="{{ $item->service_reservations }}">
                                     <div class="col-4">
                                         <div class="form-group">
                                             <select class="form-control service_create_available_days" name="service_create_available_days" id="service_create_available_days">
@@ -200,7 +204,7 @@
                                             @include('partials.select', ['name'=>"Service Type",'id'=>"service_type",'placeholder'=>"",'data'=>$service_types,'required'=>true, 'value'=>$item->booking_type])
                                         </div>    
                                     </div>
-
+                                    <input type="hidden" name="changed_duration" id="changed_duration" value="0">
                                     <!-- Service Name -->
                                     <div class="col-md-4">
                                         <div class="form-group{{ $errors->has('service_name') ? ' has-danger' : '' }}">
@@ -219,6 +223,7 @@
                                         <div class="form-group{{ $errors->has('service_duration') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="items_excel">{{ __('Service Duration (Hours)') }}</label>
                                             <input class="form-control" name="service_duration" id="service_duration" value="{{ $item->service_duration }}" onkeypress="return event.charCode >= 48 || event.charCode == 46" type="number" min="1"  required>
+                                            <p class="error_duration" style="color: red;margin-left: 10px;display:none;"></p>
                                             @if ($errors->has('service_duration'))
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $errors->first('service_duration') }}</strong>
@@ -329,7 +334,7 @@
                                         <div class="instant_booking" style="display: none;">
                                             <div class="row" style="margin-left:0px;">
                                                 
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display: none;">
                                                     <div class="form-group{{ $errors->has('service_available_days') ? ' has-danger' : '' }}">
                                         
                                                         <label class="form-control-label" for="items_excel">{{ __('Service Available Days') }}</label>
@@ -366,7 +371,7 @@
                                                     </div>
                                                 </div>
                 
-                                                <div class="col-md-12">
+                                                {{-- <div class="col-md-12">
                                                     <div class="form-group{{ $errors->has('service_hours') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="shours">{{ __('Service Hours') }}</label>
                                                         <input class="form-control" name="service_hours" id="service_hours" value="{{ $item->service_hours }}" onkeypress="return event.charCode >= 48 || event.charCode == 46" type="number" min="1"  type="number" step="any">
@@ -376,7 +381,7 @@
                                                             </span>
                                                         @endif
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 
                                             </div>
                                             
@@ -401,11 +406,11 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group{{ $errors->has('item_price') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="item_price">{{ __('Item Price') }}</label>
-                                            <input type="number" step="any" name="item_price" id="item_price" class="form-control form-control-alternative{{ $errors->has('item_price') ? ' is-invalid' : '' }}" value="{{ $item->service_price }}" value="{{ old('item_price', $item->price) }}" required autofocus>
-                                            @if ($errors->has('item_price'))
+                                            <label class="form-control-label" for="service_price">{{ __('Item Price') }}</label>
+                                            <input type="number" step="any" name="service_price" id="service_price" class="form-control form-control-alternative{{ $errors->has('service_price') ? ' is-invalid' : '' }}" value="{{ $item->service_price }}" value="{{ old('service_price', $item->price) }}" required autofocus>
+                                            @if ($errors->has('service_price'))
                                                 <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('item_price') }}</strong>
+                                                    <strong>{{ $errors->first('service_price') }}</strong>
                                                 </span>
                                             @endif
                                         </div>
@@ -428,12 +433,12 @@
 
 
                                     <div class="col-md-12">
-                                        <div class="form-group{{ $errors->has('item_description') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="item_description">{{ __('Item Description') }}</label>
-                                            <textarea id="item_description" name="item_description" class="form-control form-control-alternative{{ $errors->has('item_description') ? ' is-invalid' : '' }}"  value="{{ old('item_description', $item->service_description) }}" required autofocus rows="3">{{  $item->service_description }}</textarea>
-                                            @if ($errors->has('item_description'))
+                                        <div class="form-group{{ $errors->has('service_description') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="service_description">{{ __('Item Description') }}</label>
+                                            <textarea id="service_description" name="service_description" class="form-control form-control-alternative{{ $errors->has('service_description') ? ' is-invalid' : '' }}"  required autofocus rows="3">{{  $item->service_description }}</textarea>
+                                            @if ($errors->has('service_description'))
                                                 <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('item_description') }}</strong>
+                                                    <strong>{{ $errors->first('service_description') }}</strong>
                                                 </span>
                                             @endif
                                         </div>
@@ -579,9 +584,22 @@
                             <div class="row align-items-center">
                                 <div class="col-8">
                                     <h5 class="h3 mb-0">{{ __('Service Hours') }}</h5>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <button type="button" class="btn btn-sm btn-primary" onclick="openCreateModal(this)" >{{ __('Add') }}</button>
+                                    </div>
                                 </div>
-                                <div class="col-4 text-right">
-                                    <button type="button" class="btn btn-sm btn-primary" onclick="openCreateModal(this)" >{{ __('Add') }}</button>
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    @if($item->is_default_checked)
+                                        <p>This Service has default Service Hours. 
+                                            Click Below to change 
+                                            <a href="{{ route('admin.restaurants.edit',  auth()->user()->restorant->id) }}">
+                                                <h3 class="text-uppercase">Change Time
+                                                </h3>
+                                            </a>
+                                        </p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -603,22 +621,25 @@
                                                 <td class="budget">{{ $shours->service_from_time }}</td>
                                                 <td class="budget">{{ $shours->service_to_time }}</td>
                                                 <td class="text-right">
-                                                    <div class="dropdown">
-                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-
-                                                            <button type="button" class="dropdown-item" data-toggle="modal" data-target="#modal-edit-service-hours" onClick="set_service_hours({{ $shours->id }})">Edit</button>
-                                                            <form action="{{ route('serviceitems.deletesinglehour', $shours->id) }}" method="post">
-                                                                @csrf
-
-                                                                <button type="button" class="dropdown-item" onclick="delete_service_hour(this)">
-                                                                    {{ __('Delete') }}
-                                                                </button>
-                                                            </form>
+                                                    @if(! $item->is_default_checked)
+                                                        <div class="dropdown">
+                                                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fas fa-ellipsis-v"></i>
+                                                            </a>
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                                
+                                                                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#modal-edit-service-hours" onClick="set_service_hours({{ $shours->id }})">Edit</button>
+                                                                    <form action="{{ route('serviceitems.deletesinglehour', $shours->id) }}" method="post">
+                                                                        @csrf
+        
+                                                                        <button type="button" class="dropdown-item" onclick="delete_service_hour(this)">
+                                                                            {{ __('Delete') }}
+                                                                        </button>
+                                                                    </form>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    @endif
+                                                    
                                                 </td>
                                                 
                                             </tr>
@@ -635,50 +656,50 @@
 
 @section('js')
 <script type="text/javascript">
-$(document).ready(function(){
-    
-    
-
-
-    ///////////////////////////////
-    var a_days = '<?php echo $av_days;?>';
-    
-    
-    $('.weekDays-selector input').each(function(e){
+    $(document).ready(function(){
         
-        if(a_days.includes($(this).val())){
-            $(this).attr("checked","checked");
-        }
-    });
-    
-    
-    $('.weekDays-selector-long input').each(function(e){
         
-        if(a_days.includes($(this).val())){
-            $(this).attr("checked","checked");
-        }
-    });
 
-    $('.weekDays-selector-long-departure input').each(function(e){
+
+        ///////////////////////////////
+        var a_days = '<?php echo $av_days;?>';
         
-        if(a_days.includes($(this).val())){
-            $(this).attr("checked","checked");
+        
+        $('.weekDays-selector input').each(function(e){
+            
+            if(a_days.includes($(this).val())){
+                $(this).attr("checked","checked");
+            }
+        });
+        
+        
+        $('.weekDays-selector-long input').each(function(e){
+            
+            if(a_days.includes($(this).val())){
+                $(this).attr("checked","checked");
+            }
+        });
+
+        $('.weekDays-selector-long-departure input').each(function(e){
+            
+            if(a_days.includes($(this).val())){
+                $(this).attr("checked","checked");
+            }
+        });
+
+        // Display long or instant booking divs
+        var show_div = '<?php echo $item->booking_type;?>';
+
+        if(show_div == 'instant booking'){
+            $(".instant_booking").show();
+            $(".long_booking").hide();
         }
+        else{
+            $(".long_booking").show();
+            $(".instant_booking").hide();
+        }
+        
     });
-
-    // Display long or instant booking divs
-    var show_div = '<?php echo $item->booking_type;?>';
-
-    if(show_div == 'instant booking'){
-        $(".instant_booking").show();
-        $(".long_booking").hide();
-    }
-    else{
-        $(".long_booking").show();
-        $(".instant_booking").hide();
-    }
-    
-});
 
     $(document).on("change","#service_type",function(){
                 
@@ -695,14 +716,22 @@ $(document).ready(function(){
     });
 
     var a_days = <?php echo $service_hours_days;?>;
+    var original_day = '';
+    var original_from = '';
+    var original_to = '';
     function set_service_hours(id){
         // here the id is the Incremental id of hours_services table
 
-        console.log("the id being sent",id);
-        console.log("hello",a_days[id - 1]);
+        // console.log("the id being sent",id);
+        // console.log("a Days",a_days);
+        // console.log("hello",a_days[id - 1]);
 
         var sid = parseInt(id);
-        console.log("the id",sid);
+        original_day = a_days[id - 1]['day'];
+        original_from = a_days[id - 1]['service_from_time'];
+        original_to = a_days[id - 1]['service_to_time'];
+
+        // console.log("the id",sid);
         $(".service_body #service_available_days").val(a_days[id - 1]['day']);
         $(".service_body #service_id").val(parseInt(sid));
         
@@ -764,37 +793,78 @@ $(document).ready(function(){
         $("#modal-new-service-hours").modal("show");
     }
 
-$(document).ready(function(){
-    $("#service_available_days").select2('destroy'); 
-    $("#service_create_available_days").select2('destroy'); 
- 
-});
-
-
-function delete_service_hour(exp){
-
-    $.confirm({
-        title: 'Delete!',
-        content: 'Do you want to delete this service hour?',
-        theme: 'dark',
-        buttons: {
-            confirm: function () {
-                exp.parentElement.submit();
-                // console.log("parent Element",exp.parentElement);
-            },
-            cancel: function () {
-                // $.alert('Canceled!');
-            },
-            
-        }
+    $(document).ready(function(){
+        $("#service_available_days").select2('destroy'); 
+        $("#service_create_available_days").select2('destroy'); 
+    
     });
-}
+
+
+    function delete_service_hour(exp){
+
+        $.confirm({
+            title: 'Delete!',
+            content: 'Do you want to delete this service hour?',
+            theme: 'dark',
+            buttons: {
+                confirm: function () {
+                    exp.parentElement.submit();
+                    // console.log("parent Element",exp.parentElement);
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                },
+                
+            }
+        });
+    }
 
     
+    // Function to allow only multiples of 3 or 5 in service from and service to input fields
+    $("#service_duration").change(function(e){
+        // alert("here");
+        let num = e.target.value;
+        let original_val = '{{ $item->service_duration }}';
 
+        if(num % 5 == 0){
+            // ok
+            $(".error_duration").hide();
+        }
+        else{
+            $(".error_duration").show();
+            $(".error_duration").text("Please enter multiples of 5 - 5, 10, 15, 25, 30").fadeOut(1900, function() {
+                // console.log("on error original val",original_val);
+                e.target.value = original_val;
+            });
+        }
 
+        if(num != original_val){
+            $("#changed_duration").val(1);
+        }
+    });
 
-    </script>
+    // Function to detect if day is changed
+    $(document).on("change","#service_available_days",function(e){
+        
+        if($(this).val() == original_day){
+            $("#day_changed").val(0);
+        }
+        else{
+            $("#day_changed").val(1);
+        }
+    });
+
+    function slot_changed(time){
+        // console.log(time);
+
+        if(time != original_from || time != original_to){
+            //alert("changed Time");
+            $("#time_changed").val(1); 
+        }
+        // $("#time_changed").val(1);
+    }
+
+</script>
     <script type="text/javascript">
         "use strict";
         function setExtrasId(id){

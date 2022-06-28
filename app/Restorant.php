@@ -298,4 +298,8 @@ class Restorant extends MyModel
             }
         });
     }
+
+    public function items(){
+        return $this->hasManyThrough('App\Models\ServiceItem', 'App\Models\ServiceCategory')->where('is_default_checked',1);
+    }
 }

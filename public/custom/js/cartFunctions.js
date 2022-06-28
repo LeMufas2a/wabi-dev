@@ -604,6 +604,7 @@ window.onload = function () {
                 booking_day:$("#booking_day").val(),
                 booking_idFk:$("#booking_idFk").val(),
                 service_button_from:$("#service_button_from").val(),
+                service_booked_on:$("#service_booked_on").val(),
                 item_type:'services'
               })
               .then(function (response) {

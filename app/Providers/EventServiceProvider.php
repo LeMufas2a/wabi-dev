@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Listeners\SetRestaurantIdInSession;
+use App\Events\ServiceHoursEvent;
+use App\Listeners\ServiceHoursListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         Login::class => [
             SetRestaurantIdInSession::class
+        ],
+        ServiceHoursEvent::class => [
+            ServiceHoursListener::class,
         ],
 
     ];

@@ -13,6 +13,7 @@ use App\Models\ServiceCategory;
 use App\Models\ServiceItem;
 use App\Models\ServiceHours;
 use Carbon\Carbon;
+use DB;
 use Cart;
 use Session;
 use Illuminate\Http\Request;
@@ -107,25 +108,42 @@ class CartController extends Controller
     
     public function addServiceItem(Request $request)
     {
-        // dd($request->all());
+        // dd($request->service_button_from);
+
+        $slot_hour = explode("--",$request->service_button_from);
+        // dd($slot_hour);
+
+        $service_hour_from = $slot_hour[0];
+        $service_hour_to = $slot_hour[1];
+
         if(isset($request->session_id)){
             $this->setSessionID($request->session_id);
-        }
+        } 
 
+        /* Custom query to find the item and slots timing to be displayed in the cart */
+        
         $item = ServiceItem::find($request->id);
-		
+		// dd($request->all());
+        // dd($item);
         // Service additional Data
         
         $slots = explode("--",$request->service_button_from);
         // dd($slots);
         $item_type = $request->item_type;
-        $service_from = $request->service_from;
-        $service_to = $request->service_to;
+        // $service_from = $request->service_from;
+        // $service_to = $request->service_to;
+        $service_from = $service_hour_from;
+        $service_to = $service_hour_to;
         $booking_id = $request->booking_idFk;
         $booking_day = $request->booking_day;
+        
         $service_slot_from = $slots[0];
         $service_slot_to = $slots[1];
         
+
+        $item->service_slot_from = $service_slot_from;
+        $item->service_slot_to = $service_slot_to;
+        // dd($item);
         // Store some of the information in Session to retrieve it
         // during making an order and also to deduct the available booking_count
 
@@ -137,7 +155,8 @@ class CartController extends Controller
             'booking_day' => $booking_day,
             'service_slot_from' => $service_slot_from,
             'service_slot_to' => $service_slot_to,
-            'service_id' => $request->id
+            'service_id' => $request->id,
+            'service_booked_on' => $request->service_booked_on
         );
 
         Session::push('session_arr',$session_arr);

@@ -234,6 +234,7 @@
                                 <input id="service_to" type="hidden">
                                 <input id="booking_day" type="hidden">
                                 <input id="booking_idFk" type="hidden">
+                                <input id="service_booked_on" name="service_booked_on" type="hidden">
                                 <input id="service_button_from" type="hidden">
                                 <input id="booking_set" name="booking_set[]" type="hidden">
                                 

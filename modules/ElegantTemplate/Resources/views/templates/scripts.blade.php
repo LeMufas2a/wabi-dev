@@ -91,7 +91,7 @@
 
     var arrOfNum = [];
 
-    
+    var base_url = '{{ route('all-time-slots') }}';
 
     $('#productModalServices').on('shown.bs.modal', function (e) {
         
@@ -105,13 +105,13 @@
         
             while(count < slot_items.length){
                     
-                if(slot_items[count].service_id == service_item_id){
+                // if(slot_items[count].service_id == service_item_id){
                     
-                    slots_to_display.push(slot_items[count]);
-                }
-                else{
-                    // do nothing
-                }
+                //     slots_to_display.push(slot_items[count]);
+                // }
+                // else{
+                //     // do nothing
+                // }
 
                 count = count + 1;
             }
@@ -134,12 +134,15 @@
         var tt = $("#hide_days").val();
         
         days_arr = tt.split(",");
+        console.log("days_arr",days_arr);
         
         const arrOfStr = days_arr;
 
         arrOfStr.forEach(str => {
             arrOfNum.push(Number(str));
         });
+
+        console.log("enabledDates:",arrOfNum);
 
         $('#serviceday1').flatpickr({
                 enableTime: false,
@@ -166,18 +169,21 @@
                     }
                 ],
                 onChange: function(selectedDates, dateStr, instance) {
-                    $(".slots_to_add").html('');
-                    // console.log("selectedDates",selectedDates[0].getDate());
+                    
+                    
+                    $(".slots_to_add").html("");
+                    // $(".into_card").html("");
+                    // console.log("dateStr",dateStr);
                     
                     var log_count = 0;
             
                     var slot_count = 1; 
-
+                    var pdata = '';
                     
                     
                     const d = new Date(selectedDates);
                     let day = d.getDay();
-                    day = d.toLocaleString('en-us', {  weekday: 'long' })
+                    day = d.toLocaleString('en-us', {  weekday: 'long' });
                     // console.log("Long name of the day",day);
                     // console.log("da",day);
                     // console.log("dateStr",dateStr.getDay());
@@ -188,7 +194,7 @@
 
                     // console.log("log count",log_count);
                     // console.log("len",merged.length);
-
+                    $(".slots_to_add").html("");
                     $(".slots_to_add").append(
                         '<div class="col-lg-12">'+
                             '<div id="accordion" class="into_accordion">'
@@ -204,25 +210,16 @@
                                                         merged[log_count]['hourly_time'][h]['service_id_fk'] == service_item_id
                                                         && merged[log_count]['hourly_time'][h]['log_day'] == day
                                                         ){
-                                                            //console.log("log_count:"+log_count+"--h:"+h);
+                                                            //console.log("log_count:"+log_count+"--h:"+h into_button);
                                                             $(".into_accordion").append(
                                                                 '<div class="card into_card into_card_with_'+merged[log_count]['hourly_time'][h]['iterator']+'">'+
                                                                     '<div class="card-header into_header"  id="headingOne">'+
                                                                         '<h5 class="mb-0 parent_from" style="text-align:center;">'+
-                                                                            '<button class="btn btn-link into_button" data-toggle="collapse" data-target="#booking_'+merged[log_count]['hourly_time'][h]['iterator']+'" aria-expanded="true" aria-controls="collapseOne" data-iterator="'+merged[log_count]['hourly_time'][h]['iterator']+'" data-bookingId="'+merged[log_count]['hourly_time'][h]['booking_log_idFk']+'" data-serviceId="'+merged[log_count]['hourly_time'][h]['service_id_fk']+'" data-logDay="'+merged[log_count]['hourly_time'][h]['log_day']+'" data-serviceFrom="'+merged[log_count]['hourly_time'][h]['hour_service_from']+'" data-serviceTo="'+merged[log_count]['hourly_time'][h]['hour_service_to']+'" style="font-size:25px;font-family: sans-serif;">'+merged[log_count]['hourly_time'][h]['hour_service_from']+'-'+merged[log_count]['hourly_time'][h]['hour_service_to']+''+
+                                                                            '<button class="btn-link into_button" data-toggle="collapse" data-target="#booking_'+merged[log_count]['hourly_time'][h]['iterator']+'" aria-expanded="true" aria-controls="collapseOne" data-iterator="'+merged[log_count]['hourly_time'][h]['iterator']+'" data-bookingId="'+merged[log_count]['hourly_time'][h]['booking_log_idFk']+'" data-serviceId="'+merged[log_count]['hourly_time'][h]['service_id_fk']+'" data-logDay="'+merged[log_count]['hourly_time'][h]['log_day']+'" data-serviceFrom="'+merged[log_count]['hourly_time'][h]['hour_service_from']+'" data-serviceTo="'+merged[log_count]['hourly_time'][h]['hour_service_to']+'" style="font-size:25px;font-family: sans-serif;">'+merged[log_count]['hourly_time'][h]['hour_service_from']+'-'+merged[log_count]['hourly_time'][h]['hour_service_to']+''+
                                                                             '</button>'+
                                                                         '</h5>'+
                                                                     '</div>'
-                                                            );
-
-                                                            // $(".parent_from").append(
-                                                            //     '<button class="btn btn-link into_button" data-toggle="collapse" data-target="#booking_'+merged[log_count]['hourly_time'][h]['booking_log_idFk']+'" aria-expanded="true" aria-controls="collapseOne">'+
-                                                            //     '</button>'
-                                                            // );
-                                                            // $(".into_button").text(merged[log_count]['hourly_time'][h]['hour_service_from']+'-'+merged[log_count]['hourly_time'][h]['hour_service_to']);
-                                                            // $(".parent_from").append('</button>');
-                                                            // $(".into_header").append('</h5>');
-                                                            // $(".into_card").append('</div>');
+                                                            );                                                            
                                                             $(".into_accordion").append('</div>');
                                                         }
                                                         
@@ -243,8 +240,14 @@
 
                     
                     ////// Display respective slots in buttons via ajax
-                    $(document).on("click",".into_button",function(){
+                    $(document).on("click","button.into_button",function(e){
                         
+                        console.log("how many clicks?");
+                        if (e.detail === 2) {
+                            // alert("heelooo");
+                            return false;
+                        }
+
                         let booking_idFk = $(this).attr("data-bookingId");
                         
                         let service_idFk = $(this).attr("data-serviceId");
@@ -253,31 +256,33 @@
                         let service_to = $(this).attr("data-serviceTo");
 
                         let iterator = $(this).attr("data-iterator");
-                        console.log("booking_idFk"+booking_idFk);
+                        //console.log("booking_idFk"+booking_idFk);
                         
                         let service_button_from = '';
                         
                         let booking_set = [];
 
-                        $(".slots_content").empty();
+                        let service_booked_on = dateStr;
+
+                        $(".slots_content").remove();
 
                         $.ajax({
                             type:'POST',
-                            url:'/all-time-slots/',
+                            url:base_url,
                             headers: {
                                 'X-CSRF-TOKEN': token
                             },
                             data:{booking_id:booking_idFk,service_id:service_idFk,service_from:service_from,service_to:service_to},
                             success:function(data) {
-                                // console.log("inside success",JSON.parse(data));
-                                let pdata = JSON.parse(data);
-                                
+                                // let pdata = null;
+                                $(".slots_content").html("");
+                                pdata = JSON.parse(data);
                                 $(".into_card_with_"+iterator).append(
                                     '<div id="booking_'+iterator+'" class="collapse show slots_content" aria-labelledby="headingOne" data-parent="#accordion">'+
                                         '<div class="card-body into_slot">');
                                             for(let slot=0;slot<pdata.length;slot++){
                                                 $(".into_slot").append(
-                                                    '<button class="btn btn-light hour_button slot">'+pdata[slot]['service_from']+'--'+pdata[slot]['service_to']+'</button>'
+                                                    '<button class="btn btn-light hour_button slot" style="margin-right:15px;">'+pdata[slot]['service_from']+'--'+pdata[slot]['service_to']+'</button>'
                                                 );
                                             }
                                         $(".into_slot").append('</div>'+
@@ -288,8 +293,9 @@
                                 $("#service_to").val(service_to);
                                 $("#booking_day").val(day);
                                 $("#booking_idFk").val(booking_idFk);
+                                $("#service_booked_on").val(dateStr);
                                 // booking_set.push()
-
+                                
 
                                 $(document).on("click",".hour_button",function(){
                                     service_button_from = $(this).text();
@@ -299,9 +305,10 @@
                                                 service_to:service_to,
                                                 day:day,
                                                 booking_idFk:booking_idFk,
-                                                service_button_from:service_button_from
+                                                service_button_from:service_button_from,
+                                                service_booked_on:dateStr
                                             });
-                                    console.log("booking_set",booking_set);
+                                    //console.log("booking_set",booking_set);
                                 });
                                 
 
@@ -311,7 +318,8 @@
                                 
                             },
                             complete:function(data){
-                                // console.log("data.status",data.status);
+                                console.log("data.status");
+                                // pdata = null;
                                 if(data.status == 200){
                                     // $(".myCoul").style.setProperty( 'color', 'green', 'important' );
                                     // window.location.reload();
@@ -323,7 +331,7 @@
                                 // console.log("the complete",data.status);
                             }
                         });
-                    
+                        // iterator = '';
                     });
                     
 
